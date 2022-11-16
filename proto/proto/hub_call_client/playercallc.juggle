@@ -4,12 +4,9 @@ module player_client{
 	be_displacement ntf();
 }
 
-module player_match_client{
-	
-}
-
 module player_game_client{
-	game_svr ntf(string game_hub_name, string host, int32 port);
+	game_svr ntf(string game_hub_name);
+	room_svr ntf(string room_hub_name);
 	settle ntf(game_settle_info settle_info);
 }
 

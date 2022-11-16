@@ -1,6 +1,7 @@
 import common
 
 module client_room_match{
+	into_room ntf();
 	chat ntf(string chat_str);
 	leave_room ntf();
 	kick_out ntf(int64 player_guid);

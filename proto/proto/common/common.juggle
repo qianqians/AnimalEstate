@@ -66,11 +66,20 @@ struct player_info
 	playground[] playground_list;
 }
 
+struct player_inline_info
+{
+	string uuid;
+	int64 guid;
+	string name;
+	int32 coin;
+	int32 score;
+}
+
 struct room_info
 {
 	string room_uuid;
 	int64 room_owner_guid;
-	player_friend_info[] room_player_list;
+	player_inline_info[] room_player_list;
 }
 
 struct game_player_settle_info
