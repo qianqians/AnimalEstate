@@ -1,0 +1,3 @@
+module game_client{
+	move ntf(int32 from, int32 to);
+}

@@ -1,0 +1,8 @@
+struct lobby_router_info{
+	string lobby_hub_name;
+	bool is_busy;
+}
+
+module lobby_router{
+    lobby_info ntf(lobby_router_info _lobby_info);
+}

@@ -1,0 +1,89 @@
+enum animal
+{
+	chicken = 1;
+	monkey = 2;
+	rabbit = 3;
+	duck = 4;
+	mouse = 5;
+	bear = 6;
+	tiger = 7;
+	lion = 8;
+}
+
+enum skin
+{
+	// 鸡类皮肤 从101开始计数
+	chicken = 101;
+	
+	// 猴类皮肤 从201开始计数
+	monkey = 201;
+	
+	// 兔类皮肤 从301开始计数
+	rabbit = 301;
+	
+	// 鸭类皮肤 从401开始计数
+	duck = 401;
+	
+	// 鼠类皮肤 从501开始计数
+	mouse = 501;
+	
+	// 熊类皮肤 从601开始计数
+	bear = 601;
+	
+	// 虎类皮肤 从701开始计数
+	tiger = 701;
+	
+	// 狮类皮肤 从801开始计数
+	lion = 801;
+}
+
+enum playground
+{
+	grassland = 1; // 草原
+	hill = 2;      // 山丘
+	snow = 3;	   // 雪地
+	desert = 4;	   // 沙漠
+}
+
+struct player_friend_info
+{
+	int64 guid;
+	string name;
+	int32 coin;
+	int32 score;
+}
+
+struct player_info
+{
+	int64 guid;
+	string sdk_uuid;
+	string name;
+	int32 coin;
+	int32 score;
+	player_friend_info[] friend_list;
+	animal[] hero_list;
+	skin[] skin_list;
+	playground[] playground_list;
+}
+
+struct room_info
+{
+	string room_uuid;
+	int64 room_owner_guid;
+	player_friend_info[] room_player_list;
+}
+
+struct game_player_settle_info
+{
+	int64 guid;
+	string name;
+	int32 award_coin;
+	int32 award_score;
+}
+
+struct game_settle_info
+{
+	game_player_settle_info[] settle_info;
+}
+
+

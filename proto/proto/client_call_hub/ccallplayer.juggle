@@ -1,0 +1,22 @@
+import common
+
+module login{
+	player_login req(string token) rsp(player_info info) err(int32 err);
+	create_role req(string name) rsp(player_info info) err(int32 err);
+}
+
+module client_match{
+	start_match ntf();
+}
+
+module client_room_player{
+	create_room req() rsp(string room_hub_name, room_info _room_info) err(int32 err);
+	invite_role_join_room ntf(int64 guid);
+	agree_join_room req(string team_id) rsp(string room_hub_name, room_info _room_info) err(int32 err);
+}
+
+module client_friend_lobby {
+	find_role req(string guid) rsp(player_friend_info find_info) err(int32 err);
+	invite_role_friend ntf(player_friend_info self_account, player_friend_info target_account);
+	agree_role_friend ntf(string invite_account, bool be_agree);
+}

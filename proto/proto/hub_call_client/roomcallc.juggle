@@ -1,0 +1,13 @@
+import common
+
+module room_client{
+	refresh_room_info multicast(match_team team_info);
+	room_is_free multicast();
+	role_leave_room_success ntf();
+	be_kicked ntf();
+	team_into_match multicast();
+}
+
+module room_match_client{
+    role_into_game ntf(string game_hub_name, string host, int32 port, string game_id);
+}

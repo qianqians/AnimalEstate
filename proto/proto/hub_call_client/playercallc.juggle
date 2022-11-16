@@ -1,0 +1,23 @@
+import common
+
+module player_client{
+	be_displacement ntf();
+}
+
+module player_match_client{
+	
+}
+
+module player_game_client{
+	game_svr ntf(string game_hub_name, string host, int32 port);
+	settle ntf(game_settle_info settle_info);
+}
+
+module player_room_client{
+	invite_role_join_room ntf(string room_id, string invite_role_name);
+}
+
+module player_friend_client {
+	invite_role_friend req(player_friend_info invite_account) rsp() err();
+	agree_role_friend req(player_friend_info target_account) rsp() err();
+}

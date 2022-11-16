@@ -1,0 +1,6 @@
+import common
+
+module game{
+	use_skill ntf();
+	throw_dice ntf();
+}
