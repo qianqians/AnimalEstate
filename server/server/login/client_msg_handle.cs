@@ -17,6 +17,8 @@ namespace login
         {
             _proxy.player_login(account).callBack((token) => {
                 rsp.rsp(_proxy.name, token);
+                var key = redis_help.BuildPlayerSvrCacheKey(account);
+                login._redis_handle.SetStrData(key, _proxy.name);
             }, (err) => {
                 rsp.err(err);
             }).timeout(1000, () => {
