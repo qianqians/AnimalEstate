@@ -249,4 +249,28 @@ export function protcol_to_game_settle_info(_protocol:any){
     return _struct;
 }
 
+export class player_svr_info
+{
+    public tick_time : number;
+    public player_num : number;
+
+    constructor(){
+    }
+}
+
+export function player_svr_info_to_protcol(_struct:player_svr_info){
+    return _struct;
+}
+
+export function protcol_to_player_svr_info(_protocol:any){
+    let _struct = new player_svr_info();
+    for (const [key, val] of Object.entries(_protocol))        if (key === "tick_time"){
+            _struct.tick_time = val as number;
+        }
+        else if (key === "player_num"){
+            _struct.player_num = val as number;
+        }
+    return _struct;
+}
+
 /*this module code is codegen by abelkhan codegen for typescript*/

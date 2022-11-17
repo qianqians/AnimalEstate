@@ -297,6 +297,30 @@ namespace abelkhan
         }
     }
 
+    public class player_svr_info
+    {
+        public Int32 tick_time;
+        public Int32 player_num;
+        public static MsgPack.MessagePackObjectDictionary player_svr_info_to_protcol(player_svr_info _struct){
+            var _protocol = new MsgPack.MessagePackObjectDictionary();
+            _protocol.Add("tick_time", _struct.tick_time);
+            _protocol.Add("player_num", _struct.player_num);
+            return _protocol;
+        }
+        public static player_svr_info protcol_to_player_svr_info(MsgPack.MessagePackObjectDictionary _protocol){
+            var _structc8da264c_5214_3c3e_b2a7_fbdb8accb405 = new player_svr_info();
+            foreach (var i in _protocol){
+                if (((MsgPack.MessagePackObject)i.Key).AsString() == "tick_time"){
+                    _structc8da264c_5214_3c3e_b2a7_fbdb8accb405.tick_time = ((MsgPack.MessagePackObject)i.Value).AsInt32();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "player_num"){
+                    _structc8da264c_5214_3c3e_b2a7_fbdb8accb405.player_num = ((MsgPack.MessagePackObject)i.Value).AsInt32();
+                }
+            }
+            return _structc8da264c_5214_3c3e_b2a7_fbdb8accb405;
+        }
+    }
+
 /*this module code is codegen by abelkhan codegen for c#*/
 
 }

@@ -1,5 +1,5 @@
 
 module login_player{
-    player_login ntf(string sdk_uuid, string token);
+    player_login req(string sdk_uuid) rsp(string token) err(int32 err);
 }
 

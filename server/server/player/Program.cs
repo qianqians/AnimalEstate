@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace player
 {
-    class Program
+    class player
     {
 
 
