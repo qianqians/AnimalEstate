@@ -1,3 +1,3 @@
 module login{
-    player_login_no_author req(string account) rsp(string player_hub_name, string token);
+    player_login_no_author req(string account) rsp(string player_hub_name, string token) err(int32 err);
 }

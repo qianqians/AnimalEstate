@@ -1,6 +1,6 @@
 import common
 
-module login{
+module player_login{
 	player_login req(string token) rsp(player_info info) err(int32 err);
 	create_role req(string name) rsp(player_info info) err(int32 err);
 }
