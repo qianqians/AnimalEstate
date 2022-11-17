@@ -1,10 +1,6 @@
 import common
 
-module lobby_match{
-    create_team req(team_member leader) rsp(match_team team_info) err(int32 err);
-	agree_join_team req(string team_id, team_member member) rsp(match_team team_info) err(int32 err);
-}
-
-module match_lobby{
-	reg_match ntf(int32 team_role_num);
+module player_room{
+    create_room req(player_inline_info room_owner) rsp(room_info info) err(int32 err);
+	agree_join_room req(string room_id, player_inline_info member) rsp(room_info info) err(int32 err);
 }
