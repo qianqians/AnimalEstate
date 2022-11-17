@@ -42,11 +42,11 @@ namespace abelkhan
             _client_handle.modulemanager.add_mothed("error_code_ntf_error_code", error_code);
         }
 
-        public event Action<Int32> on_error_code;
+        public event Action<error> on_error_code;
         public void error_code(IList<MsgPack.MessagePackObject> inArray){
-            var _error = ((MsgPack.MessagePackObject)inArray[0]).AsInt32();
+            var _err_code = (error)((MsgPack.MessagePackObject)inArray[0]).AsInt32();
             if (on_error_code != null){
-                on_error_code(_error);
+                on_error_code(_err_code);
             }
         }
 

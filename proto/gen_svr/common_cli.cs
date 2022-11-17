@@ -94,17 +94,17 @@ namespace abelkhan
             _protocol.Add("friend_list", new MsgPack.MessagePackObject(_array_friend_list));
             var _array_hero_list = new List<MsgPack.MessagePackObject>();
             foreach(var v_ in _struct.hero_list){
-                _array_hero_list.Add(v_);
+                _array_hero_list.Add((Int32)v_);
             }
             _protocol.Add("hero_list", new MsgPack.MessagePackObject(_array_hero_list));
             var _array_skin_list = new List<MsgPack.MessagePackObject>();
             foreach(var v_ in _struct.skin_list){
-                _array_skin_list.Add(v_);
+                _array_skin_list.Add((Int32)v_);
             }
             _protocol.Add("skin_list", new MsgPack.MessagePackObject(_array_skin_list));
             var _array_playground_list = new List<MsgPack.MessagePackObject>();
             foreach(var v_ in _struct.playground_list){
-                _array_playground_list.Add(v_);
+                _array_playground_list.Add((Int32)v_);
             }
             _protocol.Add("playground_list", new MsgPack.MessagePackObject(_array_playground_list));
             return _protocol;
@@ -138,21 +138,21 @@ namespace abelkhan
                     _structba9db598_9e11_365a_9abc_c16f0f380537.hero_list = new();
                     var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
                     foreach (var v_ in _protocol_array){
-                        _structba9db598_9e11_365a_9abc_c16f0f380537.hero_list.Add((List<animal>)((MsgPack.MessagePackObject)v_).AsInt32());
+                        _structba9db598_9e11_365a_9abc_c16f0f380537.hero_list.Add((animal)((MsgPack.MessagePackObject)v_).AsInt32());
                     }
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "skin_list"){
                     _structba9db598_9e11_365a_9abc_c16f0f380537.skin_list = new();
                     var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
                     foreach (var v_ in _protocol_array){
-                        _structba9db598_9e11_365a_9abc_c16f0f380537.skin_list.Add((List<skin>)((MsgPack.MessagePackObject)v_).AsInt32());
+                        _structba9db598_9e11_365a_9abc_c16f0f380537.skin_list.Add((skin)((MsgPack.MessagePackObject)v_).AsInt32());
                     }
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "playground_list"){
                     _structba9db598_9e11_365a_9abc_c16f0f380537.playground_list = new();
                     var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
                     foreach (var v_ in _protocol_array){
-                        _structba9db598_9e11_365a_9abc_c16f0f380537.playground_list.Add((List<playground>)((MsgPack.MessagePackObject)v_).AsInt32());
+                        _structba9db598_9e11_365a_9abc_c16f0f380537.playground_list.Add((playground)((MsgPack.MessagePackObject)v_).AsInt32());
                     }
                 }
             }

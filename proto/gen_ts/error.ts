@@ -38,7 +38,7 @@ export class error_code_ntf_module extends client_handle.imodule {
         this.cb_error_code = null;
     }
 
-    public cb_error_code : (error:number)=>void | null;
+    public cb_error_code : (err_code:error)=>void | null;
     error_code(inArray:any[]){
         let _argv_:any[] = [];
         _argv_.push(inArray[0]);

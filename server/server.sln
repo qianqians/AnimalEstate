@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "player", "server\player\pla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "login", "server\login\login.csproj", "{764F98E1-0F15-48B8-8C8B-806CDE7289D3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "game_proto", "game_proto\game_proto.csproj", "{DDCCF9B2-C467-40D2-A7DE-07638DBCC994}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{764F98E1-0F15-48B8-8C8B-806CDE7289D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{764F98E1-0F15-48B8-8C8B-806CDE7289D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{764F98E1-0F15-48B8-8C8B-806CDE7289D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDCCF9B2-C467-40D2-A7DE-07638DBCC994}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDCCF9B2-C467-40D2-A7DE-07638DBCC994}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDCCF9B2-C467-40D2-A7DE-07638DBCC994}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDCCF9B2-C467-40D2-A7DE-07638DBCC994}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +103,7 @@ Global
 		{BC0B1891-7863-4B09-9B5B-CB595EE7215C} = {46B39C2B-0951-457B-A005-C46014B7A839}
 		{80F1050C-366A-4A9C-B067-3E27FBE05E69} = {46B39C2B-0951-457B-A005-C46014B7A839}
 		{764F98E1-0F15-48B8-8C8B-806CDE7289D3} = {46B39C2B-0951-457B-A005-C46014B7A839}
+		{DDCCF9B2-C467-40D2-A7DE-07638DBCC994} = {11C5227E-6283-4A4D-BAD6-B79DC5B080A7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {71881DAC-9ED6-472F-AB12-DE9020A519C1}

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\component\hub\hub.csproj" />
+    <ProjectReference Include="..\..\game_proto\game_proto.csproj" />
   </ItemGroup>
 
 </Project>

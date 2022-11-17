@@ -24,5 +24,5 @@ enum error{
 }
 
 module error_code_ntf{
-	error_code ntf(int32 error);
+	error_code ntf(error err_code);
 }
