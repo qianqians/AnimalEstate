@@ -1,0 +1,6 @@
+import common
+
+module game_player{
+    settle ntf(game_settle_info settle_info);
+}
+
