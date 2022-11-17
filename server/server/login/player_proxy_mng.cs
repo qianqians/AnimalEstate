@@ -45,6 +45,12 @@ namespace login
             player_proxys[_proxy.name] = new player_proxy(_login_player_caller, _proxy);
         }
 
+        public player_proxy get_player(string player_hub_name)
+        {
+            player_proxys.TryGetValue(player_hub_name, out player_proxy proxy);
+            return proxy;
+        }
+
         public async Task<player_proxy> random_idle_player()
         {
             var idle_player_proxys = new List<player_proxy>();
