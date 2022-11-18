@@ -65,7 +65,8 @@ namespace login
 
             if (idle_player_proxys.Count > 0)
             {
-                return idle_player_proxys[RandomHelper.RandomInt(idle_player_proxys.Count)];
+                uint count = (uint)idle_player_proxys.Count;
+                return idle_player_proxys[(int)hub.hub.randmon_uint(count)];
             }
 
             return null; 

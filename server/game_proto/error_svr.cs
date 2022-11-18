@@ -12,7 +12,8 @@ namespace abelkhan
         timeout = -2,
         db_error = -1,
         success = 0,
-        server_busy = 1
+        server_busy = 1,
+        unregistered_palyer = 2
     }
 /*this struct code is codegen by abelkhan codegen for c#*/
 /*this caller code is codegen by abelkhan codegen for c#*/
