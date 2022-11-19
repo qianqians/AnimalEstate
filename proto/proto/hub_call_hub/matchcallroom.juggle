@@ -11,9 +11,16 @@ module match_room{
 	 * 单个玩家匹配后进入room
 	 */
     player_join_room ntf(string target_room_uuid, player_inline_info info);
-	
+
 	/*
 	 * 匹配完成，进入游戏
 	 */
 	start_game ntf(string room_uuid, string game_hub_name);
+}
+
+module match_player{
+	/*
+	 * 单个玩家匹配后进入room
+	 */
+    player_join_room ntf(int64 player_guid, string game_hub_name, string room_hub_name);
 }

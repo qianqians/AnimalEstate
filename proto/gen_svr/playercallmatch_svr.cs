@@ -48,11 +48,26 @@ namespace abelkhan
             rsp_cb_player_match_handle = rsp_cb_player_match_handle_;
         }
 
+        public void player_join_match(player_inline_info player_info){
+            var _argv_53045b75_544f_3315_95b9_4f6ed684c17d = new ArrayList();
+            _argv_53045b75_544f_3315_95b9_4f6ed684c17d.Add(player_inline_info.player_inline_info_to_protcol(player_info));
+            hub.hub._hubs.call_hub(hub_name_f08f93cd_bfea_3bf2_ae83_42be38c1f420, "player_match_player_join_match", _argv_53045b75_544f_3315_95b9_4f6ed684c17d);
+        }
+
     }
 /*this module code is codegen by abelkhan codegen for c#*/
     public class player_match_module : common.imodule {
         public player_match_module() 
         {
+            hub.hub._modules.add_mothed("player_match_player_join_match", player_join_match);
+        }
+
+        public event Action<player_inline_info> on_player_join_match;
+        public void player_join_match(IList<MsgPack.MessagePackObject> inArray){
+            var _player_info = player_inline_info.protcol_to_player_inline_info(((MsgPack.MessagePackObject)inArray[0]).AsDictionary());
+            if (on_player_join_match != null){
+                on_player_join_match(_player_info);
+            }
         }
 
     }

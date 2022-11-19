@@ -7,8 +7,8 @@ namespace login
 {
     public class player_proxy
     {
-        private abelkhan.login_player_caller _login_player_caller = new abelkhan.login_player_caller();
-        private hub.hubproxy _proxy;
+        private readonly abelkhan.login_player_caller _login_player_caller;
+        private readonly hub.hubproxy _proxy;
 
         public string name
         {
@@ -24,7 +24,7 @@ namespace login
             _proxy = proxy;
         }
 
-        public abelkhan.login_player_player_login_cb player_login(string sdk_uuid)
+        public login_player_player_login_cb player_login(string sdk_uuid)
         {
             return _login_player_caller.get_hub(_proxy.name).player_login(sdk_uuid);
         }
@@ -32,9 +32,8 @@ namespace login
 
     public class player_proxy_mng
     {
-        private abelkhan.login_player_caller _login_player_caller = new ();
-
-        private Dictionary<string, player_proxy> player_proxys = new ();
+        private readonly login_player_caller _login_player_caller = new ();
+        private readonly Dictionary<string, player_proxy> player_proxys = new ();
 
         public player_proxy_mng()
         {
@@ -56,7 +55,7 @@ namespace login
             var idle_player_proxys = new List<player_proxy>();
             foreach (var p in player_proxys)
             {
-                var info = await login._redis_handle.GetData<abelkhan.player_svr_info>(p.Key);
+                var info = await login._redis_handle.GetData<player_svr_info>(p.Key);
                 if (info.tick_time < 34)
                 {
                     idle_player_proxys.Add(p.Value);

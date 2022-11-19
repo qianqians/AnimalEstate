@@ -1,5 +1,5 @@
 import common
 
 module player_match{
-    player_join_match ntf(player_inline_info player_info
+    player_join_match ntf(player_inline_info player_info);
 }
