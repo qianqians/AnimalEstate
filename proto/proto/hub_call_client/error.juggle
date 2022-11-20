@@ -4,6 +4,7 @@ enum error{
 	success = 0;
 	server_busy = 1;
 	unregistered_palyer = 2;
+	room_is_destroy = 3;
 }
 
 module error_code_ntf{

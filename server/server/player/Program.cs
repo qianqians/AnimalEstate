@@ -8,8 +8,12 @@ namespace player
     {
         public static string guid_key;
         public static redis_handle _redis_handle;
+
         public static readonly client_mng client_Mng = new ();
+
         public static readonly match_proxy_mng match_Proxy_Mng = new ();
+        public static readonly room_proxy_mng room_Proxy_Mng = new ();
+        public static readonly player_proxy_mng player_Proxy_Mng = new ();
 
 		static void Main(string[] args)
 		{
@@ -35,6 +39,14 @@ namespace player
             if (_proxy.type == "match")
             {
                 match_Proxy_Mng.reg_match_proxy(_proxy);
+            }
+            else if (_proxy.type == "room")
+            {
+                room_Proxy_Mng.reg_room_proxy(_proxy);
+            }
+            else if (_proxy.type == "player")
+            {
+                player_Proxy_Mng.reg_player_proxy(_proxy);
             }
         }
     }

@@ -6,7 +6,8 @@ export enum error{
     db_error = -1,
     success = 0,
     server_busy = 1,
-    unregistered_palyer = 2
+    unregistered_palyer = 2,
+    room_is_destroy = 3
 }
 
 /*this struct code is codegen by abelkhan codegen for typescript*/

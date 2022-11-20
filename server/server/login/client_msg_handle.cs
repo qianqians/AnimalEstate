@@ -15,10 +15,11 @@ namespace login
 
         private void try_player_login(player_proxy _proxy, string account, login_player_login_no_author_rsp rsp)
         {
+            var key = redis_help.BuildPlayerSvrCacheKey(account);
+            login._redis_handle.SetStrData(key, _proxy.name);
+
             _proxy.player_login(account).callBack((token) => {
                 rsp.rsp(_proxy.name, token);
-                var key = redis_help.BuildPlayerSvrCacheKey(account);
-                login._redis_handle.SetStrData(key, _proxy.name);
             }, (err) => {
                 rsp.err(err);
             }).timeout(1000, () => {

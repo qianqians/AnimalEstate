@@ -11,8 +11,8 @@ module client_match{
 
 module client_room_player{
 	create_room req() rsp(string room_hub_name, room_info _room_info) err(int32 err);
-	invite_role_join_room ntf(int64 guid);
-	agree_join_room req(string team_id) rsp(string room_hub_name, room_info _room_info) err(int32 err);
+	invite_role_join_room ntf(string sdk_uuid);
+	agree_join_room req(string room_id) rsp(string room_hub_name, room_info _room_info) err(int32 err);
 }
 
 module client_friend_lobby {

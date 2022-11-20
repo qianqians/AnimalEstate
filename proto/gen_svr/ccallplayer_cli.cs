@@ -578,18 +578,18 @@ namespace abelkhan
             }            return cb_create_room_obj;
         }
 
-        public void invite_role_join_room(Int64 guid){
+        public void invite_role_join_room(string sdk_uuid){
             var _argv_4afdf6f4_2ff9_314b_9be9_c6d0fa96e4f8 = new ArrayList();
-            _argv_4afdf6f4_2ff9_314b_9be9_c6d0fa96e4f8.Add(guid);
+            _argv_4afdf6f4_2ff9_314b_9be9_c6d0fa96e4f8.Add(sdk_uuid);
             _client_handle.call_hub(hub_name_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2, "client_room_player_invite_role_join_room", _argv_4afdf6f4_2ff9_314b_9be9_c6d0fa96e4f8);
         }
 
-        public client_room_player_agree_join_room_cb agree_join_room(string team_id){
+        public client_room_player_agree_join_room_cb agree_join_room(string room_id){
             var uuid_2b5aaead_9c5d_5e1b_b2f5_62a6bfb42fe9 = (UInt64)Interlocked.Increment(ref uuid_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2);
 
             var _argv_dd5a04d0_146c_30d4_bf08_5551c02a714b = new ArrayList();
             _argv_dd5a04d0_146c_30d4_bf08_5551c02a714b.Add(uuid_2b5aaead_9c5d_5e1b_b2f5_62a6bfb42fe9);
-            _argv_dd5a04d0_146c_30d4_bf08_5551c02a714b.Add(team_id);
+            _argv_dd5a04d0_146c_30d4_bf08_5551c02a714b.Add(room_id);
             _client_handle.call_hub(hub_name_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2, "client_room_player_agree_join_room", _argv_dd5a04d0_146c_30d4_bf08_5551c02a714b);
 
             var cb_agree_join_room_obj = new client_room_player_agree_join_room_cb(uuid_2b5aaead_9c5d_5e1b_b2f5_62a6bfb42fe9, rsp_cb_client_room_player_handle);

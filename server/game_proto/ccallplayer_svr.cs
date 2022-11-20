@@ -174,21 +174,21 @@ namespace abelkhan
             rsp = null;
         }
 
-        public event Action<Int64> on_invite_role_join_room;
+        public event Action<string> on_invite_role_join_room;
         public void invite_role_join_room(IList<MsgPack.MessagePackObject> inArray){
-            var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
+            var _sdk_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsString();
             if (on_invite_role_join_room != null){
-                on_invite_role_join_room(_guid);
+                on_invite_role_join_room(_sdk_uuid);
             }
         }
 
         public event Action<string> on_agree_join_room;
         public void agree_join_room(IList<MsgPack.MessagePackObject> inArray){
             var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
-            var _team_id = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            var _room_id = ((MsgPack.MessagePackObject)inArray[1]).AsString();
             rsp = new client_room_player_agree_join_room_rsp(hub.hub._gates.current_client_uuid, _cb_uuid);
             if (on_agree_join_room != null){
-                on_agree_join_room(_team_id);
+                on_agree_join_room(_room_id);
             }
             rsp = null;
         }

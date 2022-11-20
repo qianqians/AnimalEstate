@@ -438,17 +438,17 @@ export class client_room_player_hubproxy
         return cb_create_room_obj;
     }
 
-    public invite_role_join_room(guid:number){
+    public invite_role_join_room(sdk_uuid:string){
         let _argv_4afdf6f4_2ff9_314b_9be9_c6d0fa96e4f8:any[] = [];
-        _argv_4afdf6f4_2ff9_314b_9be9_c6d0fa96e4f8.push(guid);
+        _argv_4afdf6f4_2ff9_314b_9be9_c6d0fa96e4f8.push(sdk_uuid);
         this._client_handle.call_hub(this.hub_name_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2, "client_room_player_invite_role_join_room", _argv_4afdf6f4_2ff9_314b_9be9_c6d0fa96e4f8);
     }
 
-    public agree_join_room(team_id:string){
+    public agree_join_room(room_id:string){
         let uuid_2b5aaead_9c5d_5e1b_b2f5_62a6bfb42fe9 = Math.round(this.uuid_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2++);
 
         let _argv_dd5a04d0_146c_30d4_bf08_5551c02a714b:any[] = [uuid_2b5aaead_9c5d_5e1b_b2f5_62a6bfb42fe9];
-        _argv_dd5a04d0_146c_30d4_bf08_5551c02a714b.push(team_id);
+        _argv_dd5a04d0_146c_30d4_bf08_5551c02a714b.push(room_id);
         this._client_handle.call_hub(this.hub_name_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2, "client_room_player_agree_join_room", _argv_dd5a04d0_146c_30d4_bf08_5551c02a714b);
         let cb_agree_join_room_obj = new client_room_player_agree_join_room_cb(uuid_2b5aaead_9c5d_5e1b_b2f5_62a6bfb42fe9, rsp_cb_client_room_player_handle);
         if (rsp_cb_client_room_player_handle){
