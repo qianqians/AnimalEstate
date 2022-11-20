@@ -51,6 +51,8 @@ namespace player
                     {
                         rsp.rsp(_room_hub_name, info);
 
+                        _player.RoomID = room_id;
+
                         var key = redis_help.BuildPlayerRoomCacheKey(_player.PlayerInfo.sdk_uuid);
                         player._redis_handle.SetStrData(key, _room_proxy.name);
 
@@ -89,7 +91,7 @@ namespace player
                 var _player_proxy_name = await player._redis_handle.GetStrData(player_key);
                 var _player_hub_proxy = player.player_Proxy_Mng.get_player_proxy(_player_proxy_name);
 
-                _player_hub_proxy.invite_role_join_room(sdk_uuid, _player.PlayerInfo.name);
+                _player_hub_proxy.invite_role_join_room(sdk_uuid, _player.RoomID, _player.PlayerInfo.name);
             }
             catch (System.Exception ex)
             {
@@ -113,11 +115,10 @@ namespace player
                 player._redis_handle.SetStrData(key, _room_proxy.name);
 
                 _room_proxy.create_room(_player_proxy.PlayerInlineInfo).callBack((_room_info) => {
-
-                    var key = redis_help.BuildPlayerRoomCacheKey(_player_proxy.PlayerInfo.sdk_uuid);
-                    player._redis_handle.SetStrData(key, _room_proxy.name);
-
                     rsp.rsp(_room_proxy.name, _room_info);
+                    
+                    _player_proxy.RoomID = _room_info.room_uuid;
+
                 }, (err) => {
                     rsp.err(err);
                 }).timeout(1000, () => {

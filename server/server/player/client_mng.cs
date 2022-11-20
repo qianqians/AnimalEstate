@@ -81,6 +81,19 @@ namespace player
             }
         }
 
+        private string room_id;
+        public string RoomID
+        {
+            set
+            {
+                room_id = value;
+            }
+            get
+            {
+                return room_id;
+            }
+        }
+
         private dbproxyproxy.Collection GuidCollection
         {
             get { return hub.hub.get_random_dbproxyproxy().getCollection(constant.constant.player_db_name, constant.constant.player_db_guid_collection); }
@@ -191,6 +204,15 @@ namespace player
             }
         }
 
+        private static readonly player_room_client_caller player_Room_Client_Caller = new ();
+        public static player_room_client_caller PlayerRoomClientCaller
+        {
+            get
+            {
+                return player_Room_Client_Caller;
+            }
+        }
+
         public Task<string> token_player_login(string sdk_uuid)
         {
             var ret = new TaskCompletionSource<string>();
@@ -216,22 +238,22 @@ namespace player
                     }
                     else
                     {
+                        client_proxy _proxy = null;
                         var token = Guid.NewGuid().ToString();
 
                         if (player_info_list.Count == 0)
                         {
-                            var _proxy = new client_proxy(sdk_uuid);
-                            client_token_dict.Add(token, _proxy);
-                            client_sdk_uuid_dict.Add(sdk_uuid, _proxy);
+                            _proxy = new client_proxy(sdk_uuid);
                         }
                         else if (player_info_list.Count == 1)
                         {
                             var info = player_info_list[0];
                             var _player_info_db = BsonSerializer.Deserialize<player_info>(info as BsonDocument);
-                            var _proxy = new client_proxy(sdk_uuid, _player_info_db);
-                            client_token_dict.Add(token, _proxy);
+                            _proxy = new client_proxy(sdk_uuid, _player_info_db);
                             client_guid_dict.Add(_proxy.PlayerInfo.guid, _proxy);
                         }
+                        client_token_dict.Add(token, _proxy);
+                        client_sdk_uuid_dict.Add(sdk_uuid, _proxy);
 
                         ret.SetResult(token);
                     }
@@ -271,6 +293,15 @@ namespace player
             if (!client_uuid_dict.TryGetValue(uuid, out client_proxy _proxy))
             {
                 throw new GetPlayerException($"invaild uuid:{uuid}");
+            }
+            return _proxy;
+        }
+
+        public client_proxy sdk_uuid_get_client_proxy(string sdk_uuid)
+        {
+            if (!client_sdk_uuid_dict.TryGetValue(sdk_uuid, out client_proxy _proxy))
+            {
+                throw new GetPlayerException($"invaild sdk_uuid:{sdk_uuid}");
             }
             return _proxy;
         }

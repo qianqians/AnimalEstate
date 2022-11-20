@@ -1,9 +1,9 @@
 import common
 
 module player_player_room{
-    invite_role_join_room ntf(string sdk_uuid, string invite_role_name);
+    invite_role_join_room ntf(string sdk_uuid, string room_id, string invite_role_name);
 }
 
-module player_player_friend{
-
+module player_player_offline_msg{
+    player_have_offline_msg ntf(int64 guid);
 }
