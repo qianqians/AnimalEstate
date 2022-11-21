@@ -58,7 +58,7 @@ namespace player
             }
         }
 
-        private player_info _info;
+        private player_info _info = null;
         public player_info PlayerInfo
         {
             get
@@ -319,10 +319,10 @@ namespace player
                             var info = player_info_list[0];
                             var _player_info_db = BsonSerializer.Deserialize<player_info>(info as BsonDocument);
                             _proxy = new client_proxy(sdk_uuid, _player_info_db);
-                            client_guid_dict.Add(_proxy.PlayerInfo.guid, _proxy);
+                            client_guid_dict[_proxy.PlayerInfo.guid] = _proxy;
                         }
-                        client_token_dict.Add(token, _proxy);
-                        client_sdk_uuid_dict.Add(sdk_uuid, _proxy);
+                        client_token_dict[token] = _proxy;
+                        client_sdk_uuid_dict[sdk_uuid] = _proxy;
 
                         ret.SetResult(token);
                     }

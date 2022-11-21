@@ -381,7 +381,7 @@ namespace player
             try
             {
                 var _proxy = player.client_Mng.token_get_client_proxy(uuid, token);
-                if (_proxy != null)
+                if (_proxy != null && _proxy.PlayerInfo != null)
                 {
                     rsp.rsp(_proxy.PlayerInfo);
 
@@ -398,6 +398,8 @@ namespace player
                     {
                         client_mng.PlayerGameClientCaller.get_client(_proxy.uuid).game_svr(game_hub_name);
                     }
+
+                    await player.offline_Msg_Mng.process_offline_msg(_proxy.PlayerInfo.guid.ToString());
                 }
                 else
                 {
