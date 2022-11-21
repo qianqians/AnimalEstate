@@ -739,7 +739,7 @@ namespace abelkhan
             rsp_cb_client_friend_lobby_handle = rsp_cb_client_friend_lobby_handle_;
         }
 
-        public client_friend_lobby_find_role_cb find_role(string guid){
+        public client_friend_lobby_find_role_cb find_role(Int64 guid){
             var uuid_23e9c7cc_ac81_5213_8bc2_d73a51d7f87b = (UInt64)Interlocked.Increment(ref uuid_f2e2d46a_373f_3b99_b818_f5e5b675f4da);
 
             var _argv_ba126e3b_fd75_3aa1_a5be_1d096547ca8f = new ArrayList();
@@ -753,16 +753,16 @@ namespace abelkhan
             }            return cb_find_role_obj;
         }
 
-        public void invite_role_friend(player_friend_info self_account, player_friend_info target_account){
+        public void invite_role_friend(player_friend_info self_info, player_friend_info target_info){
             var _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278 = new ArrayList();
-            _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278.Add(player_friend_info.player_friend_info_to_protcol(self_account));
-            _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278.Add(player_friend_info.player_friend_info_to_protcol(target_account));
+            _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278.Add(player_friend_info.player_friend_info_to_protcol(self_info));
+            _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278.Add(player_friend_info.player_friend_info_to_protcol(target_info));
             _client_handle.call_hub(hub_name_f2e2d46a_373f_3b99_b818_f5e5b675f4da, "client_friend_lobby_invite_role_friend", _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278);
         }
 
-        public void agree_role_friend(string invite_account, bool be_agree){
+        public void agree_role_friend(Int64 invite_guid, bool be_agree){
             var _argv_1f120946_a2d8_34bf_a794_941de0d70f98 = new ArrayList();
-            _argv_1f120946_a2d8_34bf_a794_941de0d70f98.Add(invite_account);
+            _argv_1f120946_a2d8_34bf_a794_941de0d70f98.Add(invite_guid);
             _argv_1f120946_a2d8_34bf_a794_941de0d70f98.Add(be_agree);
             _client_handle.call_hub(hub_name_f2e2d46a_373f_3b99_b818_f5e5b675f4da, "client_friend_lobby_agree_role_friend", _argv_1f120946_a2d8_34bf_a794_941de0d70f98);
         }

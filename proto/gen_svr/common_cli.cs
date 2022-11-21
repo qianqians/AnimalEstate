@@ -77,6 +77,8 @@ namespace abelkhan
         public Int32 coin;
         public Int32 score;
         public List<player_friend_info> friend_list;
+        public List<player_friend_info> invite_list;
+        public List<player_friend_info> be_invited_list;
         public List<animal> hero_list;
         public List<skin> skin_list;
         public List<playground> playground_list;
@@ -92,6 +94,16 @@ namespace abelkhan
                 _array_friend_list.Add( new MsgPack.MessagePackObject(player_friend_info.player_friend_info_to_protcol(v_)));
             }
             _protocol.Add("friend_list", new MsgPack.MessagePackObject(_array_friend_list));
+            var _array_invite_list = new List<MsgPack.MessagePackObject>();
+            foreach(var v_ in _struct.invite_list){
+                _array_invite_list.Add( new MsgPack.MessagePackObject(player_friend_info.player_friend_info_to_protcol(v_)));
+            }
+            _protocol.Add("invite_list", new MsgPack.MessagePackObject(_array_invite_list));
+            var _array_be_invited_list = new List<MsgPack.MessagePackObject>();
+            foreach(var v_ in _struct.be_invited_list){
+                _array_be_invited_list.Add( new MsgPack.MessagePackObject(player_friend_info.player_friend_info_to_protcol(v_)));
+            }
+            _protocol.Add("be_invited_list", new MsgPack.MessagePackObject(_array_be_invited_list));
             var _array_hero_list = new List<MsgPack.MessagePackObject>();
             foreach(var v_ in _struct.hero_list){
                 _array_hero_list.Add((Int32)v_);
@@ -132,6 +144,20 @@ namespace abelkhan
                     var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
                     foreach (var v_ in _protocol_array){
                         _structba9db598_9e11_365a_9abc_c16f0f380537.friend_list.Add(player_friend_info.protcol_to_player_friend_info(((MsgPack.MessagePackObject)v_).AsDictionary()));
+                    }
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "invite_list"){
+                    _structba9db598_9e11_365a_9abc_c16f0f380537.invite_list = new();
+                    var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
+                    foreach (var v_ in _protocol_array){
+                        _structba9db598_9e11_365a_9abc_c16f0f380537.invite_list.Add(player_friend_info.protcol_to_player_friend_info(((MsgPack.MessagePackObject)v_).AsDictionary()));
+                    }
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "be_invited_list"){
+                    _structba9db598_9e11_365a_9abc_c16f0f380537.be_invited_list = new();
+                    var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
+                    foreach (var v_ in _protocol_array){
+                        _structba9db598_9e11_365a_9abc_c16f0f380537.be_invited_list.Add(player_friend_info.protcol_to_player_friend_info(((MsgPack.MessagePackObject)v_).AsDictionary()));
                     }
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "hero_list"){

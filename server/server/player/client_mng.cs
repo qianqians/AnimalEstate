@@ -172,6 +172,66 @@ namespace player
                 }
             });
         }
+
+        public void save_role_db_info()
+        {
+            var _query = new DBQueryHelper();
+            _query.condition("guid", _info.guid);
+            var data = new UpdateDataHelper();
+            data.set(_info);
+
+            PlayerCollection.updataPersistedObject(_query.query(), data.data(), true, (_result) => {
+                if (_result != hub.dbproxyproxy.EM_DB_RESULT.EM_DB_SUCESSED)
+                {
+                    log.log.err($"save_role_db_info error, player guid:{_info.guid}, err:{_result}");
+                }
+            });
+        }
+
+        public void be_invite(player_friend_info invite_role)
+        {
+            _info.invite_list.Add(invite_role);
+            save_role_db_info();
+        }
+
+        public void invite(player_friend_info target_role)
+        {
+            _info.be_invited_list.Add(target_role);
+            save_role_db_info();
+        }
+
+        public void agree_invite_friend(long guid, bool be_agree)
+        {
+            foreach (var invite_role in _info.invite_list)
+            {
+                if (invite_role.guid == guid)
+                {
+                    _info.invite_list.Remove(invite_role);
+                    if (be_agree)
+                    {
+                        _info.friend_list.Add(invite_role);
+                    }
+                    break;
+                }
+            }
+            save_role_db_info();
+        }
+
+        public player_friend_info confirm_agree_invite_friend(long guid)
+        {
+            player_friend_info target_role = null;
+            foreach (var tmp_target_role in _info.be_invited_list)
+            {
+                if (tmp_target_role.guid == guid)
+                {
+                    _info.invite_list.Remove(target_role);
+                    target_role = tmp_target_role;
+                    break;
+                }
+            }
+            save_role_db_info();
+            return target_role;
+        }
     }
 
     public class client_mng
@@ -181,7 +241,7 @@ namespace player
         private readonly Dictionary<string, client_proxy> client_sdk_uuid_dict = new();
         private readonly Dictionary<long, client_proxy> client_guid_dict = new ();
 
-        private dbproxyproxy.Collection GetPlayerCollection
+        public static dbproxyproxy.Collection GetPlayerCollection
         {
             get { return hub.hub.get_random_dbproxyproxy().getCollection(constant.constant.player_db_name, constant.constant.player_db_collection); }
         }
@@ -210,6 +270,15 @@ namespace player
             get
             {
                 return player_Room_Client_Caller;
+            }
+        }
+
+        private static readonly player_friend_client_caller player_Friend_Client_Caller = new ();
+        public static player_friend_client_caller PlayerFriend_CliendCaller
+        {
+            get
+            {
+                return player_Friend_Client_Caller;
             }
         }
 

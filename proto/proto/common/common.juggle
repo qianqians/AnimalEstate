@@ -61,6 +61,8 @@ struct player_info
 	int32 coin;
 	int32 score;
 	player_friend_info[] friend_list;
+    player_friend_info[] invite_list;
+    player_friend_info[] be_invited_list;
 	animal[] hero_list;
 	skin[] skin_list;
 	playground[] playground_list;

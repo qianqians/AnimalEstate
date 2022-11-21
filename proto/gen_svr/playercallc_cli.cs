@@ -141,10 +141,10 @@ namespace abelkhan
         public event Action<player_friend_info> on_invite_role_friend;
         public void invite_role_friend(IList<MsgPack.MessagePackObject> inArray){
             var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
-            var _invite_account = player_friend_info.protcol_to_player_friend_info(((MsgPack.MessagePackObject)inArray[1]).AsDictionary());
+            var _invite_player = player_friend_info.protcol_to_player_friend_info(((MsgPack.MessagePackObject)inArray[1]).AsDictionary());
             rsp = new player_friend_client_invite_role_friend_rsp(_client_handle, _client_handle.current_hub, _cb_uuid);
             if (on_invite_role_friend != null){
-                on_invite_role_friend(_invite_account);
+                on_invite_role_friend(_invite_player);
             }
             rsp = null;
         }
@@ -152,10 +152,10 @@ namespace abelkhan
         public event Action<player_friend_info> on_agree_role_friend;
         public void agree_role_friend(IList<MsgPack.MessagePackObject> inArray){
             var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
-            var _target_account = player_friend_info.protcol_to_player_friend_info(((MsgPack.MessagePackObject)inArray[1]).AsDictionary());
+            var _target_player = player_friend_info.protcol_to_player_friend_info(((MsgPack.MessagePackObject)inArray[1]).AsDictionary());
             rsp = new player_friend_client_agree_role_friend_rsp(_client_handle, _client_handle.current_hub, _cb_uuid);
             if (on_agree_role_friend != null){
-                on_agree_role_friend(_target_account);
+                on_agree_role_friend(_target_player);
             }
             rsp = null;
         }

@@ -564,7 +564,7 @@ export class client_friend_lobby_hubproxy
         this._client_handle = client_handle_;
     }
 
-    public find_role(guid:string){
+    public find_role(guid:number){
         let uuid_23e9c7cc_ac81_5213_8bc2_d73a51d7f87b = Math.round(this.uuid_f2e2d46a_373f_3b99_b818_f5e5b675f4da++);
 
         let _argv_ba126e3b_fd75_3aa1_a5be_1d096547ca8f:any[] = [uuid_23e9c7cc_ac81_5213_8bc2_d73a51d7f87b];
@@ -577,16 +577,16 @@ export class client_friend_lobby_hubproxy
         return cb_find_role_obj;
     }
 
-    public invite_role_friend(self_account:common.player_friend_info, target_account:common.player_friend_info){
+    public invite_role_friend(self_info:common.player_friend_info, target_info:common.player_friend_info){
         let _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278:any[] = [];
-        _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278.push(common.player_friend_info_to_protcol(self_account));
-        _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278.push(common.player_friend_info_to_protcol(target_account));
+        _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278.push(common.player_friend_info_to_protcol(self_info));
+        _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278.push(common.player_friend_info_to_protcol(target_info));
         this._client_handle.call_hub(this.hub_name_f2e2d46a_373f_3b99_b818_f5e5b675f4da, "client_friend_lobby_invite_role_friend", _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278);
     }
 
-    public agree_role_friend(invite_account:string, be_agree:boolean){
+    public agree_role_friend(invite_guid:number, be_agree:boolean){
         let _argv_1f120946_a2d8_34bf_a794_941de0d70f98:any[] = [];
-        _argv_1f120946_a2d8_34bf_a794_941de0d70f98.push(invite_account);
+        _argv_1f120946_a2d8_34bf_a794_941de0d70f98.push(invite_guid);
         _argv_1f120946_a2d8_34bf_a794_941de0d70f98.push(be_agree);
         this._client_handle.call_hub(this.hub_name_f2e2d46a_373f_3b99_b818_f5e5b675f4da, "client_friend_lobby_agree_role_friend", _argv_1f120946_a2d8_34bf_a794_941de0d70f98);
     }

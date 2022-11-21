@@ -146,7 +146,7 @@ export class player_friend_client_module extends client_handle.imodule {
 
     }
 
-    public cb_invite_role_friend : (invite_account:common.player_friend_info)=>void | null;
+    public cb_invite_role_friend : (invite_player:common.player_friend_info)=>void | null;
     invite_role_friend(inArray:any[]){
         let _cb_uuid = inArray[0];
         let _argv_:any[] = [];
@@ -158,7 +158,7 @@ export class player_friend_client_module extends client_handle.imodule {
         this.rsp = null;
     }
 
-    public cb_agree_role_friend : (target_account:common.player_friend_info)=>void | null;
+    public cb_agree_role_friend : (target_player:common.player_friend_info)=>void | null;
     agree_role_friend(inArray:any[]){
         let _cb_uuid = inArray[0];
         let _argv_:any[] = [];

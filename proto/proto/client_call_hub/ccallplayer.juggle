@@ -16,7 +16,7 @@ module client_room_player{
 }
 
 module client_friend_lobby {
-	find_role req(string guid) rsp(player_friend_info find_info) err(int32 err);
-	invite_role_friend ntf(player_friend_info self_account, player_friend_info target_account);
-	agree_role_friend ntf(string invite_account, bool be_agree);
+	find_role req(int64 guid) rsp(player_friend_info find_info) err(int32 err);
+	invite_role_friend ntf(player_friend_info self_info, player_friend_info target_info);
+	agree_role_friend ntf(int64 invite_guid, bool be_agree);
 }

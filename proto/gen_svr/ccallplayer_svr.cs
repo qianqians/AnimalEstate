@@ -227,10 +227,10 @@ namespace abelkhan
             hub.hub._modules.add_mothed("client_friend_lobby_agree_role_friend", agree_role_friend);
         }
 
-        public event Action<string> on_find_role;
+        public event Action<Int64> on_find_role;
         public void find_role(IList<MsgPack.MessagePackObject> inArray){
             var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
-            var _guid = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            var _guid = ((MsgPack.MessagePackObject)inArray[1]).AsInt64();
             rsp = new client_friend_lobby_find_role_rsp(hub.hub._gates.current_client_uuid, _cb_uuid);
             if (on_find_role != null){
                 on_find_role(_guid);
@@ -240,19 +240,19 @@ namespace abelkhan
 
         public event Action<player_friend_info, player_friend_info> on_invite_role_friend;
         public void invite_role_friend(IList<MsgPack.MessagePackObject> inArray){
-            var _self_account = player_friend_info.protcol_to_player_friend_info(((MsgPack.MessagePackObject)inArray[0]).AsDictionary());
-            var _target_account = player_friend_info.protcol_to_player_friend_info(((MsgPack.MessagePackObject)inArray[1]).AsDictionary());
+            var _self_info = player_friend_info.protcol_to_player_friend_info(((MsgPack.MessagePackObject)inArray[0]).AsDictionary());
+            var _target_info = player_friend_info.protcol_to_player_friend_info(((MsgPack.MessagePackObject)inArray[1]).AsDictionary());
             if (on_invite_role_friend != null){
-                on_invite_role_friend(_self_account, _target_account);
+                on_invite_role_friend(_self_info, _target_info);
             }
         }
 
-        public event Action<string, bool> on_agree_role_friend;
+        public event Action<Int64, bool> on_agree_role_friend;
         public void agree_role_friend(IList<MsgPack.MessagePackObject> inArray){
-            var _invite_account = ((MsgPack.MessagePackObject)inArray[0]).AsString();
+            var _invite_guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
             var _be_agree = ((MsgPack.MessagePackObject)inArray[1]).AsBoolean();
             if (on_agree_role_friend != null){
-                on_agree_role_friend(_invite_account, _be_agree);
+                on_agree_role_friend(_invite_guid, _be_agree);
             }
         }
 

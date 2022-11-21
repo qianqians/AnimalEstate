@@ -71,6 +71,8 @@ export class player_info
     public coin : number;
     public score : number;
     public friend_list : player_friend_info[];
+    public invite_list : player_friend_info[];
+    public be_invited_list : player_friend_info[];
     public hero_list : animal[];
     public skin_list : skin[];
     public playground_list : playground[];
@@ -104,6 +106,18 @@ export function protcol_to_player_info(_protocol:any){
             _struct.friend_list = [];
             for(let v_ of val){
                 _struct.friend_list.push(protcol_to_player_friend_info(v_));
+    }
+        }
+        else if (key === "invite_list"){
+            _struct.invite_list = [];
+            for(let v_ of val){
+                _struct.invite_list.push(protcol_to_player_friend_info(v_));
+    }
+        }
+        else if (key === "be_invited_list"){
+            _struct.be_invited_list = [];
+            for(let v_ of val){
+                _struct.be_invited_list.push(protcol_to_player_friend_info(v_));
     }
         }
         else if (key === "hero_list"){

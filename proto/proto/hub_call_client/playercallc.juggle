@@ -15,6 +15,6 @@ module player_room_client{
 }
 
 module player_friend_client {
-	invite_role_friend req(player_friend_info invite_account) rsp() err();
-	agree_role_friend req(player_friend_info target_account) rsp() err();
+	invite_role_friend req(player_friend_info invite_player) rsp() err();
+	agree_role_friend req(player_friend_info target_player) rsp() err();
 }

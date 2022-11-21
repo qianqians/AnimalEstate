@@ -476,12 +476,12 @@ namespace abelkhan
             rsp_cb_player_friend_client_handle = rsp_cb_player_friend_client_handle_;
         }
 
-        public player_friend_client_invite_role_friend_cb invite_role_friend(player_friend_info invite_account){
+        public player_friend_client_invite_role_friend_cb invite_role_friend(player_friend_info invite_player){
             var uuid_27e53be7_470d_5b98_b037_74e3de0f1203 = (UInt64)Interlocked.Increment(ref uuid_ab0f8392_038f_32c5_83c3_84897ee30323);
 
             var _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278 = new ArrayList();
             _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278.Add(uuid_27e53be7_470d_5b98_b037_74e3de0f1203);
-            _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278.Add(player_friend_info.player_friend_info_to_protcol(invite_account));
+            _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278.Add(player_friend_info.player_friend_info_to_protcol(invite_player));
             hub.hub._gates.call_client(client_uuid_ab0f8392_038f_32c5_83c3_84897ee30323, "player_friend_client_invite_role_friend", _argv_7b2d0e53_b589_37f7_a9bc_31fcce44d278);
 
             var cb_invite_role_friend_obj = new player_friend_client_invite_role_friend_cb(uuid_27e53be7_470d_5b98_b037_74e3de0f1203, rsp_cb_player_friend_client_handle);
@@ -490,12 +490,12 @@ namespace abelkhan
             }            return cb_invite_role_friend_obj;
         }
 
-        public player_friend_client_agree_role_friend_cb agree_role_friend(player_friend_info target_account){
+        public player_friend_client_agree_role_friend_cb agree_role_friend(player_friend_info target_player){
             var uuid_67bfbc9a_7c4d_5698_93a0_364d7aa95a7e = (UInt64)Interlocked.Increment(ref uuid_ab0f8392_038f_32c5_83c3_84897ee30323);
 
             var _argv_1f120946_a2d8_34bf_a794_941de0d70f98 = new ArrayList();
             _argv_1f120946_a2d8_34bf_a794_941de0d70f98.Add(uuid_67bfbc9a_7c4d_5698_93a0_364d7aa95a7e);
-            _argv_1f120946_a2d8_34bf_a794_941de0d70f98.Add(player_friend_info.player_friend_info_to_protcol(target_account));
+            _argv_1f120946_a2d8_34bf_a794_941de0d70f98.Add(player_friend_info.player_friend_info_to_protcol(target_player));
             hub.hub._gates.call_client(client_uuid_ab0f8392_038f_32c5_83c3_84897ee30323, "player_friend_client_agree_role_friend", _argv_1f120946_a2d8_34bf_a794_941de0d70f98);
 
             var cb_agree_role_friend_obj = new player_friend_client_agree_role_friend_cb(uuid_67bfbc9a_7c4d_5698_93a0_364d7aa95a7e, rsp_cb_player_friend_client_handle);

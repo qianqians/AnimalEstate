@@ -8,7 +8,12 @@ namespace abelkhan
     {
         static public string BuildPlayerSvrCacheKey(string sdk_uuid)
         {
-            return $"Player:PlayerCache:{sdk_uuid}";
+            return $"Player:PlayerSDKUUIDCache:{sdk_uuid}";
+        }
+
+        static public string BuildPlayerGuidCacheKey(long guid)
+        {
+            return $"Player:PlayerGuidCache:{guid}";
         }
 
         static public string BuildPlayerRoomCacheKey(string sdk_uuid)
