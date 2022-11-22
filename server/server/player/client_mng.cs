@@ -3,6 +3,7 @@ using hub;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using Newtonsoft.Json.Linq;
+using offline_msg;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -232,6 +233,21 @@ namespace player
             save_role_db_info();
             return target_role;
         }
+
+        public void settle(game_settle_info _settle_info)
+        {
+            foreach (var info in _settle_info.settle_info)
+            {
+                if (_info.guid == info.guid)
+                {
+                    _info.coin += info.award_coin;
+                    _info.score += info.award_score;
+                    return;
+                }
+            }
+
+            log.log.err($"wrong settle info guid:{_info.guid}");
+        }
     }
 
     public class client_mng
@@ -281,6 +297,30 @@ namespace player
                 return player_Friend_Client_Caller;
             }
         }
+
+        public static async void forward_offline_msg(offline_msg_mng.offline_msg _offline_msg)
+        {
+            if (await player.offline_Msg_Mng.send_offline_msg(_offline_msg))
+            {
+                var player_guid = long.Parse(_offline_msg.player_guid);
+                var player_svr_key = redis_help.BuildPlayerGuidCacheKey(player_guid);
+                string player_hub_name = await player._redis_handle.GetStrData(player_svr_key);
+                if (player_hub_name != hub.hub.name)
+                {
+                    var player_proxy = player.player_Proxy_Mng.get_player_proxy(player_hub_name);
+                    player_proxy.player_have_offline_msg(player_guid);
+                }
+                else
+                {
+                    var target_role = player.client_Mng.guid_get_client_proxy(player_guid);
+                    if (target_role != null)
+                    {
+                        await player.offline_Msg_Mng.process_offline_msg(_offline_msg.player_guid);
+                    }
+                }
+            }
+        }
+
 
         public Task<string> token_player_login(string sdk_uuid)
         {

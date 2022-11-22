@@ -127,7 +127,7 @@ namespace player
                     msg_type = "agree_friend_msg",
                     msg = st.ToArray(),
                 };
-                forward_offline_msg(_offline_msg);
+                client_mng.forward_offline_msg(_offline_msg);
             }
         }
 
@@ -156,30 +156,7 @@ namespace player
                 msg_type = "invite_friend_msg",
                 msg = st.ToArray(),
             };
-            forward_offline_msg(_offline_msg);
-        }
-
-        private async void forward_offline_msg(offline_msg_mng.offline_msg _offline_msg)
-        {
-            if (await player.offline_Msg_Mng.send_offline_msg(_offline_msg))
-            {
-                var player_guid = long.Parse(_offline_msg.player_guid);
-                var player_svr_key = redis_help.BuildPlayerGuidCacheKey(player_guid);
-                string player_hub_name = await player._redis_handle.GetStrData(player_svr_key);
-                if (player_hub_name != hub.hub.name)
-                {
-                    var player_proxy = player.player_Proxy_Mng.get_player_proxy(player_hub_name);
-                    player_proxy.player_have_offline_msg(player_guid);
-                }
-                else
-                {
-                    var target_role = player.client_Mng.guid_get_client_proxy(player_guid);
-                    if (target_role != null)
-                    {
-                        await player.offline_Msg_Mng.process_offline_msg(_offline_msg.player_guid);
-                    }
-                }
-            }
+            client_mng.forward_offline_msg(_offline_msg);
         }
 
         private void Client_Friend_Lobby_Module_on_find_role(long guid)
