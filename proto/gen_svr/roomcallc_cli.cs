@@ -17,6 +17,7 @@ namespace abelkhan
             _client_handle = client_handle_;
             _client_handle.modulemanager.add_mothed("room_client_refresh_room_info", refresh_room_info);
             _client_handle.modulemanager.add_mothed("room_client_transfer_refresh_room_info", transfer_refresh_room_info);
+            _client_handle.modulemanager.add_mothed("room_client_chat", chat);
             _client_handle.modulemanager.add_mothed("room_client_room_is_free", room_is_free);
             _client_handle.modulemanager.add_mothed("room_client_player_leave_room_success", player_leave_room_success);
             _client_handle.modulemanager.add_mothed("room_client_be_kicked", be_kicked);
@@ -37,6 +38,15 @@ namespace abelkhan
             var _info = room_info.protcol_to_room_info(((MsgPack.MessagePackObject)inArray[1]).AsDictionary());
             if (on_transfer_refresh_room_info != null){
                 on_transfer_refresh_room_info(_room_hub_name, _info);
+            }
+        }
+
+        public event Action<Int64, string> on_chat;
+        public void chat(IList<MsgPack.MessagePackObject> inArray){
+            var _chat_player_guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
+            var _chat_str = ((MsgPack.MessagePackObject)inArray[1]).AsString();
+            if (on_chat != null){
+                on_chat(_chat_player_guid, _chat_str);
             }
         }
 

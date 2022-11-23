@@ -63,6 +63,13 @@ namespace abelkhan
             hub.hub._gates.call_group_client(client_uuids_59b7c252_c008_342a_8082_3977be609704, "room_client_transfer_refresh_room_info", _argv_ab6777d0_e79b_31c0_93a6_6626bdcf6426);
         }
 
+        public void chat(Int64 chat_player_guid, string chat_str){
+            var _argv_963291b4_683e_3905_b8fb_55e87bd3c071 = new ArrayList();
+            _argv_963291b4_683e_3905_b8fb_55e87bd3c071.Add(chat_player_guid);
+            _argv_963291b4_683e_3905_b8fb_55e87bd3c071.Add(chat_str);
+            hub.hub._gates.call_group_client(client_uuids_59b7c252_c008_342a_8082_3977be609704, "room_client_chat", _argv_963291b4_683e_3905_b8fb_55e87bd3c071);
+        }
+
         public void room_is_free(){
             var _argv_0c336ab9_922c_355b_ad95_eeb4e4b20ed0 = new ArrayList();
             hub.hub._gates.call_group_client(client_uuids_59b7c252_c008_342a_8082_3977be609704, "room_client_room_is_free", _argv_0c336ab9_922c_355b_ad95_eeb4e4b20ed0);

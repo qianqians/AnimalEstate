@@ -11,6 +11,7 @@ export class room_client_module extends client_handle.imodule {
         this._client_handle = _client_handle_;
         this._client_handle._modulemng.add_method("room_client_refresh_room_info", this.refresh_room_info.bind(this));
         this._client_handle._modulemng.add_method("room_client_transfer_refresh_room_info", this.transfer_refresh_room_info.bind(this));
+        this._client_handle._modulemng.add_method("room_client_chat", this.chat.bind(this));
         this._client_handle._modulemng.add_method("room_client_room_is_free", this.room_is_free.bind(this));
         this._client_handle._modulemng.add_method("room_client_player_leave_room_success", this.player_leave_room_success.bind(this));
         this._client_handle._modulemng.add_method("room_client_be_kicked", this.be_kicked.bind(this));
@@ -18,6 +19,7 @@ export class room_client_module extends client_handle.imodule {
 
         this.cb_refresh_room_info = null;
         this.cb_transfer_refresh_room_info = null;
+        this.cb_chat = null;
         this.cb_room_is_free = null;
         this.cb_player_leave_room_success = null;
         this.cb_be_kicked = null;
@@ -40,6 +42,16 @@ export class room_client_module extends client_handle.imodule {
         _argv_.push(common.protcol_to_room_info(inArray[1]));
         if (this.cb_transfer_refresh_room_info){
             this.cb_transfer_refresh_room_info.apply(null, _argv_);
+        }
+    }
+
+    public cb_chat : (chat_player_guid:number, chat_str:string)=>void | null;
+    chat(inArray:any[]){
+        let _argv_:any[] = [];
+        _argv_.push(inArray[0]);
+        _argv_.push(inArray[1]);
+        if (this.cb_chat){
+            this.cb_chat.apply(null, _argv_);
         }
     }
 

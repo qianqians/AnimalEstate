@@ -3,6 +3,7 @@ import common
 module room_client{
 	refresh_room_info multicast(room_info info);
 	transfer_refresh_room_info multicast(string room_hub_name, room_info info);
+	chat multicast(int64 chat_player_guid, string chat_str);
 	room_is_free multicast();
 	player_leave_room_success ntf();
 	be_kicked ntf();
