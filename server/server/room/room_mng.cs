@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static MongoDB.Bson.Serialization.Serializers.SerializerHelper;
 
 namespace room
 {
@@ -77,6 +78,13 @@ namespace room
                 return uuid_clients.Count;
             }
         }
+        public List<string> RoomClientUUIDList
+        {
+            get
+            {
+                return uuid_clients.Keys.ToList();
+            }
+        } 
 
         public room_info RoomInfo
         {
@@ -108,7 +116,7 @@ namespace room
 
         public void chat(long chat_player_guid, string chat_str)
         {
-            room_mng.RoomClientCaller.get_multicast(uuid_clients.Keys.ToList()).chat(chat_player_guid, chat_str);
+            room_mng.RoomClientCaller.get_multicast(RoomClientUUIDList).chat(chat_player_guid, chat_str);
         }
 
         public void leave_room(string leave_player_uuid)
@@ -117,7 +125,7 @@ namespace room
             if (uuid_clients.Count > 0 && _owner.uuid == leave_player_uuid)
             {
                 _owner = uuid_clients.Values.First();
-                room_mng.RoomClientCaller.get_multicast(uuid_clients.Keys.ToList()).refresh_room_info(RoomInfo);
+                room_mng.RoomClientCaller.get_multicast(RoomClientUUIDList).refresh_room_info(RoomInfo);
             }
             room_mng.RoomClientCaller.get_client(leave_player_uuid).player_leave_room_success();
         }
@@ -130,7 +138,7 @@ namespace room
                 {
                     uuid_clients.Remove(_client.uuid);
 
-                    room_mng.RoomClientCaller.get_multicast(uuid_clients.Keys.ToList()).refresh_room_info(RoomInfo);
+                    room_mng.RoomClientCaller.get_multicast(RoomClientUUIDList).refresh_room_info(RoomInfo);
                     room_mng.RoomClientCaller.get_client(_client.uuid).be_kicked();
 
                     return;
@@ -141,13 +149,23 @@ namespace room
 
         public void disband()
         {
-            room_mng.RoomClientCaller.get_multicast(uuid_clients.Keys.ToList()).room_is_free();
+            room_mng.RoomClientCaller.get_multicast(RoomClientUUIDList).room_is_free();
             uuid_clients.Clear();
         }
         
         public void team_into_match()
         {
-            room_mng.RoomClientCaller.get_multicast(uuid_clients.Keys.ToList()).team_into_match();
+            room_mng.RoomClientCaller.get_multicast(RoomClientUUIDList).team_into_match();
+        }
+
+        public void refresh_room_info()
+        {
+            room_mng.RoomClientCaller.get_multicast(RoomClientUUIDList).refresh_room_info(RoomInfo);
+        }
+
+        public void role_into_game(string game_hub_name)
+        {
+            room_mng.RoomMatchClientCaller.get_multicast(RoomClientUUIDList).role_into_game(game_hub_name);
         }
     }
 
@@ -162,6 +180,15 @@ namespace room
             get
             {
                 return room_Client_Caller;
+            }
+        }
+
+        private static readonly room_match_client_caller room_Match_Client_Caller = new ();
+        public static room_match_client_caller RoomMatchClientCaller
+        {
+            get
+            {
+                return room_Match_Client_Caller;
             }
         }
 
@@ -214,6 +241,46 @@ namespace room
             {
                 _room.disband();
             }
+        }
+
+        public void room_join_room(string target_room_uuid, room_info info)
+        {
+            if (guid_room.TryGetValue(target_room_uuid, out room_impl _room))
+            {
+                foreach (var member in info.room_player_list)
+                {
+                    var _client = new client_proxy(member, _room);
+                    uuid_clients.Add(member.uuid, _client);
+
+                    _room.join_room(_client);
+                }
+                _room.refresh_room_info();
+            }
+            else
+            {
+                log.log.info($"room_join_room target_room_uuid not exist! room_uuid:{target_room_uuid}");
+            }
+        }
+
+        public void room_match_join_room_release(string room_uuid)
+        {
+            if (guid_room.Remove(room_uuid, out room_impl _room))
+            {
+                foreach (var client_uuid in _room.RoomClientUUIDList)
+                {
+                    uuid_clients.Remove(client_uuid);
+                }
+            }
+            else
+            {
+                log.log.info($"room_match_join_room_release target_room_uuid not exist! room_uuid:{room_uuid}");
+            }
+        }
+
+        public room_impl get_room(string room_uuid)
+        {
+            guid_room.TryGetValue(room_uuid, out room_impl _room);
+            return _room;
         }
     }
 

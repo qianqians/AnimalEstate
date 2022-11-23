@@ -1,4 +1,5 @@
 ﻿using abelkhan;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Principal;
 
@@ -119,6 +120,17 @@ namespace room
         private void Client_Room_Match_Module_on_into_room()
         {
             log.log.trace("on_into_room begin!");
+
+            try
+            {
+                var player_uuid = hub.hub._gates.current_client_uuid;
+                var _client = room._room_mng.get_client_proxy(player_uuid);
+                room_mng.RoomClientCaller.get_multicast(new List<string> { player_uuid }).refresh_room_info(_client.RoomImpl.RoomInfo);
+            }
+            catch (System.Exception ex)
+            {
+                log.log.err($"{ex}");
+            }
         }
     }
 }

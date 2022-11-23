@@ -11,5 +11,5 @@ module room_client{
 }
 
 module room_match_client{
-    role_into_game ntf(string game_hub_name);
+    role_into_game multicast(string game_hub_name);
 }

@@ -144,12 +144,6 @@ namespace abelkhan
             rsp_cb_room_match_client_handle = rsp_cb_room_match_client_handle_;
         }
 
-        public void role_into_game(string game_hub_name){
-            var _argv_59c21bb2_715b_3560_87c4_55cca030071b = new ArrayList();
-            _argv_59c21bb2_715b_3560_87c4_55cca030071b.Add(game_hub_name);
-            hub.hub._gates.call_client(client_uuid_28b7d582_d434_32f8_bd83_6eff7f90caa7, "room_match_client_role_into_game", _argv_59c21bb2_715b_3560_87c4_55cca030071b);
-        }
-
     }
 
     public class room_match_client_multicast {
@@ -159,6 +153,12 @@ namespace abelkhan
         public room_match_client_multicast(room_match_client_rsp_cb rsp_cb_room_match_client_handle_)
         {
             rsp_cb_room_match_client_handle = rsp_cb_room_match_client_handle_;
+        }
+
+        public void role_into_game(string game_hub_name){
+            var _argv_59c21bb2_715b_3560_87c4_55cca030071b = new ArrayList();
+            _argv_59c21bb2_715b_3560_87c4_55cca030071b.Add(game_hub_name);
+            hub.hub._gates.call_group_client(client_uuids_28b7d582_d434_32f8_bd83_6eff7f90caa7, "room_match_client_role_into_game", _argv_59c21bb2_715b_3560_87c4_55cca030071b);
         }
 
     }
