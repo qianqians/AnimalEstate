@@ -40,7 +40,7 @@ namespace match
             game_proxys[_proxy.name] = new game_proxy(_match_game_caller, _proxy);
         }
 
-        public async Task<game_proxy> random_idle_game()
+        public async Task<List<game_proxy> > get_idle_game()
         {
             var idle_game_proxys = new List<game_proxy>();
             foreach (var p in game_proxys)
@@ -52,13 +52,7 @@ namespace match
                 }
             }
 
-            if (idle_game_proxys.Count > 0)
-            {
-                uint count = (uint)idle_game_proxys.Count;
-                return idle_game_proxys[(int)hub.hub.randmon_uint(count)];
-            }
-
-            return null;
+            return idle_game_proxys;
         }
     }
 }

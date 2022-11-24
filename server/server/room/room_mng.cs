@@ -256,40 +256,6 @@ namespace room
             }
         }
 
-        public void room_join_room(string target_room_uuid, room_info info)
-        {
-            if (guid_room.TryGetValue(target_room_uuid, out room_impl _room))
-            {
-                foreach (var member in info.room_player_list)
-                {
-                    var _client = new client_proxy(member, _room);
-                    uuid_clients.Add(member.uuid, _client);
-
-                    _room.join_room(_client);
-                }
-                _room.refresh_room_info();
-            }
-            else
-            {
-                log.log.info($"room_join_room target_room_uuid not exist! room_uuid:{target_room_uuid}");
-            }
-        }
-
-        public void room_match_join_room_release(string room_uuid)
-        {
-            if (guid_room.Remove(room_uuid, out room_impl _room))
-            {
-                foreach (var client_uuid in _room.RoomClientUUIDList)
-                {
-                    uuid_clients.Remove(client_uuid);
-                }
-            }
-            else
-            {
-                log.log.info($"room_match_join_room_release target_room_uuid not exist! room_uuid:{room_uuid}");
-            }
-        }
-
         public room_impl get_room(string room_uuid)
         {
             guid_room.TryGetValue(room_uuid, out room_impl _room);

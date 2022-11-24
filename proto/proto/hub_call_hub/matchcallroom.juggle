@@ -2,17 +2,6 @@ import common
 
 module match_room{
 	/*
-	 * 2个2人的room匹配后组成新的满4人的room
-	 */
-    room_match_join_room ntf(string target_room_uuid, room_info info);
-	room_match_join_room_release ntf(string room_uuid);
-	
-	/*
-	 * 单个玩家匹配后进入room
-	 */
-    player_join_room ntf(string target_room_uuid, player_inline_info info);
-
-	/*
 	 * 匹配完成，进入游戏
 	 */
 	start_game ntf(string room_uuid, string game_hub_name);
@@ -22,5 +11,5 @@ module match_player{
 	/*
 	 * 单个玩家匹配后进入room
 	 */
-    player_join_room ntf(int64 player_guid, string game_hub_name, string room_hub_name);
+    player_join_game ntf(int64 player_guid, string game_hub_name);
 }

@@ -24,9 +24,9 @@ namespace match
             _proxy = proxy;
         }
 
-        public void player_join_room(long player_guid, string game_hub_name, string room_hub_name)
+        public void player_join_game(long player_guid, string game_hub_name)
         {
-            _match_player_caller.get_hub(_proxy.name).player_join_room(player_guid, game_hub_name, room_hub_name);
+            _match_player_caller.get_hub(_proxy.name).player_join_game(player_guid, game_hub_name);
         }
     }
 

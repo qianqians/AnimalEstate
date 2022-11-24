@@ -24,21 +24,6 @@ namespace match
             _proxy = proxy;
         }
 
-        public void room_match_join_room(string target_room_uuid, room_info info)
-        {
-            _match_room_caller.get_hub(_proxy.name).room_match_join_room(target_room_uuid, info);
-        }
-
-        public void room_match_join_room_release(string room_uuid)
-        {
-            _match_room_caller.get_hub(_proxy.name).room_match_join_room_release(room_uuid);
-        }
-
-        public void player_join_room(string target_room_uuid, player_inline_info info)
-        {
-            _match_room_caller.get_hub(_proxy.name).player_join_room(target_room_uuid, info);
-        }
-
         public void start_game(string room_uuid, string game_hub_name)
         {
             _match_room_caller.get_hub(_proxy.name).start_game(room_uuid, game_hub_name);

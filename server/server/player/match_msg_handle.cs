@@ -13,10 +13,10 @@ namespace player
         {
             match_player_Module = new ();
 
-            match_player_Module.on_player_join_room += Match_player_Module_on_player_join_room; ;
+            match_player_Module.on_player_join_game += Match_player_Module_on_player_join_game;
         }
 
-        private void Match_player_Module_on_player_join_room(long player_guid, string game_hub_name, string room_hub_name)
+        private void Match_player_Module_on_player_join_game(long player_guid, string game_hub_name)
         {
             log.log.trace("on_player_join_room begin!");
 
@@ -24,7 +24,6 @@ namespace player
             {
                 var _proxy = player.client_Mng.guid_get_client_proxy(player_guid);
                 client_mng.PlayerGameClientCaller.get_client(_proxy.uuid).game_svr(game_hub_name);
-                client_mng.PlayerGameClientCaller.get_client(_proxy.uuid).room_svr(room_hub_name);
             }
             catch (System.Exception ex)
             {
