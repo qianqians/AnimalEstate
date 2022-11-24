@@ -55,7 +55,7 @@ namespace login
             var idle_player_proxys = new List<player_proxy>();
             foreach (var p in player_proxys)
             {
-                var info = await login._redis_handle.GetData<player_svr_info>(p.Key);
+                var info = await login._redis_handle.GetData<svr_info>(redis_help.BuildPlayerSvrInfoCacheKey(p.Key));
                 if (info.tick_time < 34)
                 {
                     idle_player_proxys.Add(p.Value);

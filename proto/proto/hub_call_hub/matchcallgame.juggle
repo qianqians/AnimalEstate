@@ -1,0 +1,5 @@
+import common
+
+module match_game{
+	start_game req(room_info _info) rsp() err(int32 err);
+}

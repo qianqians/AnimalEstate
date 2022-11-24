@@ -13,8 +13,16 @@ namespace abelkhan
     public class game_module : common.imodule {
         public game_module()
         {
+            hub.hub._modules.add_mothed("game_into_game", into_game);
             hub.hub._modules.add_mothed("game_use_skill", use_skill);
             hub.hub._modules.add_mothed("game_throw_dice", throw_dice);
+        }
+
+        public event Action on_into_game;
+        public void into_game(IList<MsgPack.MessagePackObject> inArray){
+            if (on_into_game != null){
+                on_into_game();
+            }
         }
 
         public event Action on_use_skill;

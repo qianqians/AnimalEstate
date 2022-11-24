@@ -4,6 +4,7 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using static MongoDB.Bson.Serialization.Serializers.SerializerHelper;
 
@@ -121,13 +122,16 @@ namespace room
 
         public void leave_room(string leave_player_uuid)
         {
-            uuid_clients.Remove(leave_player_uuid);
+            uuid_clients.Remove(leave_player_uuid, out client_proxy _leave_player);
             if (uuid_clients.Count > 0 && _owner.uuid == leave_player_uuid)
             {
                 _owner = uuid_clients.Values.First();
                 room_mng.RoomClientCaller.get_multicast(RoomClientUUIDList).refresh_room_info(RoomInfo);
             }
             room_mng.RoomClientCaller.get_client(leave_player_uuid).player_leave_room_success();
+
+            var player_room_key = redis_help.BuildPlayerRoomCacheKey(_leave_player.guid);
+            room._redis_handle.DelData(player_room_key);
         }
 
         public void kick_out(long player_guid)
@@ -141,6 +145,9 @@ namespace room
                     room_mng.RoomClientCaller.get_multicast(RoomClientUUIDList).refresh_room_info(RoomInfo);
                     room_mng.RoomClientCaller.get_client(_client.uuid).be_kicked();
 
+                    var player_room_key = redis_help.BuildPlayerRoomCacheKey(player_guid);
+                    room._redis_handle.DelData(player_room_key);
+
                     return;
                 }
             }
@@ -149,6 +156,12 @@ namespace room
 
         public void disband()
         {
+            foreach (var _client in uuid_clients.Values)
+            {
+                var player_room_key = redis_help.BuildPlayerRoomCacheKey(_client.guid);
+                room._redis_handle.DelData(player_room_key);
+            }
+
             room_mng.RoomClientCaller.get_multicast(RoomClientUUIDList).room_is_free();
             uuid_clients.Clear();
         }

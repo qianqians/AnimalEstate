@@ -14,6 +14,8 @@ namespace room
             _redis_handle = new redis_handle(hub.hub._root_config.get_value_string("redis_for_cache"));
 
             var _client_msg_handle = new client_msg_handle();
+            var _match_msg_handle = new match_msg_handle();
+            var _player_msg_handle = new player_msg_handle();
 
             _hub.on_hubproxy += on_hubproxy;
             _hub.on_hubproxy_reconn += on_hubproxy;

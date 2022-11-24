@@ -41,6 +41,11 @@ export class game_hubproxy
         this._client_handle = client_handle_;
     }
 
+    public into_game(){
+        let _argv_90a69cb9_3a0a_3a86_9cad_499708905276:any[] = [];
+        this._client_handle.call_hub(this.hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_into_game", _argv_90a69cb9_3a0a_3a86_9cad_499708905276);
+    }
+
     public use_skill(){
         let _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe:any[] = [];
         this._client_handle.call_hub(this.hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_use_skill", _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe);

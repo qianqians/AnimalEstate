@@ -225,7 +225,7 @@ namespace player
 
                         _player.RoomID = room_id;
 
-                        var key = redis_help.BuildPlayerRoomCacheKey(_player.PlayerInfo.sdk_uuid);
+                        var key = redis_help.BuildPlayerRoomCacheKey(_player.PlayerInfo.guid);
                         player._redis_handle.SetStrData(key, _room_proxy.name);
 
                     }, (err) =>
@@ -283,13 +283,14 @@ namespace player
                 var _player_proxy = player.client_Mng.uuid_get_client_proxy(uuid);
                 var _room_proxy = player.room_Proxy_Mng.random_room();
 
-                var key = redis_help.BuildPlayerRoomCacheKey(_player_proxy.PlayerInfo.sdk_uuid);
-                player._redis_handle.SetStrData(key, _room_proxy.name);
-
+                
                 _room_proxy.create_room(_player_proxy.PlayerInlineInfo).callBack((_room_info) => {
                     rsp.rsp(_room_proxy.name, _room_info);
-                    
+
                     _player_proxy.RoomID = _room_info.room_uuid;
+
+                    var key = redis_help.BuildPlayerRoomCacheKey(_player_proxy.PlayerInfo.guid);
+                    player._redis_handle.SetStrData(key, _room_proxy.name);
 
                 }, (err) => {
                     rsp.err(err);
@@ -362,7 +363,7 @@ namespace player
                 {
                     rsp.rsp(_proxy.PlayerInfo);
 
-                    var room_key = redis_help.BuildPlayerRoomCacheKey(_proxy.PlayerInfo.sdk_uuid);
+                    var room_key = redis_help.BuildPlayerRoomCacheKey(_proxy.PlayerInfo.guid);
                     var room_hub_name = await player._redis_handle.GetStrData(room_key);
                     if (!string.IsNullOrEmpty(room_hub_name))
                     {

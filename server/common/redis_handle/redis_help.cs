@@ -6,6 +6,16 @@ namespace abelkhan
 {
     public class redis_help
     {
+        static public string BuildGameSvrInfoCacheKey(string game_hub_name)
+        {
+            return $"Svr:GameSvrInfoCache:{game_hub_name}";
+        }
+
+        static public string BuildPlayerSvrInfoCacheKey(string player_hub_name)
+        {
+            return $"Svr:PlayerSvrInfoCache:{player_hub_name}";
+        }
+
         static public string BuildPlayerSvrCacheLockKey(string sdk_uuid)
         {
             return $"Player:PlayerSDKUUIDLockCache:{sdk_uuid}";
@@ -21,9 +31,9 @@ namespace abelkhan
             return $"Player:PlayerGuidCache:{guid}";
         }
 
-        static public string BuildPlayerRoomCacheKey(string sdk_uuid)
+        static public string BuildPlayerRoomCacheKey(Int64 guid)
         {
-            return $"Player:RoomCache:{sdk_uuid}";
+            return $"Player:RoomCache:{guid}";
         }
 
         static public string BuildPlayerGameCacheKey(Int64 guid)

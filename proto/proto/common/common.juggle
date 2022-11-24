@@ -97,7 +97,7 @@ struct game_settle_info
 	game_player_settle_info[] settle_info;
 }
 
-struct player_svr_info
+struct svr_info
 {
 	int32 tick_time;
 	int32 player_num;

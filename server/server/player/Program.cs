@@ -1,4 +1,5 @@
 ﻿using abelkhan;
+using log;
 using offline_msg;
 using System;
 using System.Threading;
@@ -26,9 +27,16 @@ namespace player
 
             var _client_msg_handle = new client_msg_handle();
             var _login_msg_handle = new login_msg_handle();
+            var _match_msg_handle = new match_msg_handle();
+            var _player_msg_handle = new player_msg_handle();
+            var _game_msg_handle = new game_msg_handle();
 
             _hub.on_hubproxy += on_hubproxy;
             _hub.on_hubproxy_reconn += on_hubproxy;
+
+            hub.hub._timer.addticktime(300000, (_) => {
+                player._redis_handle.SetData(redis_help.BuildPlayerSvrInfoCacheKey(hub.hub.name), new svr_info { tick_time = (int)hub.hub.tick, player_num = client_Mng.Count });
+            });
 
             log.log.trace("player start ok");
 

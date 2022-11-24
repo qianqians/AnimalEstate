@@ -298,6 +298,14 @@ namespace player
             }
         }
 
+        public int Count
+        {
+            get
+            {
+                return client_guid_dict.Count;
+            }
+        }
+
         public static async void forward_offline_msg(offline_msg_mng.offline_msg _offline_msg)
         {
             if (await player.offline_Msg_Mng.send_offline_msg(_offline_msg))
