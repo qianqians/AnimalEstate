@@ -24,6 +24,11 @@ namespace match
             _match_game_caller = caller;
             _proxy = proxy;
         }
+
+        public match_game_start_game_cb start_game(List<player_inline_info> room_player_list)
+        {
+            return _match_game_caller.get_hub(_proxy.name).start_game(room_player_list);
+        }
     }
 
     public class game_proxy_mng
