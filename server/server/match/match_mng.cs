@@ -403,6 +403,8 @@ namespace match
             {
                 await match_one_room(idle_game_svr_list);
             }
+
+            hub.hub._timer.addticktime(5000, tick_match);
         }
     }
 }

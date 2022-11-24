@@ -4,6 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using Newtonsoft.Json.Linq;
 using offline_msg;
+using service;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,19 @@ namespace player
     public class client_proxy
     {
         private readonly string _sdk_uuid;
+
+        private long last_active_time = timerservice.Tick;
+        public long LastActiveTime
+        {
+            set
+            {
+                last_active_time = value;
+            }
+            get
+            {
+                return last_active_time;
+            }
+        }
 
         private string _uuid;
         public string uuid
@@ -329,6 +343,43 @@ namespace player
             }
         }
 
+        public client_mng()
+        {
+            hub.hub._timer.addticktime(5 * 60 * 1000, tick_clear_timeout_player);
+        }
+
+        private void tick_clear_timeout_player(long tick_time)
+        {
+            List<client_proxy> timeout_players = new();
+            foreach (var it in client_sdk_uuid_dict)
+            {
+                if ((it.Value.LastActiveTime + 30 * 60 * 1000) < timerservice.Tick)
+                {
+                    timeout_players.Add(it.Value);
+                }
+            }
+            foreach (var _proxy in timeout_players)
+            {
+                client_uuid_dict.Remove(_proxy.uuid);
+                client_sdk_uuid_dict.Remove(_proxy.PlayerInfo.sdk_uuid);
+                client_guid_dict.Remove(_proxy.PlayerInfo.guid);
+            }
+
+            List<string> token_list = new();
+            foreach (var it in client_token_dict)
+            {
+                if ((it.Value.LastActiveTime + 30 * 60 * 1000) < timerservice.Tick)
+                {
+                    token_list.Add(it.Key);
+                }
+            }
+            foreach (var _token in token_list)
+            {
+                client_token_dict.Remove(_token);
+            }
+
+            hub.hub._timer.addticktime(5 * 60 * 1000, tick_clear_timeout_player);
+        }
 
         public Task<string> token_player_login(string sdk_uuid)
         {

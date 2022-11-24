@@ -1,6 +1,7 @@
 ﻿using abelkhan;
 using log;
 using offline_msg;
+using service;
 using System;
 using System.Threading;
 
@@ -34,15 +35,33 @@ namespace player
             _hub.on_hubproxy += on_hubproxy;
             _hub.on_hubproxy_reconn += on_hubproxy;
 
-            hub.hub._timer.addticktime(300000, (_) => {
-                player._redis_handle.SetData(redis_help.BuildPlayerSvrInfoCacheKey(hub.hub.name), new svr_info { tick_time = (int)hub.hub.tick, player_num = client_Mng.Count });
-            });
+            _hub.on_client_msg += (uuid) =>
+            {
+                try
+                {
+                    var _client = client_Mng.uuid_get_client_proxy(uuid);
+                    _client.LastActiveTime = timerservice.Tick;
+                }
+                catch (System.Exception ex)
+                {
+                    log.log.err($"{ex}");
+                }
+            };
+
+            hub.hub._timer.addticktime(300000, tick_set_player_svr_info);
 
             log.log.trace("player start ok");
 
             _hub.run();
 
             log.log.info("server closed, player server:{0}", hub.hub.name);
+        }
+
+        private static void tick_set_player_svr_info(long tick_time)
+        {
+            player._redis_handle.SetData(redis_help.BuildPlayerSvrInfoCacheKey(hub.hub.name), new svr_info { tick_time = (int)hub.hub.tick, player_num = client_Mng.Count });
+
+            hub.hub._timer.addticktime(300000, tick_set_player_svr_info);
         }
 
         private static void on_hubproxy(hub.hubproxy _proxy)
