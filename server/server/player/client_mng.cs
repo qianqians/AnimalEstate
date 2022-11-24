@@ -332,6 +332,8 @@ namespace player
                 {
                     var token = Guid.NewGuid().ToString();
                     PlayerClientCaller.get_client(_proxy.uuid).be_displacement();
+                    client_uuid_dict.Remove(_proxy.uuid);
+                    client_token_dict[token] = _proxy;
                     ret.SetResult(token);
                     break;
                 }

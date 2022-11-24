@@ -6,6 +6,11 @@ namespace abelkhan
 {
     public class redis_help
     {
+        static public string BuildPlayerSvrCacheLockKey(string sdk_uuid)
+        {
+            return $"Player:PlayerSDKUUIDLockCache:{sdk_uuid}";
+        }
+
         static public string BuildPlayerSvrCacheKey(string sdk_uuid)
         {
             return $"Player:PlayerSDKUUIDCache:{sdk_uuid}";

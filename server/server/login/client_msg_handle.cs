@@ -46,23 +46,35 @@ namespace login
 
             var rsp = login_Module.rsp as login_player_login_no_author_rsp;
 
-            var key = redis_help.BuildPlayerSvrCacheKey(account);
-            var _player_proxy_name = await login._redis_handle.GetStrData(key);
-            if (string.IsNullOrEmpty(_player_proxy_name))
+            var lock_key = redis_help.BuildPlayerSvrCacheLockKey(account);
+            try
             {
-                random_player_svr_rsp(account, rsp);
-            }
-            else
-            {
-                var _proxy = login._player_proxy_mng.get_player(_player_proxy_name);
-                if (_proxy != null)
-                {
-                    try_player_login(_proxy, account, rsp);
-                }
-                else
+                await login._redis_handle.Lock(lock_key, $"lock_{account}", 1000);
+
+                var key = redis_help.BuildPlayerSvrCacheKey(account);
+                var _player_proxy_name = await login._redis_handle.GetStrData(key);
+                if (string.IsNullOrEmpty(_player_proxy_name))
                 {
                     random_player_svr_rsp(account, rsp);
                 }
+                else
+                {
+                    var _proxy = login._player_proxy_mng.get_player(_player_proxy_name);
+                    if (_proxy != null)
+                    {
+                        try_player_login(_proxy, account, rsp);
+                    }
+                    else
+                    {
+                        random_player_svr_rsp(account, rsp);
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                log.log.err($"{ex}");
+                rsp.err((int)error.db_error);
+                await login._redis_handle.UnLock(lock_key, $"lock_{account}");
             }
         }
     }
