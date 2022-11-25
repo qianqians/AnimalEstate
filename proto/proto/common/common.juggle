@@ -39,6 +39,7 @@ enum skin
 
 enum playground
 {
+	random = 0;    // 随机地图
 	grassland = 1; // 草原
 	hill = 2;      // 山丘
 	snow = 3;	   // 雪地
@@ -75,12 +76,15 @@ struct player_inline_info
 	string name;
 	int32 coin;
 	int32 score;
+	animal[] hero_list;
+	skin[] skin_list;
 }
 
 struct room_info
 {
 	string room_uuid;
 	int64 room_owner_guid;
+	playground _playground;
 	player_inline_info[] room_player_list;
 }
 

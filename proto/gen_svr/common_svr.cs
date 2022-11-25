@@ -29,6 +29,7 @@ namespace abelkhan
         lion = 801
     }
     public enum playground{
+        random = 0,
         grassland = 1,
         hill = 2,
         snow = 3,
@@ -193,6 +194,8 @@ namespace abelkhan
         public string name;
         public Int32 coin;
         public Int32 score;
+        public List<animal> hero_list;
+        public List<skin> skin_list;
         public static MsgPack.MessagePackObjectDictionary player_inline_info_to_protcol(player_inline_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
             _protocol.Add("uuid", _struct.uuid);
@@ -200,6 +203,16 @@ namespace abelkhan
             _protocol.Add("name", _struct.name);
             _protocol.Add("coin", _struct.coin);
             _protocol.Add("score", _struct.score);
+            var _array_hero_list = new List<MsgPack.MessagePackObject>();
+            foreach(var v_ in _struct.hero_list){
+                _array_hero_list.Add((Int32)v_);
+            }
+            _protocol.Add("hero_list", new MsgPack.MessagePackObject(_array_hero_list));
+            var _array_skin_list = new List<MsgPack.MessagePackObject>();
+            foreach(var v_ in _struct.skin_list){
+                _array_skin_list.Add((Int32)v_);
+            }
+            _protocol.Add("skin_list", new MsgPack.MessagePackObject(_array_skin_list));
             return _protocol;
         }
         public static player_inline_info protcol_to_player_inline_info(MsgPack.MessagePackObjectDictionary _protocol){
@@ -220,6 +233,20 @@ namespace abelkhan
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "score"){
                     _structcdacc51b_f718_3ebb_ad22_096d86e7efee.score = ((MsgPack.MessagePackObject)i.Value).AsInt32();
                 }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "hero_list"){
+                    _structcdacc51b_f718_3ebb_ad22_096d86e7efee.hero_list = new();
+                    var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
+                    foreach (var v_ in _protocol_array){
+                        _structcdacc51b_f718_3ebb_ad22_096d86e7efee.hero_list.Add((animal)((MsgPack.MessagePackObject)v_).AsInt32());
+                    }
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "skin_list"){
+                    _structcdacc51b_f718_3ebb_ad22_096d86e7efee.skin_list = new();
+                    var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
+                    foreach (var v_ in _protocol_array){
+                        _structcdacc51b_f718_3ebb_ad22_096d86e7efee.skin_list.Add((skin)((MsgPack.MessagePackObject)v_).AsInt32());
+                    }
+                }
             }
             return _structcdacc51b_f718_3ebb_ad22_096d86e7efee;
         }
@@ -229,11 +256,13 @@ namespace abelkhan
     {
         public string room_uuid;
         public Int64 room_owner_guid;
+        public playground _playground;
         public List<player_inline_info> room_player_list;
         public static MsgPack.MessagePackObjectDictionary room_info_to_protcol(room_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
             _protocol.Add("room_uuid", _struct.room_uuid);
             _protocol.Add("room_owner_guid", _struct.room_owner_guid);
+            _protocol.Add("_playground", (Int32)_struct._playground);
             var _array_room_player_list = new List<MsgPack.MessagePackObject>();
             foreach(var v_ in _struct.room_player_list){
                 _array_room_player_list.Add( new MsgPack.MessagePackObject(player_inline_info.player_inline_info_to_protcol(v_)));
@@ -249,6 +278,9 @@ namespace abelkhan
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "room_owner_guid"){
                     _struct6bdeecee_07e7_32d2_a4bc_6ebc8b13f116.room_owner_guid = ((MsgPack.MessagePackObject)i.Value).AsInt64();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "_playground"){
+                    _struct6bdeecee_07e7_32d2_a4bc_6ebc8b13f116._playground = (playground)((MsgPack.MessagePackObject)i.Value).AsInt32();
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "room_player_list"){
                     _struct6bdeecee_07e7_32d2_a4bc_6ebc8b13f116.room_player_list = new();

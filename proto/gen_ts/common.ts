@@ -24,6 +24,7 @@ export enum skin{
 }
 
 export enum playground{
+    random = 0,
     grassland = 1,
     hill = 2,
     snow = 3,
@@ -148,6 +149,8 @@ export class player_inline_info
     public name : string;
     public coin : number;
     public score : number;
+    public hero_list : animal[];
+    public skin_list : skin[];
 
     constructor(){
     }
@@ -174,6 +177,18 @@ export function protcol_to_player_inline_info(_protocol:any){
         else if (key === "score"){
             _struct.score = val as number;
         }
+        else if (key === "hero_list"){
+            _struct.hero_list = [];
+            for(let v_ of val){
+                _struct.hero_list.push(v_);
+    }
+        }
+        else if (key === "skin_list"){
+            _struct.skin_list = [];
+            for(let v_ of val){
+                _struct.skin_list.push(v_);
+    }
+        }
     return _struct;
 }
 
@@ -181,6 +196,7 @@ export class room_info
 {
     public room_uuid : string;
     public room_owner_guid : number;
+    public _playground : playground;
     public room_player_list : player_inline_info[];
 
     constructor(){
@@ -198,6 +214,9 @@ export function protcol_to_room_info(_protocol:any){
         }
         else if (key === "room_owner_guid"){
             _struct.room_owner_guid = val as number;
+        }
+        else if (key === "_playground"){
+            _struct._playground = val as playground;
         }
         else if (key === "room_player_list"){
             _struct.room_player_list = [];

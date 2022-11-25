@@ -22,9 +22,9 @@ namespace player
             _proxy = proxy;
         }
 
-        public player_room_create_room_cb create_room(player_inline_info room_owner)
+        public player_room_create_room_cb create_room(playground _playground, player_inline_info room_owner)
         {
-            return player_Room_Caller.get_hub(name).create_room(room_owner);
+            return player_Room_Caller.get_hub(name).create_room(_playground, room_owner);
         }
 
         public player_room_agree_join_room_cb agree_join_room(string room_id, player_inline_info member)

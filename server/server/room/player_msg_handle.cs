@@ -31,14 +31,14 @@ namespace room
             }
         }
 
-        private void Player_Room_Module_on_create_room(player_inline_info room_owner)
+        private void Player_Room_Module_on_create_room(playground _playground, player_inline_info room_owner)
         {
             log.log.trace("on_create_room begin!");
 
             var rsp = player_Room_Module.rsp as player_room_create_room_rsp;
             try
             {
-                var _room = room._room_mng.create_room(room_owner);
+                var _room = room._room_mng.create_room(_playground, room_owner);
                 rsp.rsp(_room.RoomInfo);
             }
             catch (System.Exception ex)

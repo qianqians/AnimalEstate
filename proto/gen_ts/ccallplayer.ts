@@ -243,8 +243,9 @@ export class client_match_hubproxy
         this._client_handle = client_handle_;
     }
 
-    public start_match(){
+    public start_match(_playground:common.playground){
         let _argv_5d1645a8_78f1_3219_bb7e_d14f420c9e1d:any[] = [];
+        _argv_5d1645a8_78f1_3219_bb7e_d14f420c9e1d.push(_playground);
         this._client_handle.call_hub(this.hub_name_a67a32be_6a98_3d05_88d9_696d83c9d775, "client_match_start_match", _argv_5d1645a8_78f1_3219_bb7e_d14f420c9e1d);
     }
 
@@ -426,10 +427,11 @@ export class client_room_player_hubproxy
         this._client_handle = client_handle_;
     }
 
-    public create_room(){
+    public create_room(_playground:common.playground){
         let uuid_596b5288_d0f2_52ea_802a_a61621d93808 = Math.round(this.uuid_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2++);
 
         let _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee:any[] = [uuid_596b5288_d0f2_52ea_802a_a61621d93808];
+        _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.push(_playground);
         this._client_handle.call_hub(this.hub_name_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2, "client_room_player_create_room", _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee);
         let cb_create_room_obj = new client_room_player_create_room_cb(uuid_596b5288_d0f2_52ea_802a_a61621d93808, rsp_cb_client_room_player_handle);
         if (rsp_cb_client_room_player_handle){

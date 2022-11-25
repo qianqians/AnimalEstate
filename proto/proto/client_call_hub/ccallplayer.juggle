@@ -6,11 +6,11 @@ module player_login{
 }
 
 module client_match{
-	start_match ntf();
+	start_match ntf(playground _playground);
 }
 
 module client_room_player{
-	create_room req() rsp(string room_hub_name, room_info _room_info) err(int32 err);
+	create_room req(playground _playground) rsp(string room_hub_name, room_info _room_info) err(int32 err);
 	invite_role_join_room ntf(string sdk_uuid);
 	agree_join_room req(string room_id) rsp(string room_hub_name, room_info _room_info) err(int32 err);
 }

@@ -96,10 +96,11 @@ namespace abelkhan
             hub.hub._modules.add_mothed("client_match_start_match", start_match);
         }
 
-        public event Action on_start_match;
+        public event Action<playground> on_start_match;
         public void start_match(IList<MsgPack.MessagePackObject> inArray){
+            var __playground = (playground)((MsgPack.MessagePackObject)inArray[0]).AsInt32();
             if (on_start_match != null){
-                on_start_match();
+                on_start_match(__playground);
             }
         }
 
@@ -164,12 +165,13 @@ namespace abelkhan
             hub.hub._modules.add_mothed("client_room_player_agree_join_room", agree_join_room);
         }
 
-        public event Action on_create_room;
+        public event Action<playground> on_create_room;
         public void create_room(IList<MsgPack.MessagePackObject> inArray){
             var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var __playground = (playground)((MsgPack.MessagePackObject)inArray[1]).AsInt32();
             rsp = new client_room_player_create_room_rsp(hub.hub._gates.current_client_uuid, _cb_uuid);
             if (on_create_room != null){
-                on_create_room();
+                on_create_room(__playground);
             }
             rsp = null;
         }

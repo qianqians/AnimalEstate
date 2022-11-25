@@ -145,11 +145,12 @@ namespace abelkhan
             rsp_cb_match_game_handle = rsp_cb_match_game_handle_;
         }
 
-        public match_game_start_game_cb start_game(List<player_inline_info> room_player_list){
+        public match_game_start_game_cb start_game(playground _playground, List<player_inline_info> room_player_list){
             var uuid_f06e9503_61db_5f2e_8f88_644242d7103f = (UInt64)Interlocked.Increment(ref uuid_c4041984_8d90_3417_8e13_9d51947982cb);
 
             var _argv_3ad8ee08_b505_3abe_b70d_9c6b12861747 = new ArrayList();
             _argv_3ad8ee08_b505_3abe_b70d_9c6b12861747.Add(uuid_f06e9503_61db_5f2e_8f88_644242d7103f);
+            _argv_3ad8ee08_b505_3abe_b70d_9c6b12861747.Add(_playground);
             var _array_57999374_60c2_3b99_9cd5_dd611f8f7c8f = new ArrayList();
             foreach(var v_f5a759e3_2ed7_57f0_be22_5c7cc710d7b4 in room_player_list){
                 _array_57999374_60c2_3b99_9cd5_dd611f8f7c8f.Add(player_inline_info.player_inline_info_to_protcol(v_f5a759e3_2ed7_57f0_be22_5c7cc710d7b4));
@@ -197,17 +198,18 @@ namespace abelkhan
             hub.hub._modules.add_mothed("match_game_start_game", start_game);
         }
 
-        public event Action<List<player_inline_info>> on_start_game;
+        public event Action<playground, List<player_inline_info>> on_start_game;
         public void start_game(IList<MsgPack.MessagePackObject> inArray){
             var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var __playground = (playground)((MsgPack.MessagePackObject)inArray[1]).AsInt32();
             var _room_player_list = new List<player_inline_info>();
-            var _protocol_arrayroom_player_list = ((MsgPack.MessagePackObject)inArray[1]).AsList();
+            var _protocol_arrayroom_player_list = ((MsgPack.MessagePackObject)inArray[2]).AsList();
             foreach (var v_c3395084_df66_50f9_ab5c_877d1525e143 in _protocol_arrayroom_player_list){
                 _room_player_list.Add(player_inline_info.protcol_to_player_inline_info(((MsgPack.MessagePackObject)v_c3395084_df66_50f9_ab5c_877d1525e143).AsDictionary()));
             }
             rsp = new match_game_start_game_rsp(hub.hub._hubs.current_hubproxy.name, _cb_uuid);
             if (on_start_game != null){
-                on_start_game(_room_player_list);
+                on_start_game(__playground, _room_player_list);
             }
             rsp = null;
         }

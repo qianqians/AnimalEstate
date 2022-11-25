@@ -271,7 +271,7 @@ namespace player
             }
         }
 
-        private void Client_Room_Player_Module_on_create_room()
+        private void Client_Room_Player_Module_on_create_room(playground _playground)
         {
             log.log.trace("on_create_room begin!");
 
@@ -284,7 +284,7 @@ namespace player
                 var _room_proxy = player.room_Proxy_Mng.random_room();
 
                 
-                _room_proxy.create_room(_player_proxy.PlayerInlineInfo).callBack((_room_info) => {
+                _room_proxy.create_room(_playground, _player_proxy.PlayerInlineInfo).callBack((_room_info) => {
                     rsp.rsp(_room_proxy.name, _room_info);
 
                     _player_proxy.RoomID = _room_info.room_uuid;
@@ -304,7 +304,7 @@ namespace player
             }
         }
 
-        private void Client_match_Module_on_start_match()
+        private void Client_match_Module_on_start_match(playground _playground)
         {
             log.log.trace("on_start_match begin!");
 
@@ -313,7 +313,7 @@ namespace player
             try
             {
                 var _proxy = player.client_Mng.uuid_get_client_proxy(uuid);
-                player.match_Proxy_Mng.random_match().player_join_match(_proxy.PlayerInlineInfo);
+                player.match_Proxy_Mng.random_match().player_join_match(_playground, _proxy.PlayerInlineInfo);
             }
             catch (GetPlayerException ex)
             {

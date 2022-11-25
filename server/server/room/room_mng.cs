@@ -85,8 +85,9 @@ namespace room
             {
                 return uuid_clients.Keys.ToList();
             }
-        } 
+        }
 
+        private playground _playground = playground.random;
         public room_info RoomInfo
         {
             get
@@ -94,6 +95,7 @@ namespace room
                 var info = new room_info();
                 info.room_uuid = room_id;
                 info.room_owner_guid = _owner.guid;
+                info._playground = _playground;
                 info.room_player_list = new ();
                 foreach (var it in uuid_clients)
                 {
@@ -104,8 +106,9 @@ namespace room
             }
         }
 
-        public void create_room(client_proxy owner)
+        public void create_room(playground ground, client_proxy owner)
         {
+            _playground = ground;
             _owner = owner;
             uuid_clients[owner.uuid] = owner;
         }
@@ -205,12 +208,12 @@ namespace room
             }
         }
 
-        public room_impl create_room(player_inline_info room_owner)
+        public room_impl create_room(playground _playground, player_inline_info room_owner)
         {
             var _room = new room_impl();
             var _client = new client_proxy(room_owner, _room);
 
-            _room.create_room(_client);
+            _room.create_room(_playground, _client);
 
             uuid_clients.Add(room_owner.uuid, _client);
             guid_room.Add(_room.RoomID, _room);

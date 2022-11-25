@@ -22,9 +22,9 @@ namespace player
             _proxy = proxy;
         }
 
-        public void player_join_match(player_inline_info info)
+        public void player_join_match(playground _playground, player_inline_info info)
         {
-            player_Match_Caller.get_hub(name).player_join_match(info);
+            player_Match_Caller.get_hub(name).player_join_match(_playground, info);
         }
     }
 

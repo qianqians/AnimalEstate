@@ -1,6 +1,6 @@
 import common
 
 module player_room{
-    create_room req(player_inline_info room_owner) rsp(room_info info) err(int32 err);
+    create_room req(playground _playground, player_inline_info room_owner) rsp(room_info info) err(int32 err);
 	agree_join_room req(string room_id, player_inline_info member) rsp(room_info info) err(int32 err);
 }

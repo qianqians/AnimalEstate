@@ -1,5 +1,5 @@
 import common
 
 module match_game{
-	start_game req(player_inline_info[] room_player_list) rsp() err(int32 err);
+	start_game req(playground _playground, player_inline_info[] room_player_list) rsp() err(int32 err);
 }

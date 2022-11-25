@@ -244,11 +244,12 @@ namespace abelkhan
             rsp_cb_player_room_handle = rsp_cb_player_room_handle_;
         }
 
-        public player_room_create_room_cb create_room(player_inline_info room_owner){
+        public player_room_create_room_cb create_room(playground _playground, player_inline_info room_owner){
             var uuid_596b5288_d0f2_52ea_802a_a61621d93808 = (UInt64)Interlocked.Increment(ref uuid_0cbb8ec7_5c42_333d_86fd_100c0951d27f);
 
             var _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee = new ArrayList();
             _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(uuid_596b5288_d0f2_52ea_802a_a61621d93808);
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(_playground);
             _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(player_inline_info.player_inline_info_to_protcol(room_owner));
             hub.hub._hubs.call_hub(hub_name_0cbb8ec7_5c42_333d_86fd_100c0951d27f, "player_room_create_room", _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee);
 
@@ -336,13 +337,14 @@ namespace abelkhan
             hub.hub._modules.add_mothed("player_room_agree_join_room", agree_join_room);
         }
 
-        public event Action<player_inline_info> on_create_room;
+        public event Action<playground, player_inline_info> on_create_room;
         public void create_room(IList<MsgPack.MessagePackObject> inArray){
             var _cb_uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
-            var _room_owner = player_inline_info.protcol_to_player_inline_info(((MsgPack.MessagePackObject)inArray[1]).AsDictionary());
+            var __playground = (playground)((MsgPack.MessagePackObject)inArray[1]).AsInt32();
+            var _room_owner = player_inline_info.protcol_to_player_inline_info(((MsgPack.MessagePackObject)inArray[2]).AsDictionary());
             rsp = new player_room_create_room_rsp(hub.hub._hubs.current_hubproxy.name, _cb_uuid);
             if (on_create_room != null){
-                on_create_room(_room_owner);
+                on_create_room(__playground, _room_owner);
             }
             rsp = null;
         }
