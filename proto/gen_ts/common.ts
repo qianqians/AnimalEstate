@@ -227,6 +227,77 @@ export function protcol_to_room_info(_protocol:any){
     return _struct;
 }
 
+export class animal_game_info
+{
+    public animal_id : animal;
+    public skin_id : skin;
+    public index : number;
+
+    constructor(){
+    }
+}
+
+export function animal_game_info_to_protcol(_struct:animal_game_info){
+    return _struct;
+}
+
+export function protcol_to_animal_game_info(_protocol:any){
+    let _struct = new animal_game_info();
+    for (const [key, val] of Object.entries(_protocol))        if (key === "animal_id"){
+            _struct.animal_id = val as animal;
+        }
+        else if (key === "skin_id"){
+            _struct.skin_id = val as skin;
+        }
+        else if (key === "index"){
+            _struct.index = val as number;
+        }
+    return _struct;
+}
+
+export class player_game_info
+{
+    public uuid : string;
+    public guid : number;
+    public name : string;
+    public animal_info : animal_game_info[];
+    public current_animal_index : number;
+    public current_pos : number;
+
+    constructor(){
+    }
+}
+
+export function player_game_info_to_protcol(_struct:player_game_info){
+    return _struct;
+}
+
+export function protcol_to_player_game_info(_protocol:any){
+    let _struct = new player_game_info();
+    for (const [key, val] of Object.entries(_protocol))        if (key === "uuid"){
+            _struct.uuid = val as string;
+        }
+        else if (key === "guid"){
+            _struct.guid = val as number;
+        }
+        else if (key === "name"){
+            _struct.name = val as string;
+        }
+        else if (key === "animal_info"){
+            _struct.animal_info = [];
+            for(let v_ of val){
+                _struct.animal_info.push(protcol_to_animal_game_info(v_));
+    }
+        }
+        else if (key === "current_animal_index"){
+            _struct.current_animal_index = val as number;
+        }
+        else if (key === "current_pos"){
+            _struct.current_pos = val as number;
+        }
+    return _struct;
+}
+
 export class game_player_settle_info
 {
     public guid : number;

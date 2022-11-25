@@ -294,6 +294,87 @@ namespace abelkhan
         }
     }
 
+    public class animal_game_info
+    {
+        public animal animal_id;
+        public skin skin_id;
+        public Int16 index;
+        public static MsgPack.MessagePackObjectDictionary animal_game_info_to_protcol(animal_game_info _struct){
+            var _protocol = new MsgPack.MessagePackObjectDictionary();
+            _protocol.Add("animal_id", (Int32)_struct.animal_id);
+            _protocol.Add("skin_id", (Int32)_struct.skin_id);
+            _protocol.Add("index", _struct.index);
+            return _protocol;
+        }
+        public static animal_game_info protcol_to_animal_game_info(MsgPack.MessagePackObjectDictionary _protocol){
+            var _struct0f490332_8543_30ad_92b2_6c49981b121d = new animal_game_info();
+            foreach (var i in _protocol){
+                if (((MsgPack.MessagePackObject)i.Key).AsString() == "animal_id"){
+                    _struct0f490332_8543_30ad_92b2_6c49981b121d.animal_id = (animal)((MsgPack.MessagePackObject)i.Value).AsInt32();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "skin_id"){
+                    _struct0f490332_8543_30ad_92b2_6c49981b121d.skin_id = (skin)((MsgPack.MessagePackObject)i.Value).AsInt32();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "index"){
+                    _struct0f490332_8543_30ad_92b2_6c49981b121d.index = ((MsgPack.MessagePackObject)i.Value).AsInt16();
+                }
+            }
+            return _struct0f490332_8543_30ad_92b2_6c49981b121d;
+        }
+    }
+
+    public class player_game_info
+    {
+        public string uuid;
+        public Int64 guid;
+        public string name;
+        public List<animal_game_info> animal_info;
+        public Int16 current_animal_index;
+        public Int16 current_pos;
+        public static MsgPack.MessagePackObjectDictionary player_game_info_to_protcol(player_game_info _struct){
+            var _protocol = new MsgPack.MessagePackObjectDictionary();
+            _protocol.Add("uuid", _struct.uuid);
+            _protocol.Add("guid", _struct.guid);
+            _protocol.Add("name", _struct.name);
+            var _array_animal_info = new List<MsgPack.MessagePackObject>();
+            foreach(var v_ in _struct.animal_info){
+                _array_animal_info.Add( new MsgPack.MessagePackObject(animal_game_info.animal_game_info_to_protcol(v_)));
+            }
+            _protocol.Add("animal_info", new MsgPack.MessagePackObject(_array_animal_info));
+            _protocol.Add("current_animal_index", _struct.current_animal_index);
+            _protocol.Add("current_pos", _struct.current_pos);
+            return _protocol;
+        }
+        public static player_game_info protcol_to_player_game_info(MsgPack.MessagePackObjectDictionary _protocol){
+            var _structa9e105de_cbf5_3520_93fb_036b8466d4f5 = new player_game_info();
+            foreach (var i in _protocol){
+                if (((MsgPack.MessagePackObject)i.Key).AsString() == "uuid"){
+                    _structa9e105de_cbf5_3520_93fb_036b8466d4f5.uuid = ((MsgPack.MessagePackObject)i.Value).AsString();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "guid"){
+                    _structa9e105de_cbf5_3520_93fb_036b8466d4f5.guid = ((MsgPack.MessagePackObject)i.Value).AsInt64();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "name"){
+                    _structa9e105de_cbf5_3520_93fb_036b8466d4f5.name = ((MsgPack.MessagePackObject)i.Value).AsString();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "animal_info"){
+                    _structa9e105de_cbf5_3520_93fb_036b8466d4f5.animal_info = new();
+                    var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
+                    foreach (var v_ in _protocol_array){
+                        _structa9e105de_cbf5_3520_93fb_036b8466d4f5.animal_info.Add(animal_game_info.protcol_to_animal_game_info(((MsgPack.MessagePackObject)v_).AsDictionary()));
+                    }
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "current_animal_index"){
+                    _structa9e105de_cbf5_3520_93fb_036b8466d4f5.current_animal_index = ((MsgPack.MessagePackObject)i.Value).AsInt16();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "current_pos"){
+                    _structa9e105de_cbf5_3520_93fb_036b8466d4f5.current_pos = ((MsgPack.MessagePackObject)i.Value).AsInt16();
+                }
+            }
+            return _structa9e105de_cbf5_3520_93fb_036b8466d4f5;
+        }
+    }
+
     public class game_player_settle_info
     {
         public Int64 guid;

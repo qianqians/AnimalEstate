@@ -1,3 +1,6 @@
+import common
+
 module game_client{
-	move ntf(int32 from, int32 to);
+	game_info multicast(player_game_info[] info);
+	move multicast(int64 guid, int32 from, int32 to);
 }

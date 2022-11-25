@@ -29,13 +29,6 @@ namespace abelkhan
             rsp_cb_game_client_handle = rsp_cb_game_client_handle_;
         }
 
-        public void move(Int32 from, Int32 to){
-            var _argv_33efb72e_9227_32af_a058_169be114a277 = new ArrayList();
-            _argv_33efb72e_9227_32af_a058_169be114a277.Add(from);
-            _argv_33efb72e_9227_32af_a058_169be114a277.Add(to);
-            hub.hub._gates.call_client(client_uuid_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_move", _argv_33efb72e_9227_32af_a058_169be114a277);
-        }
-
     }
 
     public class game_client_multicast {
@@ -45,6 +38,24 @@ namespace abelkhan
         public game_client_multicast(game_client_rsp_cb rsp_cb_game_client_handle_)
         {
             rsp_cb_game_client_handle = rsp_cb_game_client_handle_;
+        }
+
+        public void game_info(List<player_game_info> info){
+            var _argv_a8150bab_ab88_3ac0_b633_425c25e81223 = new ArrayList();
+            var _array_391fd3d4_2d55_3f5e_9223_7f450a814a15 = new ArrayList();
+            foreach(var v_0c15545d_d42a_5fe0_bed7_a9496851e88b in info){
+                _array_391fd3d4_2d55_3f5e_9223_7f450a814a15.Add(player_game_info.player_game_info_to_protcol(v_0c15545d_d42a_5fe0_bed7_a9496851e88b));
+            }
+            _argv_a8150bab_ab88_3ac0_b633_425c25e81223.Add(_array_391fd3d4_2d55_3f5e_9223_7f450a814a15);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_game_info", _argv_a8150bab_ab88_3ac0_b633_425c25e81223);
+        }
+
+        public void move(Int64 guid, Int32 from, Int32 to){
+            var _argv_33efb72e_9227_32af_a058_169be114a277 = new ArrayList();
+            _argv_33efb72e_9227_32af_a058_169be114a277.Add(guid);
+            _argv_33efb72e_9227_32af_a058_169be114a277.Add(from);
+            _argv_33efb72e_9227_32af_a058_169be114a277.Add(to);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_move", _argv_33efb72e_9227_32af_a058_169be114a277);
         }
 
     }

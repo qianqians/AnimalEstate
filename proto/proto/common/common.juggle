@@ -88,6 +88,23 @@ struct room_info
 	player_inline_info[] room_player_list;
 }
 
+struct animal_game_info
+{
+	animal animal_id;
+	skin skin_id;
+	int16 index;
+}
+
+struct player_game_info
+{
+	string uuid;
+	int64 guid;
+	string name;
+	animal_game_info[] animal_info;
+	int16 current_animal_index;
+	int16 current_pos;
+}
+
 struct game_player_settle_info
 {
 	int64 guid;
