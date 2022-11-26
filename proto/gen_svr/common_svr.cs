@@ -28,6 +28,14 @@ namespace abelkhan
         tiger = 701,
         lion = 801
     }
+    public enum effect{
+        muddy = 1,
+        banana_peel = 2,
+        golden_apple = 3,
+        rice_ear = 4,
+        monkey_wine = 5,
+        mouse_trap = 100
+    }
     public enum playground{
         random = 0,
         grassland = 1,
@@ -298,12 +306,10 @@ namespace abelkhan
     {
         public animal animal_id;
         public skin skin_id;
-        public Int16 index;
         public static MsgPack.MessagePackObjectDictionary animal_game_info_to_protcol(animal_game_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
             _protocol.Add("animal_id", (Int32)_struct.animal_id);
             _protocol.Add("skin_id", (Int32)_struct.skin_id);
-            _protocol.Add("index", _struct.index);
             return _protocol;
         }
         public static animal_game_info protcol_to_animal_game_info(MsgPack.MessagePackObjectDictionary _protocol){
@@ -314,9 +320,6 @@ namespace abelkhan
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "skin_id"){
                     _struct0f490332_8543_30ad_92b2_6c49981b121d.skin_id = (skin)((MsgPack.MessagePackObject)i.Value).AsInt32();
-                }
-                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "index"){
-                    _struct0f490332_8543_30ad_92b2_6c49981b121d.index = ((MsgPack.MessagePackObject)i.Value).AsInt16();
                 }
             }
             return _struct0f490332_8543_30ad_92b2_6c49981b121d;

@@ -1,6 +1,16 @@
 import common
 
+struct effect_info 
+{
+	int16[] grids;
+	effect effect_id;
+}
+
 module game_client{
 	game_info multicast(player_game_info[] info);
 	move multicast(int64 guid, int32 from, int32 to);
+	relay multicast(int64 guid, int16 new_animal_index);
+	effect multicast(effect_info info);
+	use_skill multicast(int64 guid);
+	effect_move multicast(int64 guid, effect effect_id, int32 from, int32 to);
 }

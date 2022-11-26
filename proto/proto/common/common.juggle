@@ -37,6 +37,19 @@ enum skin
 	lion = 801;
 }
 
+enum effect 
+{
+	// 场景随机事件 1-99
+	muddy = 1;
+	banana_peel = 2;
+	golden_apple = 3;
+	rice_ear = 4;
+	monkey_wine = 5;
+
+	// 动物技能效果 100-999
+	mouse_trap = 100;
+}
+
 enum playground
 {
 	random = 0;    // 随机地图
@@ -92,7 +105,6 @@ struct animal_game_info
 {
 	animal animal_id;
 	skin skin_id;
-	int16 index;
 }
 
 struct player_game_info

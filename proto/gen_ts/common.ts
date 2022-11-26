@@ -23,6 +23,15 @@ export enum skin{
     lion = 801
 }
 
+export enum effect{
+    muddy = 1,
+    banana_peel = 2,
+    golden_apple = 3,
+    rice_ear = 4,
+    monkey_wine = 5,
+    mouse_trap = 100
+}
+
 export enum playground{
     random = 0,
     grassland = 1,
@@ -231,7 +240,6 @@ export class animal_game_info
 {
     public animal_id : animal;
     public skin_id : skin;
-    public index : number;
 
     constructor(){
     }
@@ -248,9 +256,6 @@ export function protcol_to_animal_game_info(_protocol:any){
         }
         else if (key === "skin_id"){
             _struct.skin_id = val as skin;
-        }
-        else if (key === "index"){
-            _struct.index = val as number;
         }
     return _struct;
 }
