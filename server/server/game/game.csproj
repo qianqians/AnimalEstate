@@ -15,9 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\component\hub\hub.csproj" />
     <ProjectReference Include="..\..\game_proto\game_proto.csproj" />
-    <ProjectReference Include="..\center_svr\center_svr.csproj" />
   </ItemGroup>
 
 </Project>

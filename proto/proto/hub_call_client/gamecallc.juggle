@@ -4,13 +4,19 @@ struct effect_info
 {
 	int16[] grids;
 	effect effect_id;
+
+	// 泥泞路面持续时间
+	int32 continued_rounds;
 }
 
 module game_client{
-	game_info multicast(player_game_info[] info);
+	game_wait_start_info multicast(int32 countdown, playground _playground, player_game_info[] info);
+	game_info multicast(playground _playground, player_game_info[] info);
+	ntf_effect_info multicast(effect_info[] info);
+	turn_player_round multicast(int64 guid);
+	throw_dice multicast(int64 guid, int32[] dice);
 	move multicast(int64 guid, int32 from, int32 to);
 	relay multicast(int64 guid, int16 new_animal_index);
-	effect multicast(effect_info info);
 	use_skill multicast(int64 guid);
 	effect_move multicast(int64 guid, effect effect_id, int32 from, int32 to);
 }

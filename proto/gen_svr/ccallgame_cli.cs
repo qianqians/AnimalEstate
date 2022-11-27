@@ -52,8 +52,9 @@ namespace abelkhan
             rsp_cb_game_handle = rsp_cb_game_handle_;
         }
 
-        public void into_game(){
+        public void into_game(Int64 guid){
             var _argv_90a69cb9_3a0a_3a86_9cad_499708905276 = new ArrayList();
+            _argv_90a69cb9_3a0a_3a86_9cad_499708905276.Add(guid);
             _client_handle.call_hub(hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_into_game", _argv_90a69cb9_3a0a_3a86_9cad_499708905276);
         }
 

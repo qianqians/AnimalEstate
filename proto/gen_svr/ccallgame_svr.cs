@@ -18,10 +18,11 @@ namespace abelkhan
             hub.hub._modules.add_mothed("game_throw_dice", throw_dice);
         }
 
-        public event Action on_into_game;
+        public event Action<Int64> on_into_game;
         public void into_game(IList<MsgPack.MessagePackObject> inArray){
+            var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
             if (on_into_game != null){
-                on_into_game();
+                on_into_game(_guid);
             }
         }
 

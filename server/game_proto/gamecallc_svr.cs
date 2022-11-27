@@ -13,6 +13,7 @@ namespace abelkhan
     {
         public List<Int16> grids;
         public effect effect_id;
+        public Int32 continued_rounds;
         public static MsgPack.MessagePackObjectDictionary effect_info_to_protcol(effect_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
             var _array_grids = new List<MsgPack.MessagePackObject>();
@@ -21,6 +22,7 @@ namespace abelkhan
             }
             _protocol.Add("grids", new MsgPack.MessagePackObject(_array_grids));
             _protocol.Add("effect_id", (Int32)_struct.effect_id);
+            _protocol.Add("continued_rounds", _struct.continued_rounds);
             return _protocol;
         }
         public static effect_info protcol_to_effect_info(MsgPack.MessagePackObjectDictionary _protocol){
@@ -35,6 +37,9 @@ namespace abelkhan
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "effect_id"){
                     _struct3934263e_8a7e_3773_9a47_c85f982b70f5.effect_id = (effect)((MsgPack.MessagePackObject)i.Value).AsInt32();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "continued_rounds"){
+                    _struct3934263e_8a7e_3773_9a47_c85f982b70f5.continued_rounds = ((MsgPack.MessagePackObject)i.Value).AsInt32();
                 }
             }
             return _struct3934263e_8a7e_3773_9a47_c85f982b70f5;
@@ -72,14 +77,54 @@ namespace abelkhan
             rsp_cb_game_client_handle = rsp_cb_game_client_handle_;
         }
 
-        public void game_info(List<player_game_info> info){
+        public void game_wait_start_info(Int32 countdown, playground _playground, List<player_game_info> info){
+            var _argv_1de11b0e_6af1_350d_ad38_245a9e2a0a43 = new ArrayList();
+            _argv_1de11b0e_6af1_350d_ad38_245a9e2a0a43.Add(countdown);
+            _argv_1de11b0e_6af1_350d_ad38_245a9e2a0a43.Add(_playground);
+            var _array_391fd3d4_2d55_3f5e_9223_7f450a814a15 = new ArrayList();
+            foreach(var v_0c15545d_d42a_5fe0_bed7_a9496851e88b in info){
+                _array_391fd3d4_2d55_3f5e_9223_7f450a814a15.Add(player_game_info.player_game_info_to_protcol(v_0c15545d_d42a_5fe0_bed7_a9496851e88b));
+            }
+            _argv_1de11b0e_6af1_350d_ad38_245a9e2a0a43.Add(_array_391fd3d4_2d55_3f5e_9223_7f450a814a15);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_game_wait_start_info", _argv_1de11b0e_6af1_350d_ad38_245a9e2a0a43);
+        }
+
+        public void game_info(playground _playground, List<player_game_info> info){
             var _argv_a8150bab_ab88_3ac0_b633_425c25e81223 = new ArrayList();
+            _argv_a8150bab_ab88_3ac0_b633_425c25e81223.Add(_playground);
             var _array_391fd3d4_2d55_3f5e_9223_7f450a814a15 = new ArrayList();
             foreach(var v_0c15545d_d42a_5fe0_bed7_a9496851e88b in info){
                 _array_391fd3d4_2d55_3f5e_9223_7f450a814a15.Add(player_game_info.player_game_info_to_protcol(v_0c15545d_d42a_5fe0_bed7_a9496851e88b));
             }
             _argv_a8150bab_ab88_3ac0_b633_425c25e81223.Add(_array_391fd3d4_2d55_3f5e_9223_7f450a814a15);
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_game_info", _argv_a8150bab_ab88_3ac0_b633_425c25e81223);
+        }
+
+        public void ntf_effect_info(List<effect_info> info){
+            var _argv_e8275721_ff0f_38f6_97f2_e503533bc36e = new ArrayList();
+            var _array_391fd3d4_2d55_3f5e_9223_7f450a814a15 = new ArrayList();
+            foreach(var v_0c15545d_d42a_5fe0_bed7_a9496851e88b in info){
+                _array_391fd3d4_2d55_3f5e_9223_7f450a814a15.Add(effect_info.effect_info_to_protcol(v_0c15545d_d42a_5fe0_bed7_a9496851e88b));
+            }
+            _argv_e8275721_ff0f_38f6_97f2_e503533bc36e.Add(_array_391fd3d4_2d55_3f5e_9223_7f450a814a15);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_ntf_effect_info", _argv_e8275721_ff0f_38f6_97f2_e503533bc36e);
+        }
+
+        public void turn_player_round(Int64 guid){
+            var _argv_ecab320c_0c7a_39d6_86e9_96ecfccda4c1 = new ArrayList();
+            _argv_ecab320c_0c7a_39d6_86e9_96ecfccda4c1.Add(guid);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_turn_player_round", _argv_ecab320c_0c7a_39d6_86e9_96ecfccda4c1);
+        }
+
+        public void throw_dice(Int64 guid, List<Int32> dice){
+            var _argv_89caa8aa_910b_3726_9283_63467ea68426 = new ArrayList();
+            _argv_89caa8aa_910b_3726_9283_63467ea68426.Add(guid);
+            var _array_50efb5f9_e76d_39f6_a8f5_087df183aa5b = new ArrayList();
+            foreach(var v_6f8b15a1_8afa_550d_9b21_68c8187be9d8 in dice){
+                _array_50efb5f9_e76d_39f6_a8f5_087df183aa5b.Add(v_6f8b15a1_8afa_550d_9b21_68c8187be9d8);
+            }
+            _argv_89caa8aa_910b_3726_9283_63467ea68426.Add(_array_50efb5f9_e76d_39f6_a8f5_087df183aa5b);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_throw_dice", _argv_89caa8aa_910b_3726_9283_63467ea68426);
         }
 
         public void move(Int64 guid, Int32 from, Int32 to){
@@ -95,12 +140,6 @@ namespace abelkhan
             _argv_24e2d4a2_c288_30c5_b96e_6dd1d36278a9.Add(guid);
             _argv_24e2d4a2_c288_30c5_b96e_6dd1d36278a9.Add(new_animal_index);
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_relay", _argv_24e2d4a2_c288_30c5_b96e_6dd1d36278a9);
-        }
-
-        public void effect(effect_info info){
-            var _argv_002c03ba_b18e_3cab_b587_5b1d8156975b = new ArrayList();
-            _argv_002c03ba_b18e_3cab_b587_5b1d8156975b.Add(effect_info.effect_info_to_protcol(info));
-            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_effect", _argv_002c03ba_b18e_3cab_b587_5b1d8156975b);
         }
 
         public void use_skill(Int64 guid){

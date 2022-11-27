@@ -1,7 +1,7 @@
 import common
 
 module game{
-	into_game ntf();
+	into_game ntf(int64 guid);
 	use_skill ntf();
 	throw_dice ntf();
 }
