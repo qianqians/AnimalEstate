@@ -525,39 +525,70 @@ namespace game
             }
         }
 
-        public void tick()
+        public void player_use_skill(client_proxy _client)
         {
-            if (!is_all_ready)
+            var _current_client = _client_proxys[_current_client_index];
+            if (_client.PlayerGameInfo.guid == _current_client.PlayerGameInfo.guid)
             {
-                if (check_all_ready())
-                {
-                    is_all_ready = true;
-                }
-                if (wait_ready_time < service.timerservice.Tick)
-                {
-                    foreach (var _client_Proxy in _client_proxys)
-                    {
-                        if (!_client_Proxy.IsReady)
-                        {
-                            _client_Proxy.set_ready();
-                            _client_Proxy.set_auto_active(true);
-                        }
-                    }
-                    is_all_ready = true;
-                }
-                else
-                {
-                    return;
-                }
+                _client.use_skill();
+            }
+            else
+            {
+                log.log.warn($"use_skill not client:{_client.PlayerGameInfo.guid} round active!");
+            }
+        }
 
-                if (is_all_ready)
+        public void player_throw_dice(client_proxy _client)
+        {
+            var _current_client = _client_proxys[_current_client_index];
+            if (_client.PlayerGameInfo.guid == _current_client.PlayerGameInfo.guid)
+            {
+                if (_client.throw_dice_and_check_end_round())
                 {
-                    ntf_game_info();
+                    _current_client_index++;
+                    var _round_client = _client_proxys[_current_client_index];
+                    _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_round_client.PlayerGameInfo.guid);
                 }
             }
+            else
+            {
+                log.log.warn($"throw_dice not client:{_client.PlayerGameInfo.guid} round active!");
+            }
+        }
 
+        public void tick()
+        {
             do
             {
+                if (!is_all_ready)
+                {
+                    if (check_all_ready())
+                    {
+                        is_all_ready = true;
+                    }
+                    if (wait_ready_time < service.timerservice.Tick)
+                    {
+                        foreach (var _client_Proxy in _client_proxys)
+                        {
+                            if (!_client_Proxy.IsReady)
+                            {
+                                _client_Proxy.set_ready();
+                                _client_Proxy.set_auto_active(true);
+                            }
+                        }
+                        is_all_ready = true;
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                    if (is_all_ready)
+                    {
+                        ntf_game_info();
+                    }
+                }
+
                 var _client = _client_proxys[_current_client_index];
                 if (_client.IsAutoActive)
                 {
@@ -629,6 +660,30 @@ namespace game
             else
             {
                 log.log.warn($"player_into_game error player not in game guid:{guid}");
+            }
+        }
+
+        public void player_use_skill(string uuid)
+        {
+            if (uuid_clients.TryGetValue(uuid, out client_proxy _client))
+            {
+                _client.GameImpl.player_use_skill(_client);
+            }
+            else
+            {
+                log.log.warn($"client not inline uuid:{uuid}");
+            }
+        }
+
+        public void player_throw_dice(string uuid)
+        {
+            if (uuid_clients.TryGetValue(uuid, out client_proxy _client))
+            {
+                _client.GameImpl.player_throw_dice(_client);
+            }
+            else
+            {
+                log.log.warn($"client not inline uuid:{uuid}");
             }
         }
 
