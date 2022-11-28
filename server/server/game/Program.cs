@@ -20,6 +20,10 @@ namespace game
             _hub.on_hubproxy += on_hubproxy;
             _hub.on_hubproxy_reconn += on_hubproxy;
 
+            _hub.onCloseServer += () => {
+                _hub.closeSvr();
+            };
+
             hub.hub._timer.addticktime(300000, tick_set_game_svr_info);
 
             log.log.trace("login start ok");

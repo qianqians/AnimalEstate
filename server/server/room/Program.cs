@@ -20,6 +20,10 @@ namespace room
             _hub.on_hubproxy += on_hubproxy;
             _hub.on_hubproxy_reconn += on_hubproxy;
 
+            _hub.onCloseServer += () => {
+                _hub.closeSvr();
+            };
+
             log.log.trace("room start ok");
 
             _hub.run();

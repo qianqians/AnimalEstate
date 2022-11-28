@@ -19,6 +19,10 @@ namespace match
             _hub.on_hubproxy += on_hubproxy;
             _hub.on_hubproxy_reconn += on_hubproxy;
 
+            _hub.onCloseServer += () => {
+                _hub.closeSvr();
+            };
+
             log.log.trace("login start ok");
 
             _hub.run();

@@ -48,6 +48,10 @@ namespace player
                 }
             };
 
+            _hub.onCloseServer += () => {
+                _hub.closeSvr();
+            };
+
             hub.hub._timer.addticktime(300000, tick_set_player_svr_info);
 
             log.log.trace("player start ok");
