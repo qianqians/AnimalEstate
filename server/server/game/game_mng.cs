@@ -697,6 +697,13 @@ namespace game
         private readonly Dictionary<string, client_proxy> uuid_clients = new ();
         private readonly Dictionary<long, client_proxy> guid_clients = new();
         private readonly List<game_impl> games = new ();
+        public int Count
+        {
+            get
+            {
+                return guid_clients.Count;
+            }
+        }
 
         private readonly game_client_caller _game_client_caller = new ();
 

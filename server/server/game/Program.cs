@@ -1,4 +1,5 @@
 ﻿using abelkhan;
+using System.Numerics;
 
 namespace game
 {
@@ -19,11 +20,20 @@ namespace game
             _hub.on_hubproxy += on_hubproxy;
             _hub.on_hubproxy_reconn += on_hubproxy;
 
+            hub.hub._timer.addticktime(300000, tick_set_game_svr_info);
+
             log.log.trace("login start ok");
 
             _hub.run();
 
             log.log.info("server closed, login server:{0}", hub.hub.name);
+        }
+
+        private static void tick_set_game_svr_info(long tick_time)
+        {
+            game._redis_handle.SetData(redis_help.BuildGameSvrInfoCacheKey(hub.hub.name), new svr_info { tick_time = (int)hub.hub.tick, player_num = _game_mng.Count });
+
+            hub.hub._timer.addticktime(300000, tick_set_game_svr_info);
         }
 
         private static void on_hubproxy(hub.hubproxy _proxy)
