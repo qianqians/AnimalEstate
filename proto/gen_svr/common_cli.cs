@@ -382,12 +382,14 @@ namespace abelkhan
     {
         public Int64 guid;
         public string name;
+        public Int32 rank;
         public Int32 award_coin;
         public Int32 award_score;
         public static MsgPack.MessagePackObjectDictionary game_player_settle_info_to_protcol(game_player_settle_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
             _protocol.Add("guid", _struct.guid);
             _protocol.Add("name", _struct.name);
+            _protocol.Add("rank", _struct.rank);
             _protocol.Add("award_coin", _struct.award_coin);
             _protocol.Add("award_score", _struct.award_score);
             return _protocol;
@@ -400,6 +402,9 @@ namespace abelkhan
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "name"){
                     _structeb1fe0ef_fca5_358c_91c2_45f20a7adbea.name = ((MsgPack.MessagePackObject)i.Value).AsString();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "rank"){
+                    _structeb1fe0ef_fca5_358c_91c2_45f20a7adbea.rank = ((MsgPack.MessagePackObject)i.Value).AsInt32();
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "award_coin"){
                     _structeb1fe0ef_fca5_358c_91c2_45f20a7adbea.award_coin = ((MsgPack.MessagePackObject)i.Value).AsInt32();

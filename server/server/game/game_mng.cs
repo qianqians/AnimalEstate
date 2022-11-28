@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace game
@@ -102,6 +103,24 @@ namespace game
             }
         }
         private List<skill_effect> skill_Effects = new ();
+
+        private bool is_done_play = false;
+        public bool IsDonePlay
+        {
+            get
+            {
+                return is_done_play;
+            }
+        }
+
+        private int rank = 4;
+        public int PlayRank
+        {
+            get
+            {
+                return rank;
+            }
+        }
 
         private readonly Dictionary<animal, Action> skill_list = new ();
 
@@ -261,6 +280,10 @@ namespace game
                     _game_info.current_animal_index++;
                     if (_game_info.current_animal_index >= _game_info.animal_info.Count)
                     {
+                        is_done_play = true;
+                        _impl.DonePlayClient.Add(this);
+                        rank = _impl.DonePlayClient.Count;
+                        _impl.check_done_play();
                         return true;
                     }
                     relay = true;
@@ -379,6 +402,9 @@ namespace game
             }
         }
 
+        private bool is_done_play = false;
+        public List<client_proxy> DonePlayClient = new ();
+
         public List<effect_info> effect_list = new ();
 
         private readonly game_client_caller _game_client_caller;
@@ -438,6 +464,41 @@ namespace game
                 }
             }
             return true;
+        }
+
+        public async void check_done_play()
+        {
+            if (DonePlayClient.Count >= 3)
+            {
+                var info = new game_settle_info();
+                info.settle_info = new List<game_player_settle_info>();
+
+                var player_hub_list = new List<string>();
+                foreach (var _client_Proxy in _client_proxys)
+                {
+                    var player_settle_info = new game_player_settle_info();
+                    player_settle_info.guid = _client_Proxy.PlayerGameInfo.guid;
+                    player_settle_info.name = _client_Proxy.PlayerGameInfo.name;
+                    player_settle_info.rank = _client_Proxy.PlayRank;
+                    player_settle_info.award_coin = 100 / _client_Proxy.PlayRank;
+                    player_settle_info.award_score = 50 / _client_Proxy.PlayRank;
+                    info.settle_info.Add(player_settle_info);
+
+                    var player_svr_key = redis_help.BuildPlayerGuidCacheKey(_client_Proxy.PlayerGameInfo.guid);
+                    string player_hub_name = await game._redis_handle.GetStrData(player_svr_key);
+                    if (!player_hub_list.Contains(player_hub_name))
+                    {
+                        player_hub_list.Add(player_hub_name);
+                    }
+                }
+
+                foreach (var palyer_hub_name in player_hub_list)
+                {
+                    game._player_proxy_mng.get_player(palyer_hub_name).settle(info);
+                }
+
+                is_done_play = true;
+            }
         }
 
         private void ntf_game_info()
@@ -525,6 +586,25 @@ namespace game
             }
         }
 
+        private void next_player()
+        {
+            for(var i = 0; i < 4; i++)
+            {
+                _current_client_index++;
+                var _round_client = _client_proxys[_current_client_index];
+                if (!_round_client.IsDonePlay)
+                {
+                    _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_round_client.PlayerGameInfo.guid);
+                    break;
+                }
+
+                if (_current_client_index >= 4)
+                {
+                    _current_client_index = 0;
+                }
+            }
+        }
+
         public void player_use_skill(client_proxy _client)
         {
             var _current_client = _client_proxys[_current_client_index];
@@ -545,9 +625,7 @@ namespace game
             {
                 if (_client.throw_dice_and_check_end_round())
                 {
-                    _current_client_index++;
-                    var _round_client = _client_proxys[_current_client_index];
-                    _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_round_client.PlayerGameInfo.guid);
+                    next_player();
                 }
             }
             else
@@ -556,7 +634,7 @@ namespace game
             }
         }
 
-        public void tick()
+        public bool tick()
         {
             do
             {
@@ -606,11 +684,11 @@ namespace game
                     }
                 }
 
-                _current_client_index++;
-                var _round_client = _client_proxys[_current_client_index];
-                _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_round_client.PlayerGameInfo.guid);
+                next_player();
 
             } while (false);
+
+            return is_done_play;
         }
     }
 
@@ -691,9 +769,24 @@ namespace game
         {
             try
             {
+                var done_game_list = new List<game_impl>();
                 foreach (var _game in games)
                 {
-                    _game.tick();
+                    if (_game.tick())
+                    {
+                        done_game_list.Add(_game);
+                    }
+                }
+
+                foreach (var _game in done_game_list)
+                {
+                    games.Remove(_game);
+
+                    foreach (var _client in _game.ClientProxys)
+                    {
+                        uuid_clients.Remove(_client.uuid);
+                        guid_clients.Remove(_client.PlayerGameInfo.guid);
+                    }
                 }
             }
             catch (System.Exception ex)

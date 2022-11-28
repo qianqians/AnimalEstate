@@ -180,6 +180,9 @@ namespace player
                 score = 0
             };
 
+            var player_svr_key = redis_help.BuildPlayerGuidCacheKey(_info.guid);
+            await player._redis_handle.SetStrData(player_svr_key, hub.hub.name);
+
             PlayerCollection.createPersistedObject(_info.ToBsonDocument(), (ret) => {
                 if (ret != dbproxyproxy.EM_DB_RESULT.EM_DB_SUCESSED)
                 {
@@ -399,7 +402,7 @@ namespace player
 
                 DBQueryHelper query = new();
                 query.condition("sdk_uuid", sdk_uuid);
-                GetPlayerCollection.getObjectInfo(query.query(), (player_info_list) =>
+                GetPlayerCollection.getObjectInfo(query.query(), async (player_info_list) =>
                 {
                     if (player_info_list.Count > 1)
                     {
@@ -421,6 +424,9 @@ namespace player
                             var _player_info_db = BsonSerializer.Deserialize<player_info>(info as BsonDocument);
                             _proxy = new client_proxy(sdk_uuid, _player_info_db);
                             client_guid_dict[_proxy.PlayerInfo.guid] = _proxy;
+
+                            var player_svr_key = redis_help.BuildPlayerGuidCacheKey(_proxy.PlayerInfo.guid);
+                            await player._redis_handle.SetStrData(player_svr_key, hub.hub.name);
                         }
                         client_token_dict[token] = _proxy;
                         client_sdk_uuid_dict[sdk_uuid] = _proxy;

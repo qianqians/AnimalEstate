@@ -121,6 +121,7 @@ struct game_player_settle_info
 {
 	int64 guid;
 	string name;
+	int32 rank;
 	int32 award_coin;
 	int32 award_score;
 }

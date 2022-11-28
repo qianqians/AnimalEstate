@@ -307,6 +307,7 @@ export class game_player_settle_info
 {
     public guid : number;
     public name : string;
+    public rank : number;
     public award_coin : number;
     public award_score : number;
 
@@ -325,6 +326,9 @@ export function protcol_to_game_player_settle_info(_protocol:any){
         }
         else if (key === "name"){
             _struct.name = val as string;
+        }
+        else if (key === "rank"){
+            _struct.rank = val as number;
         }
         else if (key === "award_coin"){
             _struct.award_coin = val as number;
