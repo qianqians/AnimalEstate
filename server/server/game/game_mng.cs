@@ -407,6 +407,9 @@ namespace game
 
         public List<effect_info> effect_list = new ();
 
+        private long idle_time = service.timerservice.Tick;
+        private bool turn_next_player = false;
+
         private readonly game_client_caller _game_client_caller;
         public game_client_caller GameClientCaller
         {
@@ -603,6 +606,14 @@ namespace game
                     _current_client_index = 0;
                 }
             }
+
+            turn_next_player = false;
+        }
+
+        private void wait_next_player()
+        {
+            turn_next_player = true;
+            idle_time = service.timerservice.Tick + 2000;
         }
 
         public void player_use_skill(client_proxy _client)
@@ -625,7 +636,7 @@ namespace game
             {
                 if (_client.throw_dice_and_check_end_round())
                 {
-                    next_player();
+                    wait_next_player();
                 }
             }
             else
@@ -667,6 +678,16 @@ namespace game
                     }
                 }
 
+                if (idle_time > service.timerservice.Tick)
+                {
+                    break;
+                }
+
+                if (turn_next_player)
+                {
+                    next_player();
+                }
+
                 var _client = _client_proxys[_current_client_index];
                 if (_client.IsAutoActive)
                 {
@@ -684,7 +705,7 @@ namespace game
                     }
                 }
 
-                next_player();
+                wait_next_player();
 
             } while (false);
 
