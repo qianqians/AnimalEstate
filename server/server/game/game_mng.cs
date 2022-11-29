@@ -326,7 +326,7 @@ namespace game
         }
     }
 
-    public class game_impl
+    public partial class game_impl
     {
         private readonly Dictionary<playground, int> playground_lenght = new() {
             { playground.grassland, 100 },
@@ -514,81 +514,6 @@ namespace game
             _game_client_caller.get_multicast(ClientUUIDS).use_skill(guid);
         }
 
-        public void check_grid_effect(client_proxy _client)
-        {
-            foreach (var _effect_info in effect_list)
-            {
-                if (_effect_info.grids.Contains(_client.PlayerGameInfo.current_pos))
-                {
-                    switch (_effect_info.effect_id)
-                    {
-                        case effect.muddy:
-                            {
-                                var _effect = new client_proxy.special_grid_effect();
-                                _effect.move_coefficient = 0.67f;
-                                _effect.continued_rounds = 1;
-                                _client.add_special_grid_effect(_effect);
-                            }
-                            break;
-
-                        case effect.banana_peel:
-                            {
-                                var from = _client.PlayerGameInfo.current_pos;
-                                var to = 0;
-                                if (hub.hub.randmon_uint(2) < 1)
-                                {
-                                    to = from + 3;
-                                }
-                                else
-                                {
-                                    to = from - 3;
-                                }
-                                _game_client_caller.get_multicast(ClientUUIDS).effect_move(_client.PlayerGameInfo.guid, effect.banana_peel, from, to);
-                            }
-                            break;
-
-                        case effect.golden_apple:
-                            {
-                                var _effect = new client_proxy.special_grid_effect();
-                                _effect.mutil_rounds = 2;
-                                _effect.continued_rounds = 3;
-                                _effect.stop_rounds = 1;
-                                _client.add_special_grid_effect(_effect);
-                            }
-                            break;
-
-                        case effect.rice_ear:
-                            {
-                                var _effect = new client_proxy.special_grid_effect();
-                                _effect.move_coefficient = 2;
-                                _effect.continued_rounds = 3;
-                                _client.add_special_grid_effect(_effect);
-                            }
-                            break;
-
-                        case effect.monkey_wine:
-                            {
-                                var _effect = new client_proxy.special_grid_effect();
-                                _effect.stop_rounds = 1;
-                                _client.add_special_grid_effect(_effect);
-                            }
-                            break;
-
-                        case effect.mouse_trap:
-                            {
-                                var _effect = new client_proxy.special_grid_effect();
-                                _effect.stop_rounds = 3;
-                                _client.add_special_grid_effect(_effect);
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-
         private void next_player()
         {
             for(var i = 0; i < 4; i++)
@@ -686,6 +611,7 @@ namespace game
                 if (turn_next_player)
                 {
                     next_player();
+                    check_randmon_effect();
                 }
 
                 var _client = _client_proxys[_current_client_index];

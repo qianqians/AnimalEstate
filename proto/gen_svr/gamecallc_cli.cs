@@ -55,6 +55,7 @@ namespace abelkhan
             _client_handle.modulemanager.add_mothed("game_client_game_wait_start_info", game_wait_start_info);
             _client_handle.modulemanager.add_mothed("game_client_game_info", game_info);
             _client_handle.modulemanager.add_mothed("game_client_ntf_effect_info", ntf_effect_info);
+            _client_handle.modulemanager.add_mothed("game_client_ntf_new_effect_info", ntf_new_effect_info);
             _client_handle.modulemanager.add_mothed("game_client_turn_player_round", turn_player_round);
             _client_handle.modulemanager.add_mothed("game_client_throw_dice", throw_dice);
             _client_handle.modulemanager.add_mothed("game_client_move", move);
@@ -99,6 +100,14 @@ namespace abelkhan
             }
             if (on_ntf_effect_info != null){
                 on_ntf_effect_info(_info);
+            }
+        }
+
+        public event Action<effect_info> on_ntf_new_effect_info;
+        public void ntf_new_effect_info(IList<MsgPack.MessagePackObject> inArray){
+            var _info = effect_info.protcol_to_effect_info(((MsgPack.MessagePackObject)inArray[0]).AsDictionary());
+            if (on_ntf_new_effect_info != null){
+                on_ntf_new_effect_info(_info);
             }
         }
 

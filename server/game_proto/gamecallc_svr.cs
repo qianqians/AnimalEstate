@@ -110,6 +110,12 @@ namespace abelkhan
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_ntf_effect_info", _argv_e8275721_ff0f_38f6_97f2_e503533bc36e);
         }
 
+        public void ntf_new_effect_info(effect_info info){
+            var _argv_fba818df_3af0_36da_a270_f40974bad0a2 = new ArrayList();
+            _argv_fba818df_3af0_36da_a270_f40974bad0a2.Add(effect_info.effect_info_to_protcol(info));
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_ntf_new_effect_info", _argv_fba818df_3af0_36da_a270_f40974bad0a2);
+        }
+
         public void turn_player_round(Int64 guid){
             var _argv_ecab320c_0c7a_39d6_86e9_96ecfccda4c1 = new ArrayList();
             _argv_ecab320c_0c7a_39d6_86e9_96ecfccda4c1.Add(guid);

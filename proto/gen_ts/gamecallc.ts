@@ -43,6 +43,7 @@ export class game_client_module extends client_handle.imodule {
         this._client_handle._modulemng.add_method("game_client_game_wait_start_info", this.game_wait_start_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_game_info", this.game_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_ntf_effect_info", this.ntf_effect_info.bind(this));
+        this._client_handle._modulemng.add_method("game_client_ntf_new_effect_info", this.ntf_new_effect_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_turn_player_round", this.turn_player_round.bind(this));
         this._client_handle._modulemng.add_method("game_client_throw_dice", this.throw_dice.bind(this));
         this._client_handle._modulemng.add_method("game_client_move", this.move.bind(this));
@@ -53,6 +54,7 @@ export class game_client_module extends client_handle.imodule {
         this.cb_game_wait_start_info = null;
         this.cb_game_info = null;
         this.cb_ntf_effect_info = null;
+        this.cb_ntf_new_effect_info = null;
         this.cb_turn_player_round = null;
         this.cb_throw_dice = null;
         this.cb_move = null;
@@ -100,6 +102,15 @@ export class game_client_module extends client_handle.imodule {
         _argv_.push(_array_);
         if (this.cb_ntf_effect_info){
             this.cb_ntf_effect_info.apply(null, _argv_);
+        }
+    }
+
+    public cb_ntf_new_effect_info : (info:effect_info)=>void | null;
+    ntf_new_effect_info(inArray:any[]){
+        let _argv_:any[] = [];
+        _argv_.push(protcol_to_effect_info(inArray[0]));
+        if (this.cb_ntf_new_effect_info){
+            this.cb_ntf_new_effect_info.apply(null, _argv_);
         }
     }
 
