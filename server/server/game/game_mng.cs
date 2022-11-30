@@ -103,6 +103,14 @@ namespace game
             }
         }
         private List<skill_effect> skill_Effects = new ();
+        private Tuple<skill_effect, int> current_effect = null;
+        public bool CouldMove
+        {
+            get
+            {
+                return current_effect.Item1.could_move;
+            }
+        }
 
         private bool is_done_play = false;
         public bool IsDonePlay
@@ -155,32 +163,16 @@ namespace game
             }
         }
 
-        public void use_skill()
+        public void add_special_grid_effect(special_grid_effect _effect)
         {
-            var current_animal = _game_info.animal_info[_game_info.current_animal_index];
-            if (skill_list.TryGetValue(current_animal.animal_id, out Action skill_func))
-            {
-                skill_func.Invoke();
-                _impl.ntf_player_use_skill(_game_info.guid);
-            }
-            else
-            {
-                log.log.err($"invaild animal id:{current_animal.animal_id}, player.name:{_game_info.name}, player.guid:{_game_info.guid}");
-            }
+            special_grid_effects.Add(_effect);
         }
 
-        private Tuple<skill_effect, int> summary_skill_effect()
+        public void summary_skill_effect()
         {
             var _effect = new skill_effect();
-            var _due_skill_effect = new List<skill_effect>();
             foreach (var _skill_effect in skill_Effects)
             {
-                _skill_effect.continued_rounds--;
-                if (_skill_effect.continued_rounds <= 0)
-                {
-                    _due_skill_effect.Add(_skill_effect);
-                }
-
                 if (!_skill_effect.could_move)
                 {
                     _effect.could_move = false;
@@ -198,12 +190,39 @@ namespace game
                     _effect.move_coefficient *= _skill_effect.move_coefficient;
                 }
             }
+
+            var round_actives = 0;
+            foreach (var grid_effect in special_grid_effects)
+            {
+                if (grid_effect.move_coefficient > 1.0f)
+                {
+                    _effect.move_coefficient *= grid_effect.move_coefficient;
+                }
+                if (grid_effect.mutil_rounds > round_actives)
+                {
+                    round_actives = grid_effect.mutil_rounds;
+                }
+            }
+
+            current_effect = Tuple.Create(_effect, round_actives);
+        }
+
+        public void iterater_skill_effect()
+        {
+            var _due_skill_effect = new List<skill_effect>();
+            foreach (var _skill_effect in skill_Effects)
+            {
+                _skill_effect.continued_rounds--;
+                if (_skill_effect.continued_rounds <= 0)
+                {
+                    _due_skill_effect.Add(_skill_effect);
+                }
+            }
             foreach (var _skill_effect in _due_skill_effect)
             {
                 skill_Effects.Remove(_skill_effect);
             }
 
-            var round_actives = 0;
             var _due_special_grid_effect = new List<special_grid_effect>();
             foreach (var grid_effect in special_grid_effects)
             {
@@ -218,38 +237,42 @@ namespace game
                     {
                         _due_special_grid_effect.Add(grid_effect);
                     }
-                    _effect.could_move = false;
                 }
                 else
                 {
                     _due_special_grid_effect.Add(grid_effect);
-                }
-
-                if (grid_effect.move_coefficient > 1.0f)
-                {
-                    _effect.move_coefficient *= grid_effect.move_coefficient;
-                }
-                if (grid_effect.mutil_rounds > round_actives)
-                {
-                    round_actives = grid_effect.mutil_rounds;
                 }
             }
             foreach (var _grid_effect in _due_special_grid_effect)
             {
                 special_grid_effects.Remove(_grid_effect);
             }
-
-            return Tuple.Create(_effect, round_actives);
         }
 
-        public void add_special_grid_effect(special_grid_effect _effect)
+        public void use_skill()
         {
-            special_grid_effects.Add(_effect);
+            var _effect_and_round_actives = current_effect;
+            var _effect = _effect_and_round_actives.Item1;
+            var _round_active_num = _effect_and_round_actives.Item2;
+
+            if (_effect.could_move)
+            {
+                var current_animal = _game_info.animal_info[_game_info.current_animal_index];
+                if (skill_list.TryGetValue(current_animal.animal_id, out Action skill_func))
+                {
+                    skill_func.Invoke();
+                    _impl.ntf_player_use_skill(_game_info.guid);
+                }
+                else
+                {
+                    log.log.err($"invaild animal id:{current_animal.animal_id}, player.name:{_game_info.name}, player.guid:{_game_info.guid}");
+                }
+            }
         }
 
         public bool throw_dice_and_check_end_round()
         {
-            var _effect_and_round_actives = summary_skill_effect();
+            var _effect_and_round_actives = current_effect;
             var _effect = _effect_and_round_actives.Item1;
             var _round_active_num = _effect_and_round_actives.Item2;
             do
@@ -522,8 +545,13 @@ namespace game
                 var _round_client = _client_proxys[_current_client_index];
                 if (!_round_client.IsDonePlay)
                 {
-                    _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_round_client.PlayerGameInfo.guid);
-                    break;
+                    _round_client.summary_skill_effect();
+                    _round_client.iterater_skill_effect();
+                    if (_round_client.CouldMove)
+                    {
+                        _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_round_client.PlayerGameInfo.guid);
+                        break;
+                    }
                 }
 
                 if (_current_client_index >= 4)
