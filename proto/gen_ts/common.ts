@@ -34,10 +34,11 @@ export enum effect{
 
 export enum playground{
     random = 0,
-    grassland = 1,
-    hill = 2,
-    snow = 3,
-    desert = 4
+    lakeside = 1,
+    grassland = 2,
+    hill = 3,
+    snow = 4,
+    desert = 5
 }
 
 /*this struct code is codegen by abelkhan codegen for typescript*/

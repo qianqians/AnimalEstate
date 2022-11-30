@@ -53,10 +53,11 @@ enum effect
 enum playground
 {
 	random = 0;    // 随机地图
-	grassland = 1; // 草原
-	hill = 2;      // 山丘
-	snow = 3;	   // 雪地
-	desert = 4;	   // 沙漠
+	lakeside = 1;  // 平原湖边
+	grassland = 2; // 草原
+	hill = 3;      // 山丘
+	snow = 4;	   // 雪地
+	desert = 5;	   // 沙漠
 }
 
 struct player_friend_info
