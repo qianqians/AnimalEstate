@@ -1,0 +1,32 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        }
+    },
+    "last.imagePath": "C:/Users/qianqians/Documents/workspace/AnimalEstate/tiledmap/lakeside",
+    "map.height": 25,
+    "map.lastUsedFormat": "tmx",
+    "map.renderOrder": null,
+    "map.tileHeight": 64,
+    "map.tileWidth": 64,
+    "map.width": 25,
+    "openFiles": [
+    ],
+    "project": "lakeside.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 64,
+        "width": 64
+    }
+}
