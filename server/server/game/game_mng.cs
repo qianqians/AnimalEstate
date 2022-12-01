@@ -352,6 +352,7 @@ namespace game
     public partial class game_impl
     {
         private readonly Dictionary<playground, int> playground_lenght = new() {
+            { playground.lakeside, 64 },
             { playground.grassland, 100 },
             { playground.hill, 100 },
             { playground.snow, 100 },
