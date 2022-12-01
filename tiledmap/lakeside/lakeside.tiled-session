@@ -3,11 +3,26 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "background.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
         "": {
+            "scaleInDock": 1
+        },
+        "background.tmx": {
+            "scale": 0.6085937499999999,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 836.3543003851091,
+                "y": 801.0269576379975
+            }
+        },
+        "background.tmx#地板": {
+            "scaleInDock": 1
+        },
+        "background.tmx#背景": {
             "scaleInDock": 1
         }
     },
@@ -19,10 +34,12 @@
     "map.tileWidth": 64,
     "map.width": 25,
     "openFiles": [
+        "background.tmx"
     ],
     "project": "lakeside.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "background.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
