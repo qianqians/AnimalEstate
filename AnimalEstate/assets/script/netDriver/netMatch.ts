@@ -10,7 +10,7 @@ export class netMatch {
     private c_player_match_caller : player_room_match.client_match_caller;
     private player_match_module : player_client.player_game_client_module;
 
-    constructor() {
+    public constructor() {
         this.c_player_match_caller = new player_room_match.client_match_caller(cli.cli_handle);
 
         this.player_match_module = new player_client.player_game_client_module(cli.cli_handle);

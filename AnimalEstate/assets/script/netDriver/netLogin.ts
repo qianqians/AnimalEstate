@@ -16,7 +16,7 @@ export class netLogin {
     private player_client_module : player_client.player_client_module;
 
     public cb_player_be_displacement : () => void;
-    constructor() {
+    public constructor() {
         this.c_login_caller = new login.login_caller(cli.cli_handle); 
         this.c_player_login_caller = new player_login.player_login_caller(cli.cli_handle);
 

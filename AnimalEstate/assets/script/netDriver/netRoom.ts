@@ -19,7 +19,7 @@ export class netRoom {
     private room_call_client : room_client.room_client_module;
     private room_match_call_client : room_client.room_match_client_module;
 
-    constructor() {
+    public constructor() {
         this.client_call_player_room_caller = new client_call_player_room_caller.client_room_player_caller(cli.cli_handle);
 
         this.player_room_client_module = new player_room_client.player_room_client_module(cli.cli_handle);
