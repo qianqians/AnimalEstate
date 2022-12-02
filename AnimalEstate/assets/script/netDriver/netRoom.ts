@@ -1,5 +1,5 @@
-import * as cli from "../serverSDK/client_handle";
-import * as common from "../serverSDK/common";
+import * as cli from "../serverSDK/client_handle"
+import * as common from "../serverSDK/common"
 
 import * as client_call_player_room_caller from "../serverSDK/ccallplayer"
 import * as client_call_room_caller from "../serverSDK/ccallroom"

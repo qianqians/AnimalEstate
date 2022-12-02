@@ -1,5 +1,5 @@
-import * as cli from "../serverSDK/client_handle";
-import * as common from "../serverSDK/common";
+import * as cli from "../serverSDK/client_handle"
+import * as common from "../serverSDK/common"
 
 import * as client_game_caller from "../serverSDK/ccallgame"
 import * as game_client_module from "../serverSDK/gamecallc"
@@ -12,7 +12,7 @@ export class netGame {
 
     private game_call_client_module : game_client_module.game_client_module;
 
-    constructor() {
+    public constructor() {
         this.game_caller = new client_game_caller.game_caller(cli.cli_handle);
 
         this.game_call_client_module = new game_client_module.game_client_module(cli.cli_handle);

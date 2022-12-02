@@ -1,5 +1,5 @@
-import * as cli from "../serverSDK/client_handle";
-import * as common from "../serverSDK/common";
+import * as cli from "../serverSDK/client_handle"
+import * as common from "../serverSDK/common"
 
 import * as friend_caller from "../serverSDK/ccallplayer"
 import * as friend_module from "../serverSDK/playercallc"
@@ -10,7 +10,7 @@ export class netFriend {
     private friend_caller : friend_caller.client_friend_lobby_caller;
     private friend_module : friend_module.player_friend_client_module;
     
-    constructor() {
+    public constructor() {
         this.friend_caller = new friend_caller.client_friend_lobby_caller(cli.cli_handle);
 
         this.friend_module = new friend_module.player_friend_client_module(cli.cli_handle);
