@@ -9,9 +9,10 @@ import * as player_client from "../serverSDK/playercallc"
 
 export class netLogin {
     private c_login_caller : login.login_caller;
+    
+    public player_name = "";
     private c_player_login_caller : player_login.player_login_caller;
 
-    public player_name = "";
     private player_client_module : player_client.player_client_module;
 
     public cb_player_be_displacement : () => void;
@@ -26,7 +27,8 @@ export class netLogin {
         }
     }
 
-    public cb_player_login_sucess : (role_info:common.player_info) => void;
+    public player_info : common.player_info;
+    public cb_player_login_sucess : () => void;
     public cb_player_login_non_account : () => void;
     public login_player_no_author(account) {
         cli.cli_handle.get_hub_info("login", (info_list)=>{
@@ -37,7 +39,8 @@ export class netLogin {
                     this.player_name = player_hub_name;
                     
                     this.c_player_login_caller.get_hub(player_hub_name).player_login(token).callBack((player_info)=>{
-                        this.cb_player_login_sucess.call(null, player_info);
+                        this.player_info = player_info;
+                        this.cb_player_login_sucess.call(null);
                     }, (err)=>{
                         if (err == error.error.unregistered_palyer) {
                             this.cb_player_login_non_account.call(null);
@@ -60,7 +63,8 @@ export class netLogin {
 
     public create_role(name){
         this.c_player_login_caller.get_hub(this.player_name).create_role(name).callBack((player_info)=>{
-            this.cb_player_login_sucess.call(null, player_info);
+            this.player_info = player_info;
+            this.cb_player_login_sucess.call(null);
         }, (err)=>{
             console.log("create role error:" + err);
         }).timeout(3000, ()=>{

@@ -388,10 +388,14 @@ namespace player
             {
                 log.log.err(ex.ErrorInfo);
                 hub.hub._gates.disconnect_client(uuid);
+
+                rsp.err((int)error.db_error);
             }
             catch (System.Exception ex)
             {
                 log.log.err($"{ex}");
+
+                rsp.err((int)error.db_error);
             }
         }
     }
