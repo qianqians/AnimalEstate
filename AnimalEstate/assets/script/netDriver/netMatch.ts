@@ -1,6 +1,5 @@
 import * as cli from "../serverSDK/client_handle";
 import * as common from "../serverSDK/common";
-import * as error from "../serverSDK/error"
 
 import * as player_room_match from "../serverSDK/ccallplayer"
 import * as player_client from "../serverSDK/playercallc"

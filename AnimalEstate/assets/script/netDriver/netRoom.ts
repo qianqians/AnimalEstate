@@ -1,13 +1,18 @@
 import * as cli from "../serverSDK/client_handle";
 import * as common from "../serverSDK/common";
-import * as error from "../serverSDK/error"
 
+import * as client_call_player_room_caller from "../serverSDK/ccallplayer"
 import * as client_call_room_caller from "../serverSDK/ccallroom"
+
+import * as player_room_client from "../serverSDK/playercallc"
 import * as room_client from "../serverSDK/roomcallc"
 
 import * as singleton from "./netSingleton"
 
 export class netRoom {
+    private client_call_player_room_caller : client_call_player_room_caller.client_room_player_caller;
+    private player_room_client_module : player_room_client.player_room_client_module;
+
     private room_hub_name : string;
     private ccallroom : client_call_room_caller.client_room_match_caller;
 
@@ -15,6 +20,11 @@ export class netRoom {
     private room_match_call_client : room_client.room_match_client_module;
 
     constructor() {
+        this.client_call_player_room_caller = new client_call_player_room_caller.client_room_player_caller(cli.cli_handle);
+
+        this.player_room_client_module = new player_room_client.player_room_client_module(cli.cli_handle);
+        this.player_room_client_module.cb_invite_role_join_room = this.on_cb_invite_role_join_room.bind(this);
+
         this.ccallroom = new client_call_room_caller.client_room_match_caller(cli.cli_handle);
 
         this.room_call_client = new room_client.room_client_module(cli.cli_handle);
@@ -27,6 +37,23 @@ export class netRoom {
 
         this.room_match_call_client = new room_client.room_match_client_module(cli.cli_handle);
         this.room_match_call_client.cb_role_into_game = this.on_cb_role_into_game.bind(this);
+    }
+
+    public create_room(_playground : common.playground) {
+        this.client_call_player_room_caller.get_hub(singleton.netSingleton.login.player_name).create_room(_playground);
+    }
+
+    public agree_join_room(room_id : string) {
+        this.client_call_player_room_caller.get_hub(singleton.netSingleton.login.player_name).agree_join_room(room_id);
+    }
+
+    public invite_role_join_room(sdk_uuid : string) {
+        this.client_call_player_room_caller.get_hub(singleton.netSingleton.login.player_name).invite_role_join_room(sdk_uuid);
+    }
+
+    public cb_invite_role_join_room : (room_id:string, invite_role_name:string)=>void;
+    private on_cb_invite_role_join_room(room_id:string, invite_role_name:string) {
+        this.cb_invite_role_join_room.call(null, room_id, invite_role_name);
     }
 
     public into_room(room_hub_name : string) {
