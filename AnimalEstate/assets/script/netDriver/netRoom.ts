@@ -7,9 +7,13 @@ import * as client_call_room_caller from "../serverSDK/ccallroom"
 import * as player_room_client from "../serverSDK/playercallc"
 import * as room_client from "../serverSDK/roomcallc"
 
-import * as singleton from "./netSingleton"
+import * as login from "./netLogin"
+import * as game from "./netGame"
 
 export class netRoom {
+    private login_handle : login.netLogin;
+    private game_handle : game.netGame;
+
     private client_call_player_room_caller : client_call_player_room_caller.client_room_player_caller;
     private player_room_client_module : player_room_client.player_room_client_module;
 
@@ -19,7 +23,10 @@ export class netRoom {
     private room_call_client : room_client.room_client_module;
     private room_match_call_client : room_client.room_match_client_module;
 
-    public constructor() {
+    public constructor(_login:login.netLogin, _game:game.netGame) {
+        this.login_handle = _login;
+        this.game_handle = _game;
+
         this.client_call_player_room_caller = new client_call_player_room_caller.client_room_player_caller(cli.cli_handle);
 
         this.player_room_client_module = new player_room_client.player_room_client_module(cli.cli_handle);
@@ -40,15 +47,15 @@ export class netRoom {
     }
 
     public create_room(_playground : common.playground) {
-        this.client_call_player_room_caller.get_hub(singleton.netSingleton.login.player_name).create_room(_playground);
+        this.client_call_player_room_caller.get_hub(this.login_handle.player_name).create_room(_playground);
     }
 
     public agree_join_room(room_id : string) {
-        this.client_call_player_room_caller.get_hub(singleton.netSingleton.login.player_name).agree_join_room(room_id);
+        this.client_call_player_room_caller.get_hub(this.login_handle.player_name).agree_join_room(room_id);
     }
 
     public invite_role_join_room(sdk_uuid : string) {
-        this.client_call_player_room_caller.get_hub(singleton.netSingleton.login.player_name).invite_role_join_room(sdk_uuid);
+        this.client_call_player_room_caller.get_hub(this.login_handle.player_name).invite_role_join_room(sdk_uuid);
     }
 
     public cb_invite_role_join_room : (room_id:string, invite_role_name:string)=>void;
@@ -113,6 +120,6 @@ export class netRoom {
     }
 
     private on_cb_role_into_game(game_hub_name:string) {
-        singleton.netSingleton.game.into_game(game_hub_name);
+        this.game_handle.into_game(game_hub_name);
     }
 }
