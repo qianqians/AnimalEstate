@@ -411,5 +411,5 @@ export class client
 
         return tick_end - tick_begin;
     }
-
 }
+export let cli_handle = new client();
