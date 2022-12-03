@@ -326,7 +326,7 @@ namespace player
             }
         }
 
-        private void Player_login_Module_on_create_role(string name)
+        private async void Player_login_Module_on_create_role(string name)
         {
             log.log.trace("on_player_login begin!");
 
@@ -335,7 +335,7 @@ namespace player
 
             try
             {
-                var _proxy = player.client_Mng.create_player(uuid, name);
+                var _proxy = await player.client_Mng.create_player(uuid, name);
                 rsp.rsp(_proxy.PlayerInfo);
             }
             catch (LoginException ex)

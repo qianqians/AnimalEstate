@@ -13,7 +13,7 @@ namespace match
 
         static void Main(string[] args)
 		{
-            var _hub = new hub.hub(args[0], args[1], "login");
+            var _hub = new hub.hub(args[0], args[1], "match");
             _redis_handle = new redis_handle(hub.hub._root_config.get_value_string("redis_for_cache"));
 
             _hub.on_hubproxy += on_hubproxy;

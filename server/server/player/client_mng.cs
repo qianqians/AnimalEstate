@@ -169,7 +169,7 @@ namespace player
             _info = info;
         }
 
-        public async void create_player(string name)
+        public async Task create_player(string name)
         {
             _info = new player_info
             {
@@ -177,7 +177,19 @@ namespace player
                 name = name,
                 guid = await get_guid(),
                 coin = 100,
-                score = 0
+                score = 0,
+                friend_list = new List<player_friend_info>(),
+                invite_list = new List<player_friend_info>(),
+                be_invited_list = new List<player_friend_info>(),
+                hero_list = new List<animal>() {
+                    animal.chicken, animal.monkey, animal.rabbit, animal.duck, animal.mouse, animal.bear, animal.tiger, animal.lion
+                },
+                skin_list = new List<skin>() { 
+                    skin.chicken, skin.monkey, skin.rabbit, skin.duck, skin.mouse, skin.bear, skin.tiger, skin.lion
+                },
+                playground_list = new List<playground>() { 
+                    playground.lakeside, playground.grassland, playground.hill, playground.snow, playground.desert
+                }
             };
 
             var player_svr_key = redis_help.BuildPlayerGuidCacheKey(_info.guid);
@@ -451,14 +463,14 @@ namespace player
             return _proxy;
         }
 
-        public client_proxy create_player(string uuid, string name)
+        public async Task<client_proxy> create_player(string uuid, string name)
         {
             if (!client_uuid_dict.TryGetValue(uuid, out client_proxy _proxy))
             {
                 throw new LoginException($"invaild uuid:{uuid}");
             }
 
-            _proxy.create_player(name);
+            await _proxy.create_player(name);
             client_guid_dict.Add(_proxy.PlayerInfo.guid, _proxy);
 
             return _proxy;

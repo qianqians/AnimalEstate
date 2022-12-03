@@ -11,7 +11,7 @@ namespace game
 
         static void Main(string[] args)
 		{
-            var _hub = new hub.hub(args[0], args[1], "login");
+            var _hub = new hub.hub(args[0], args[1], "game");
             _redis_handle = new redis_handle(hub.hub._root_config.get_value_string("redis_for_cache"));
 
             var _client_msg_handle = new client_msg_handle();

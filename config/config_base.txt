@@ -25,7 +25,7 @@
 		"name":"gate",
 		"websocket_listen":true,
 		"websocket_outside_host":"ws://127.0.0.1",
-		"websocket_outside_port":3236,
+		"websocket_outside_port":3001,
 		"is_ssl":false,
 		"certificate":"./cert/scs1657770456175_relaxwar.com_server.crt",
 		"private_key":"./cert/scs1657770456175_relaxwar.com_server.key",

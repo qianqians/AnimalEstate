@@ -33,7 +33,8 @@ export class netLogin {
     public login_player_no_author(account) {
         cli.cli_handle.get_hub_info("login", (info_list)=>{
             if (info_list.length > 0) {
-                var login_hub = info_list[Math.round(Math.random() * info_list.length)]
+                var index = Math.floor(Math.random() * info_list.length);
+                var login_hub = info_list[index];
 
                 this.c_login_caller.get_hub(login_hub.hub_name).player_login_no_author(account).callBack((player_hub_name, token)=>{
                     this.player_name = player_hub_name;
