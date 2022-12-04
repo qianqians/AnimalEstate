@@ -2,7 +2,7 @@ import { _decorator, Component, Node, Button, EditBox, find, director } from 'cc
 const { ccclass, property } = _decorator;
 
 import * as singleton from '../netDriver/netSingleton';
-import { playground, player_game_info } from '../serverSDK/common';
+import { playground } from '../serverSDK/common';
 
 @ccclass('main_scene')
 export class main_scene extends Component {

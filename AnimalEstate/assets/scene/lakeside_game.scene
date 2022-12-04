@@ -23,7 +23,7 @@
     "_prefab": null,
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 209
+      "__id__": 210
     },
     "_id": "81f7b71d-f69c-4841-9ecd-f59f723fca80"
   },
@@ -55,6 +55,9 @@
       },
       {
         "__id__": 208
+      },
+      {
+        "__id__": 209
       }
     ],
     "_prefab": null,
@@ -388,8 +391,8 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 2.162,
-      "y": 396.028,
+      "x": 320,
+      "y": 480,
       "z": 0
     },
     "_lrot": {
@@ -6192,8 +6195,8 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 0,
-      "y": 399.695,
+      "x": 320,
+      "y": 480,
       "z": 0
     },
     "_lrot": {
@@ -6343,21 +6346,41 @@
     "_id": "c5V1EV8IpMtrIvY1OE9t2u"
   },
   {
+    "__type__": "c1d10sbH69KoKFCx+r4782p",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 2
+    },
+    "_enabled": true,
+    "__prefab": null,
+    "camera": {
+      "__id__": 4
+    },
+    "map": {
+      "__id__": 202
+    },
+    "lake": {
+      "__id__": 205
+    },
+    "_id": "e14B+wdYlAbKY6/jESllQJ"
+  },
+  {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 210
-    },
-    "shadows": {
       "__id__": 211
     },
-    "_skybox": {
+    "shadows": {
       "__id__": 212
     },
-    "fog": {
+    "_skybox": {
       "__id__": 213
     },
-    "octree": {
+    "fog": {
       "__id__": 214
+    },
+    "octree": {
+      "__id__": 215
     }
   },
   {
