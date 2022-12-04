@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Button, EditBox, find } from 'cc';
+import { _decorator, Component, Node, Button, EditBox, find, director } from 'cc';
 const { ccclass, property } = _decorator;
 
 import * as singleton from '../netDriver/netSingleton';
@@ -25,6 +25,7 @@ export class login extends Component {
 
         singleton.netSingleton.login.cb_player_login_sucess = () => {
             console.log("login sucess!");
+            director.loadScene("main");
         }
 
         this.netBode.on("connect",(e)=>{
