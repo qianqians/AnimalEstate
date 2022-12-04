@@ -706,8 +706,8 @@ namespace game
                     continue;
                 }
 
-                uuid_clients.Add(_client.uuid, _client);
-                guid_clients.Add(_client.PlayerGameInfo.guid, _client);
+                uuid_clients[_client.uuid] = _client;
+                guid_clients[_client.PlayerGameInfo.guid] = _client;
             }
         }
 
