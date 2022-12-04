@@ -20,6 +20,7 @@ export class main_scene extends Component {
 
         singleton.netSingleton.game.cb_game_wait_start_info = (countdown:number, _playground:playground, info:player_game_info[]) => {
             console.log("start game!");
+            director.loadScene("game");
         };
     }
 
