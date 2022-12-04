@@ -546,6 +546,11 @@ namespace game
             for(var i = 0; i < 4; i++)
             {
                 _current_client_index++;
+                if (_current_client_index >= 4)
+                {
+                    _current_client_index = 0;
+                }
+
                 var _round_client = _client_proxys[_current_client_index];
                 if (!_round_client.IsDonePlay)
                 {
@@ -556,11 +561,6 @@ namespace game
                         _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_round_client.PlayerGameInfo.guid);
                         break;
                     }
-                }
-
-                if (_current_client_index >= 4)
-                {
-                    _current_client_index = 0;
                 }
             }
 
@@ -631,6 +631,9 @@ namespace game
 
                     if (is_all_ready)
                     {
+                        var _round_client = _client_proxys[_current_client_index];
+                        _round_client.summary_skill_effect();
+                        _round_client.iterater_skill_effect();
                         ntf_game_info();
                     }
                 }
