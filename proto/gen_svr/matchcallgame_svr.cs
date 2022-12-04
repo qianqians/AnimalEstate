@@ -150,7 +150,7 @@ namespace abelkhan
 
             var _argv_3ad8ee08_b505_3abe_b70d_9c6b12861747 = new ArrayList();
             _argv_3ad8ee08_b505_3abe_b70d_9c6b12861747.Add(uuid_f06e9503_61db_5f2e_8f88_644242d7103f);
-            _argv_3ad8ee08_b505_3abe_b70d_9c6b12861747.Add(_playground);
+            _argv_3ad8ee08_b505_3abe_b70d_9c6b12861747.Add((int)_playground);
             var _array_57999374_60c2_3b99_9cd5_dd611f8f7c8f = new ArrayList();
             foreach(var v_f5a759e3_2ed7_57f0_be22_5c7cc710d7b4 in room_player_list){
                 _array_57999374_60c2_3b99_9cd5_dd611f8f7c8f.Add(player_inline_info.player_inline_info_to_protcol(v_f5a759e3_2ed7_57f0_be22_5c7cc710d7b4));

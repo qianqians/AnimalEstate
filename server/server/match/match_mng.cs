@@ -535,7 +535,7 @@ namespace match
                 await match_two_room(idle_game_svr_list);
             }
 
-            if (one_room_match_list.Count > 0 && one_player_match_list.Count > 0 && idle_game_svr_list.Count > 0)
+            if ((one_room_match_list.Count > 0 || one_player_match_list.Count > 0) && idle_game_svr_list.Count > 0)
             {
                 await match_one_room(idle_game_svr_list);
             }

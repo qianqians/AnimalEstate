@@ -249,7 +249,7 @@ namespace abelkhan
 
             var _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee = new ArrayList();
             _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(uuid_596b5288_d0f2_52ea_802a_a61621d93808);
-            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(_playground);
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add((int)_playground);
             _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(player_inline_info.player_inline_info_to_protcol(room_owner));
             hub.hub._hubs.call_hub(hub_name_0cbb8ec7_5c42_333d_86fd_100c0951d27f, "player_room_create_room", _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee);
 

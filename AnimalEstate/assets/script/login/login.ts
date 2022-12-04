@@ -2,7 +2,6 @@ import { _decorator, Component, Node, Button, EditBox, find, director } from 'cc
 const { ccclass, property } = _decorator;
 
 import * as singleton from '../netDriver/netSingleton';
-import * as common from "../serverSDK/common";
 
 @ccclass('login')
 export class login extends Component {
@@ -14,7 +13,6 @@ export class login extends Component {
     account:EditBox = null;
     
     start() {
-        //console.log("yyyyyyyyyyyyy");
         this.account.node.active = false;
         this.loginBtn.node.on(Node.EventType.MOUSE_DOWN, this.callback, this);
 
@@ -39,11 +37,9 @@ export class login extends Component {
         this._accountName = this.account.textLabel.string;
 
         singleton.netSingleton.login.login_player_no_author(this._accountName);
-        
     }
 
     update(deltaTime: number) {
-        
     }
 }
 

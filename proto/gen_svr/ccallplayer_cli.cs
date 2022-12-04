@@ -321,7 +321,7 @@ namespace abelkhan
 
         public void start_match(playground _playground){
             var _argv_5d1645a8_78f1_3219_bb7e_d14f420c9e1d = new ArrayList();
-            _argv_5d1645a8_78f1_3219_bb7e_d14f420c9e1d.Add(_playground);
+            _argv_5d1645a8_78f1_3219_bb7e_d14f420c9e1d.Add((int)_playground);
             _client_handle.call_hub(hub_name_a67a32be_6a98_3d05_88d9_696d83c9d775, "client_match_start_match", _argv_5d1645a8_78f1_3219_bb7e_d14f420c9e1d);
         }
 
@@ -571,7 +571,7 @@ namespace abelkhan
 
             var _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee = new ArrayList();
             _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(uuid_596b5288_d0f2_52ea_802a_a61621d93808);
-            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add(_playground);
+            _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee.Add((int)_playground);
             _client_handle.call_hub(hub_name_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2, "client_room_player_create_room", _argv_0f87a215_0b4f_3a78_9d92_9bd3f4aa6dee);
 
             var cb_create_room_obj = new client_room_player_create_room_cb(uuid_596b5288_d0f2_52ea_802a_a61621d93808, rsp_cb_client_room_player_handle);

@@ -92,6 +92,9 @@ namespace player
                 info.guid = _info.guid;
                 info.coin = _info.coin;
                 info.score = _info.score;
+                info.hero_list = _info.hero_list;
+                info.skin_list = _info.skin_list;
+                info.playground_list = _info.playground_list;
                 return info;
             }
         }

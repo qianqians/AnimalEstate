@@ -205,6 +205,7 @@ namespace abelkhan
         public Int32 score;
         public List<animal> hero_list;
         public List<skin> skin_list;
+        public List<playground> playground_list;
         public static MsgPack.MessagePackObjectDictionary player_inline_info_to_protcol(player_inline_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
             _protocol.Add("uuid", _struct.uuid);
@@ -222,6 +223,11 @@ namespace abelkhan
                 _array_skin_list.Add((Int32)v_);
             }
             _protocol.Add("skin_list", new MsgPack.MessagePackObject(_array_skin_list));
+            var _array_playground_list = new List<MsgPack.MessagePackObject>();
+            foreach(var v_ in _struct.playground_list){
+                _array_playground_list.Add((Int32)v_);
+            }
+            _protocol.Add("playground_list", new MsgPack.MessagePackObject(_array_playground_list));
             return _protocol;
         }
         public static player_inline_info protcol_to_player_inline_info(MsgPack.MessagePackObjectDictionary _protocol){
@@ -254,6 +260,13 @@ namespace abelkhan
                     var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
                     foreach (var v_ in _protocol_array){
                         _structcdacc51b_f718_3ebb_ad22_096d86e7efee.skin_list.Add((skin)((MsgPack.MessagePackObject)v_).AsInt32());
+                    }
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "playground_list"){
+                    _structcdacc51b_f718_3ebb_ad22_096d86e7efee.playground_list = new();
+                    var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
+                    foreach (var v_ in _protocol_array){
+                        _structcdacc51b_f718_3ebb_ad22_096d86e7efee.playground_list.Add((playground)((MsgPack.MessagePackObject)v_).AsInt32());
                     }
                 }
             }

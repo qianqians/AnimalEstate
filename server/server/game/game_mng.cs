@@ -146,12 +146,15 @@ namespace game
             skill_list.Add(animal.tiger, tiger_skill);
             skill_list.Add(animal.lion, lion_skill);
 
-            _game_info = new();
-            _game_info.uuid = _info.uuid;
-            _game_info.guid = _info.guid;
-            _game_info.name = _info.name;
-            _game_info.current_pos = 0;
-            _game_info.current_animal_index = 0;
+            _game_info = new()
+            {
+                uuid = _info.uuid,
+                guid = _info.guid,
+                name = _info.name,
+                current_pos = 0,
+                current_animal_index = 0,
+                animal_info = new ()
+            };
 
             var animal_list = new List<animal>(_info.hero_list);
             for (var i = 0; i < 4; i++)
@@ -469,7 +472,7 @@ namespace game
                 var _player_robot = new player_inline_info();
                 _player_robot.uuid = "robot";
                 _player_robot.name = NameHelper.GetNameHelper.GetName();
-                _player_robot.guid = 0;
+                _player_robot.guid = -1;
                 _player_robot.hero_list = new List<animal> { animal.chicken, animal.monkey, animal.rabbit, animal.duck, animal.mouse, animal.bear, animal.tiger, animal.lion };
                 _player_robot.skin_list = new List<skin> { skin.chicken, skin.monkey, skin.rabbit, skin.duck, skin.mouse, skin.bear, skin.tiger, skin.lion };
                 var _client = new client_proxy(_player_robot, this);
@@ -695,6 +698,11 @@ namespace game
 
             foreach (var _client in _game.ClientProxys)
             {
+                if (_client.uuid == "robot" && _client.PlayerGameInfo.guid == -1)
+                {
+                    continue;
+                }
+
                 uuid_clients.Add(_client.uuid, _client);
                 guid_clients.Add(_client.PlayerGameInfo.guid, _client);
             }

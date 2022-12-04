@@ -92,6 +92,7 @@ struct player_inline_info
 	int32 score;
 	animal[] hero_list;
 	skin[] skin_list;
+	playground[] playground_list;
 }
 
 struct room_info

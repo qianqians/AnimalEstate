@@ -80,7 +80,7 @@ namespace abelkhan
         public void game_wait_start_info(Int32 countdown, playground _playground, List<player_game_info> info){
             var _argv_1de11b0e_6af1_350d_ad38_245a9e2a0a43 = new ArrayList();
             _argv_1de11b0e_6af1_350d_ad38_245a9e2a0a43.Add(countdown);
-            _argv_1de11b0e_6af1_350d_ad38_245a9e2a0a43.Add(_playground);
+            _argv_1de11b0e_6af1_350d_ad38_245a9e2a0a43.Add((int)_playground);
             var _array_391fd3d4_2d55_3f5e_9223_7f450a814a15 = new ArrayList();
             foreach(var v_0c15545d_d42a_5fe0_bed7_a9496851e88b in info){
                 _array_391fd3d4_2d55_3f5e_9223_7f450a814a15.Add(player_game_info.player_game_info_to_protcol(v_0c15545d_d42a_5fe0_bed7_a9496851e88b));
@@ -91,7 +91,7 @@ namespace abelkhan
 
         public void game_info(playground _playground, List<player_game_info> info){
             var _argv_a8150bab_ab88_3ac0_b633_425c25e81223 = new ArrayList();
-            _argv_a8150bab_ab88_3ac0_b633_425c25e81223.Add(_playground);
+            _argv_a8150bab_ab88_3ac0_b633_425c25e81223.Add((int)_playground);
             var _array_391fd3d4_2d55_3f5e_9223_7f450a814a15 = new ArrayList();
             foreach(var v_0c15545d_d42a_5fe0_bed7_a9496851e88b in info){
                 _array_391fd3d4_2d55_3f5e_9223_7f450a814a15.Add(player_game_info.player_game_info_to_protcol(v_0c15545d_d42a_5fe0_bed7_a9496851e88b));
@@ -157,7 +157,7 @@ namespace abelkhan
         public void effect_move(Int64 guid, effect effect_id, Int32 from, Int32 to){
             var _argv_275504eb_206b_39cf_a228_7410dadf83b7 = new ArrayList();
             _argv_275504eb_206b_39cf_a228_7410dadf83b7.Add(guid);
-            _argv_275504eb_206b_39cf_a228_7410dadf83b7.Add(effect_id);
+            _argv_275504eb_206b_39cf_a228_7410dadf83b7.Add((int)effect_id);
             _argv_275504eb_206b_39cf_a228_7410dadf83b7.Add(from);
             _argv_275504eb_206b_39cf_a228_7410dadf83b7.Add(to);
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_effect_move", _argv_275504eb_206b_39cf_a228_7410dadf83b7);
