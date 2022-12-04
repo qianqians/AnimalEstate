@@ -14,6 +14,7 @@ namespace abelkhan
         public game_module()
         {
             hub.hub._modules.add_mothed("game_into_game", into_game);
+            hub.hub._modules.add_mothed("game_play_order", play_order);
             hub.hub._modules.add_mothed("game_use_skill", use_skill);
             hub.hub._modules.add_mothed("game_throw_dice", throw_dice);
         }
@@ -23,6 +24,18 @@ namespace abelkhan
             var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
             if (on_into_game != null){
                 on_into_game(_guid);
+            }
+        }
+
+        public event Action<List<animal_game_info>> on_play_order;
+        public void play_order(IList<MsgPack.MessagePackObject> inArray){
+            var _animal_info = new List<animal_game_info>();
+            var _protocol_arrayanimal_info = ((MsgPack.MessagePackObject)inArray[0]).AsList();
+            foreach (var v_c00062dc_edff_54ff_a6ff_4b3c0f329e98 in _protocol_arrayanimal_info){
+                _animal_info.Add(animal_game_info.protcol_to_animal_game_info(((MsgPack.MessagePackObject)v_c00062dc_edff_54ff_a6ff_4b3c0f329e98).AsDictionary()));
+            }
+            if (on_play_order != null){
+                on_play_order(_animal_info);
             }
         }
 

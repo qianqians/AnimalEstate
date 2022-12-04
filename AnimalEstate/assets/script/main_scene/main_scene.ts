@@ -18,9 +18,11 @@ export class main_scene extends Component {
     start() {
         this.start_match_btn.node.on(Node.EventType.MOUSE_DOWN, this.start_match_callback, this);
 
-        singleton.netSingleton.game.cb_game_wait_start_info = (countdown:number, _playground:playground, info:player_game_info[]) => {
+        singleton.netSingleton.game.cb_game_wait_start_info = () => {
             console.log("start game!");
-            director.loadScene("game");
+            if (singleton.netSingleton.game.Playground == playground.lakeside){
+                director.loadScene("lakeside_game");
+            }
         };
     }
 

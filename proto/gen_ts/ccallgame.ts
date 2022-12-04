@@ -47,6 +47,16 @@ export class game_hubproxy
         this._client_handle.call_hub(this.hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_into_game", _argv_90a69cb9_3a0a_3a86_9cad_499708905276);
     }
 
+    public play_order(animal_info:common.animal_game_info[]){
+        let _argv_72cd38c4_f976_3ca7_aeef_12b6fc619413:any[] = [];
+        let _array_7044f738_3b40_35d1_a737_b6b236adbdd2:any[] = [];
+        for(let v_c00062dc_edff_54ff_a6ff_4b3c0f329e98 of animal_info){
+            _array_7044f738_3b40_35d1_a737_b6b236adbdd2.push(common.animal_game_info_to_protcol(v_c00062dc_edff_54ff_a6ff_4b3c0f329e98));
+        }
+        _argv_72cd38c4_f976_3ca7_aeef_12b6fc619413.push(_array_7044f738_3b40_35d1_a737_b6b236adbdd2);
+        this._client_handle.call_hub(this.hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_play_order", _argv_72cd38c4_f976_3ca7_aeef_12b6fc619413);
+    }
+
     public use_skill(){
         let _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe:any[] = [];
         this._client_handle.call_hub(this.hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_use_skill", _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe);

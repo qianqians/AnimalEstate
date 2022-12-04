@@ -161,6 +161,7 @@ export class player_inline_info
     public score : number;
     public hero_list : animal[];
     public skin_list : skin[];
+    public playground_list : playground[];
 
     constructor(){
     }
@@ -197,6 +198,12 @@ export function protcol_to_player_inline_info(_protocol:any){
             _struct.skin_list = [];
             for(let v_ of val){
                 _struct.skin_list.push(v_);
+    }
+        }
+        else if (key === "playground_list"){
+            _struct.playground_list = [];
+            for(let v_ of val){
+                _struct.playground_list.push(v_);
     }
         }
     return _struct;

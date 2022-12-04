@@ -89,7 +89,7 @@ namespace abelkhan
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_game_wait_start_info", _argv_1de11b0e_6af1_350d_ad38_245a9e2a0a43);
         }
 
-        public void game_info(playground _playground, List<player_game_info> info){
+        public void game_info(playground _playground, List<player_game_info> info, Int64 round_player_guid){
             var _argv_a8150bab_ab88_3ac0_b633_425c25e81223 = new ArrayList();
             _argv_a8150bab_ab88_3ac0_b633_425c25e81223.Add((int)_playground);
             var _array_391fd3d4_2d55_3f5e_9223_7f450a814a15 = new ArrayList();
@@ -97,6 +97,7 @@ namespace abelkhan
                 _array_391fd3d4_2d55_3f5e_9223_7f450a814a15.Add(player_game_info.player_game_info_to_protcol(v_0c15545d_d42a_5fe0_bed7_a9496851e88b));
             }
             _argv_a8150bab_ab88_3ac0_b633_425c25e81223.Add(_array_391fd3d4_2d55_3f5e_9223_7f450a814a15);
+            _argv_a8150bab_ab88_3ac0_b633_425c25e81223.Add(round_player_guid);
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_game_info", _argv_a8150bab_ab88_3ac0_b633_425c25e81223);
         }
 

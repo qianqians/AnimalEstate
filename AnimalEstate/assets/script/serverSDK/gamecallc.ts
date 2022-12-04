@@ -78,7 +78,7 @@ export class game_client_module extends client_handle.imodule {
         }
     }
 
-    public cb_game_info : (_playground:common.playground, info:common.player_game_info[])=>void | null;
+    public cb_game_info : (_playground:common.playground, info:common.player_game_info[], round_player_guid:number)=>void | null;
     game_info(inArray:any[]){
         let _argv_:any[] = [];
         _argv_.push(inArray[0]);
@@ -87,6 +87,7 @@ export class game_client_module extends client_handle.imodule {
             _array_.push(common.protcol_to_player_game_info(v_));
         }
         _argv_.push(_array_);
+        _argv_.push(inArray[2]);
         if (this.cb_game_info){
             this.cb_game_info.apply(null, _argv_);
         }

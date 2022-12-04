@@ -7,9 +7,23 @@ using System.Threading.Tasks;
 
 namespace game
 {
+    public class SetAnimalOrderError : System.Exception
+    {
+        public SetAnimalOrderError(string err) : base(err)
+        {
+        }
+    }
+
     public partial class client_proxy
     {
         private readonly player_inline_info _info;
+        public List<playground> PlayerPlaygrounds{
+            get
+            {
+                return _info.playground_list;
+            }
+        }
+
         private player_game_info _game_info;
         public player_game_info PlayerGameInfo
         {
@@ -132,6 +146,8 @@ namespace game
 
         private readonly Dictionary<animal, Action> skill_list = new ();
 
+        private error_code_ntf_caller _error_code_ntf_caller = new ();
+
         public client_proxy(player_inline_info info, game_impl impl)
         {
             _info = info;
@@ -164,6 +180,20 @@ namespace game
                 _game_info.animal_info.Add(new animal_game_info() { animal_id = _animal_id, skin_id = _skin_id });
                 animal_list.Remove(_animal_id);
             }
+        }
+
+        public void ntf_error_code(error err_code)
+        {
+            _error_code_ntf_caller.get_client(uuid).error_code(err_code);
+        }
+
+        public void set_animal_order(List<animal_game_info> animal_info)
+        {
+            if (animal_info.Count != 4)
+            {
+                throw new SetAnimalOrderError($"animal_info count != 4, player.guid:{_game_info.guid}");
+            }
+            _game_info.animal_info = animal_info;
         }
 
         public void add_special_grid_effect(special_grid_effect _effect)
@@ -409,7 +439,7 @@ namespace game
                 return player_game_info_list;
             }
         }
-        private int _current_client_index = 0;
+        public int _current_client_index = 0;
 
         private long wait_ready_time = service.timerservice.Tick + 25000;
         public long Countdown
@@ -448,7 +478,17 @@ namespace game
 
         private playground random_playground()
         {
-            var random_list = new List<playground>() {  playground.grassland, playground.hill, playground.snow, playground.desert };
+            var random_list = new List<playground>();
+            foreach (var _client in _client_proxys)
+            {
+                foreach (var _playground in _client.PlayerPlaygrounds)
+                {
+                    if (!random_list.Contains(_playground))
+                    {
+                        random_list.Add(_playground);
+                    }
+                }
+            }
             return random_list[(int)hub.hub.randmon_uint((uint)random_list.Count)];
         }
 
@@ -482,6 +522,11 @@ namespace game
             }
 
             _current_client_index = 0;
+        }
+
+        public void ntf_game_wait_start_info()
+        {
+            _game_client_caller.get_multicast(ClientUUIDS).game_wait_start_info((int)Countdown, Playground, PlayerGameInfo);
         }
 
         private bool check_all_ready()
@@ -533,7 +578,8 @@ namespace game
 
         private void ntf_game_info()
         {
-            _game_client_caller.get_multicast(ClientUUIDS).game_info(_playground, PlayerGameInfo);
+            var _round_player = _client_proxys[_current_client_index];
+            _game_client_caller.get_multicast(ClientUUIDS).game_info(_playground, PlayerGameInfo, _round_player.PlayerGameInfo.guid);
         }
 
         public void ntf_player_use_skill(long guid)
@@ -694,6 +740,12 @@ namespace game
             hub.hub._timer.addticktime(3000, tick_game);
         }
 
+        public client_proxy get_player(string uuid)
+        {
+            uuid_clients.TryGetValue(uuid, out client_proxy _client);
+            return _client;
+        }
+
         public void create_game(playground _playground, List<player_inline_info> room_player_list)
         {
             var _game = new game_impl(_game_client_caller, _playground, room_player_list);
@@ -721,7 +773,8 @@ namespace game
 
                 if (_client.GameImpl.IsAllReady)
                 {
-                    _game_client_caller.get_multicast(new List<string> { _client.uuid }).game_info(_client.GameImpl.Playground, _client.GameImpl.PlayerGameInfo);
+                    var _round_player = _client.GameImpl.ClientProxys[_client.GameImpl._current_client_index];
+                    _game_client_caller.get_multicast(new List<string> { _client.uuid }).game_info(_client.GameImpl.Playground, _client.GameImpl.PlayerGameInfo, _round_player.PlayerGameInfo.guid);
                     _game_client_caller.get_multicast(new List<string> { _client.uuid }).ntf_effect_info(_client.GameImpl.effect_list);
                 }
                 else

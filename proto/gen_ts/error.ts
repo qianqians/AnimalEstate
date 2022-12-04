@@ -7,7 +7,8 @@ export enum error{
     success = 0,
     server_busy = 1,
     unregistered_palyer = 2,
-    room_is_destroy = 3
+    room_is_destroy = 3,
+    animal_order_len_not_four = 4
 }
 
 /*this struct code is codegen by abelkhan codegen for typescript*/

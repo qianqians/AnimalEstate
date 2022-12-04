@@ -58,6 +58,16 @@ namespace abelkhan
             _client_handle.call_hub(hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_into_game", _argv_90a69cb9_3a0a_3a86_9cad_499708905276);
         }
 
+        public void play_order(List<animal_game_info> animal_info){
+            var _argv_72cd38c4_f976_3ca7_aeef_12b6fc619413 = new ArrayList();
+            var _array_7044f738_3b40_35d1_a737_b6b236adbdd2 = new ArrayList();
+            foreach(var v_6dc408dd_fea4_5767_a896_5cfbe6a4974f in animal_info){
+                _array_7044f738_3b40_35d1_a737_b6b236adbdd2.Add(animal_game_info.animal_game_info_to_protcol(v_6dc408dd_fea4_5767_a896_5cfbe6a4974f));
+            }
+            _argv_72cd38c4_f976_3ca7_aeef_12b6fc619413.Add(_array_7044f738_3b40_35d1_a737_b6b236adbdd2);
+            _client_handle.call_hub(hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_play_order", _argv_72cd38c4_f976_3ca7_aeef_12b6fc619413);
+        }
+
         public void use_skill(){
             var _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe = new ArrayList();
             _client_handle.call_hub(hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_use_skill", _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe);

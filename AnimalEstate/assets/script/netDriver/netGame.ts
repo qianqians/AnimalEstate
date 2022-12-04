@@ -45,9 +45,15 @@ export class netGame {
         this.game_caller.get_hub(this.game_hub_name).throw_dice();
     }
 
-    public cb_game_wait_start_info : (countdown:number, _playground:common.playground, info:common.player_game_info[]) => void;
+    public Countdown:number;
+    public Playground:common.playground;
+    public PlayerGameInfo:common.player_game_info[];
+    public cb_game_wait_start_info : () => void;
     private on_cb_game_wait_start_info(countdown:number, _playground:common.playground, info:common.player_game_info[]) {
-        this.cb_game_wait_start_info.call(null, countdown, _playground, info);
+        this.Countdown = countdown;
+        this.Playground = _playground;
+        this.PlayerGameInfo = info;
+        this.cb_game_wait_start_info.call(null);
     }
 
     public cb_game_info : (_playground:common.playground, info:common.player_game_info[]) => void;

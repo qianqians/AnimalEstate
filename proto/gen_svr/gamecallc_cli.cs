@@ -78,7 +78,7 @@ namespace abelkhan
             }
         }
 
-        public event Action<playground, List<player_game_info>> on_game_info;
+        public event Action<playground, List<player_game_info>, Int64> on_game_info;
         public void game_info(IList<MsgPack.MessagePackObject> inArray){
             var __playground = (playground)((MsgPack.MessagePackObject)inArray[0]).AsInt32();
             var _info = new List<player_game_info>();
@@ -86,8 +86,9 @@ namespace abelkhan
             foreach (var v_d856b000_56e0_5f62_a6f3_e6a0c7859745 in _protocol_arrayinfo){
                 _info.Add(player_game_info.protcol_to_player_game_info(((MsgPack.MessagePackObject)v_d856b000_56e0_5f62_a6f3_e6a0c7859745).AsDictionary()));
             }
+            var _round_player_guid = ((MsgPack.MessagePackObject)inArray[2]).AsInt64();
             if (on_game_info != null){
-                on_game_info(__playground, _info);
+                on_game_info(__playground, _info, _round_player_guid);
             }
         }
 
