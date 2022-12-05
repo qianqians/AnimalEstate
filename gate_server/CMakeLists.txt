@@ -53,7 +53,5 @@ INCLUDE_DIRECTORIES(${msgpack11_INCLUDE_PATH})
 set(concurrent_INCLUDE_PATH ${PROJECT_SOURCE_DIR}//juggle//concurrent CACHE PATH "concurrent include path")
 INCLUDE_DIRECTORIES(${concurrent_INCLUDE_PATH})
 
-add_subdirectory(./component/hub)
 add_subdirectory(./component/gate)
 add_subdirectory(./server/gate_svr)
-add_subdirectory(./server/battle)
