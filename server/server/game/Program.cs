@@ -1,4 +1,5 @@
 ﻿using abelkhan;
+using service;
 using System.Numerics;
 
 namespace game
@@ -24,7 +25,7 @@ namespace game
                 _hub.closeSvr();
             };
 
-            hub.hub._timer.addticktime(300000, tick_set_game_svr_info);
+            tick_set_game_svr_info(timerservice.Tick);
 
             log.log.trace("login start ok");
 

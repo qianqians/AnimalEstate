@@ -52,7 +52,7 @@ namespace player
                 _hub.closeSvr();
             };
 
-            hub.hub._timer.addticktime(300000, tick_set_player_svr_info);
+            tick_set_player_svr_info(timerservice.Tick);
 
             log.log.trace("player start ok");
 
