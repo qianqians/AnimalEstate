@@ -38,7 +38,8 @@ export enum playground{
     grassland = 2,
     hill = 3,
     snow = 4,
-    desert = 5
+    desert = 5,
+    countof = 6
 }
 
 /*this struct code is codegen by abelkhan codegen for typescript*/

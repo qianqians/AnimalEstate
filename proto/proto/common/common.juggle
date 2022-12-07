@@ -58,6 +58,7 @@ enum playground
 	hill = 3;      // 山丘
 	snow = 4;	   // 雪地
 	desert = 5;	   // 沙漠
+	countof = 6;   // 总数
 }
 
 struct player_friend_info

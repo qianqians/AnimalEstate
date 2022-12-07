@@ -51,7 +51,7 @@ namespace match
             foreach (var p in game_proxys)
             {
                 var info = await match._redis_handle.GetData<svr_info>(redis_help.BuildGameSvrInfoCacheKey(p.Key));
-                if (info.tick_time < 34)
+                if (info?.tick_time < 34)
                 {
                     idle_game_proxys.Add(p.Value);
                 }
