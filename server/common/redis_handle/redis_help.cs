@@ -16,6 +16,11 @@ namespace abelkhan
             return $"Svr:PlayerSvrInfoCache:{player_hub_name}";
         }
 
+        static public string BuildPlayerGateCacheKey(string sdk_uuid)
+        {
+            return $"Player:GateSDKUUIDCache:{sdk_uuid}";
+        }
+
         static public string BuildPlayerSvrCacheLockKey(string sdk_uuid)
         {
             return $"Player:PlayerSDKUUIDLockCache:{sdk_uuid}";
