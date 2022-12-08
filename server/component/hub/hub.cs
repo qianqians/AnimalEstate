@@ -191,6 +191,11 @@ namespace hub
             };
         }
 
+        public void set_support_take_over_svr(bool is_support)
+        {
+            is_support_take_over_svr = is_support;
+        }
+
         public Action onCenterCrash;
         private async void reconnect_center()
         {
@@ -422,11 +427,13 @@ namespace hub
         public static List<abelkhan.Ichannel> add_chs;
         public static List<abelkhan.Ichannel> remove_chs;
 
+        public static bool is_support_take_over_svr = true;
+        public static abelkhan.redis_mq _redis_mq_service;
+
         private static Random _r;
         private static ConcurrentDictionary<string, dbproxyproxy> _dbproxys;
 
         private abelkhan.enetservice _enetservice;
-        private abelkhan.redis_mq _redis_mq_service;
         private abelkhan.cryptacceptservice _cryptacceptservice;
         private abelkhan.websocketacceptservice _websocketacceptservice;
 

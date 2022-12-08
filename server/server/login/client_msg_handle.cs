@@ -45,11 +45,13 @@ namespace login
             log.log.trace("on_player_login_no_author begin! player account:{0}", account);
 
             var rsp = login_Module.rsp as login_player_login_no_author_rsp;
+            var uuid = hub.hub._gates.current_client_uuid;
 
             var lock_key = redis_help.BuildPlayerSvrCacheLockKey(account);
+            var token = $"lock_{account}";
             try
             {
-                await login._redis_handle.Lock(lock_key, $"lock_{account}", 1000);
+                await login._redis_handle.Lock(lock_key, token, 1000);
 
                 var key = redis_help.BuildPlayerSvrCacheKey(account);
                 var _player_proxy_name = await login._redis_handle.GetStrData(key);
@@ -69,12 +71,18 @@ namespace login
                         random_player_svr_rsp(account, rsp);
                     }
                 }
+
+                var gate_key = redis_help.BuildPlayerGateCacheKey(account);
+                await login._redis_handle.SetStrData(key, hub.hub._gates.get_client_gate_name(uuid));
             }
             catch (System.Exception ex)
             {
                 log.log.err($"{ex}");
                 rsp.err((int)error.db_error);
-                await login._redis_handle.UnLock(lock_key, $"lock_{account}");
+            }
+            finally
+            {
+                await login._redis_handle.UnLock(lock_key, token);
             }
         }
     }
