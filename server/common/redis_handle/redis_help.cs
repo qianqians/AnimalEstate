@@ -36,6 +36,11 @@ namespace abelkhan
             return $"Player:RoomCache:{guid}";
         }
 
+        static public string BuildPlayerGameCacheLockKey(Int64 guid)
+        {
+            return $"Player:GameLockCache:{guid}";
+        }
+
         static public string BuildPlayerGameCacheKey(Int64 guid)
         {
             return $"Player:GameCache:{guid}";

@@ -76,6 +76,19 @@ namespace game
             }
         }
 
+        private bool is_offline = false;
+        public bool IsOffline
+        {
+            set
+            {
+                is_offline = value;
+            }
+            get
+            {
+                return is_offline;
+            }
+        }
+
         private readonly game_impl _impl;
         public game_impl GameImpl
         {
@@ -519,6 +532,7 @@ namespace game
                 _client_proxys.Add(_client);
                 _client.set_ready();
                 _client.set_auto_active(true);
+                _client.IsOffline = true;
             }
 
             _current_client_index = 0;
@@ -565,6 +579,8 @@ namespace game
                     {
                         player_hub_list.Add(player_hub_name);
                     }
+
+                    
                 }
 
                 foreach (var palyer_hub_name in player_hub_list)
@@ -771,6 +787,8 @@ namespace game
                 _client.uuid = uuid;
                 uuid_clients.Add(_client.uuid, _client);
 
+                _client.IsOffline = false;
+
                 if (_client.GameImpl.IsAllReady)
                 {
                     var _round_player = _client.GameImpl.ClientProxys[_client.GameImpl._current_client_index];
@@ -785,7 +803,15 @@ namespace game
             else
             {
                 log.log.warn($"player_into_game error player not in game guid:{guid}");
+
+
             }
+        }
+
+        public client_proxy get_client_uuid(string uuid)
+        {
+            uuid_clients.TryGetValue(uuid, out client_proxy _client);
+            return _client;
         }
 
         public void player_use_skill(string uuid)

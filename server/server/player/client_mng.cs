@@ -381,6 +381,12 @@ namespace player
                 client_uuid_dict.Remove(_proxy.uuid);
                 client_sdk_uuid_dict.Remove(_proxy.PlayerInfo.sdk_uuid);
                 client_guid_dict.Remove(_proxy.PlayerInfo.guid);
+
+                var player_key = redis_help.BuildPlayerSvrCacheKey(_proxy.PlayerInfo.sdk_uuid);
+                player._redis_handle.DelData(player_key);
+
+                var player_guid_key = redis_help.BuildPlayerGuidCacheKey(_proxy.PlayerInfo.guid);
+                player._redis_handle.DelData(player_guid_key);
             }
 
             List<string> token_list = new();

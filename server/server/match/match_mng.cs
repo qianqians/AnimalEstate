@@ -1,6 +1,8 @@
 ﻿using abelkhan;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace match
@@ -53,8 +55,25 @@ namespace match
         {
             var ret = new TaskCompletionSource<bool>();
 
-            _game.start_game(_playground, player_List).callBack(() => {
+            _game.start_game(_playground, player_List).callBack(async () => {
                 ret.SetResult(true);
+
+                foreach(var _player_info in player_List)
+                {
+                    var lock_key = redis_help.BuildPlayerGameCacheLockKey(_player_info.guid);
+                    var token = $"{_player_info.guid}";
+                    try
+                    {
+                        await match._redis_handle.Lock(lock_key, token, 1000);
+
+                        var player_game_key = redis_help.BuildPlayerGameCacheKey(_player_info.guid);
+                        await match._redis_handle.SetStrData(player_game_key, _game.name);
+                    }
+                    finally
+                    {
+                        await match._redis_handle.UnLock(lock_key, token);
+                    }
+                }
 
             }, (err) => {
                 log.log.err($"match game err:{err}!");
