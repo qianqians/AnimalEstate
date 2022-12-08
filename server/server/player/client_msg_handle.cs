@@ -101,12 +101,12 @@ namespace player
             }
         }
 
-        private void Client_Friend_Lobby_Module_on_agree_role_friend(long invite_guid, bool be_agree)
+        private async void Client_Friend_Lobby_Module_on_agree_role_friend(long invite_guid, bool be_agree)
         {
             log.log.trace("on_agree_role_friend begin!");
 
             var uuid = hub.hub._gates.current_client_uuid;
-            var _player = player.client_Mng.uuid_get_client_proxy(uuid);
+            var _player = await player.client_Mng.uuid_get_client_proxy(uuid);
             _player.agree_invite_friend(invite_guid, be_agree);
 
             if (be_agree)
@@ -131,12 +131,12 @@ namespace player
             }
         }
 
-        private void Client_Friend_Lobby_Module_on_invite_role_friend(player_friend_info self_info, player_friend_info target_info)
+        private async void Client_Friend_Lobby_Module_on_invite_role_friend(player_friend_info self_info, player_friend_info target_info)
         {
             log.log.trace("on_invite_role_friend begin!");
 
             var uuid = hub.hub._gates.current_client_uuid;
-            var _player = player.client_Mng.uuid_get_client_proxy(uuid);
+            var _player = await player.client_Mng.uuid_get_client_proxy(uuid);
             _player.invite(target_info);
 
             var _msg = new invite_friend_msg()
@@ -211,7 +211,7 @@ namespace player
 
             try
             {
-                var _player = player.client_Mng.uuid_get_client_proxy(uuid);
+                var _player = await player.client_Mng.uuid_get_client_proxy(uuid);
 
                 var _room_key = redis_help.BuildRoomSvrNameCacheKey(room_id);
                 var _room_hub_name = await player._redis_handle.GetStrData(_room_key);
@@ -257,7 +257,7 @@ namespace player
 
             try
             {
-                var _player = player.client_Mng.uuid_get_client_proxy(uuid);
+                var _player = await player.client_Mng.uuid_get_client_proxy(uuid);
 
                 var player_key = redis_help.BuildPlayerSvrCacheKey(sdk_uuid);
                 var _player_proxy_name = await player._redis_handle.GetStrData(player_key);
@@ -271,7 +271,7 @@ namespace player
             }
         }
 
-        private void Client_Room_Player_Module_on_create_room(playground _playground)
+        private async void Client_Room_Player_Module_on_create_room(playground _playground)
         {
             log.log.trace("on_create_room begin!");
 
@@ -280,7 +280,7 @@ namespace player
 
             try
             {
-                var _player_proxy = player.client_Mng.uuid_get_client_proxy(uuid);
+                var _player_proxy = await player.client_Mng.uuid_get_client_proxy(uuid);
                 var _room_proxy = player.room_Proxy_Mng.random_room();
 
                 
@@ -304,7 +304,7 @@ namespace player
             }
         }
 
-        private void Client_match_Module_on_start_match(playground _playground)
+        private async void Client_match_Module_on_start_match(playground _playground)
         {
             log.log.trace("on_start_match begin!");
 
@@ -312,7 +312,7 @@ namespace player
 
             try
             {
-                var _proxy = player.client_Mng.uuid_get_client_proxy(uuid);
+                var _proxy = await player.client_Mng.uuid_get_client_proxy(uuid);
                 player.match_Proxy_Mng.random_match().player_join_match(_playground, _proxy.PlayerInlineInfo);
             }
             catch (GetPlayerException ex)

@@ -43,6 +43,7 @@ export class netLogin {
                         this.player_info = player_info;
                         this.cb_player_login_sucess.call(null);
                     }, (err)=>{
+                        console.log("login err:", err);
                         if (err == error.error.unregistered_palyer) {
                             this.cb_player_login_non_account.call(null);
                         }
@@ -63,6 +64,7 @@ export class netLogin {
 
 
     public create_role(name){
+        console.log("begin create role!");
         this.c_player_login_caller.get_hub(this.player_name).create_role(name).callBack((player_info)=>{
             this.player_info = player_info;
             this.cb_player_login_sucess.call(null);

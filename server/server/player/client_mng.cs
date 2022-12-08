@@ -1,5 +1,6 @@
 ﻿using abelkhan;
 using hub;
+using log;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using Newtonsoft.Json.Linq;
@@ -46,6 +47,13 @@ namespace player
     public class client_proxy
     {
         private readonly string _sdk_uuid;
+        public string SDK_UUID
+        {
+            get
+            {
+                return _sdk_uuid;
+            }
+        }
 
         private long last_active_time = timerservice.Tick;
         public long LastActiveTime
@@ -191,7 +199,7 @@ namespace player
                     skin.chicken, skin.monkey, skin.rabbit, skin.duck, skin.mouse, skin.bear, skin.tiger, skin.lion
                 },
                 playground_list = new List<playground>() { 
-                    playground.lakeside, playground.grassland, playground.hill, playground.snow, playground.desert
+                    playground.lakeside/*, playground.grassland, playground.hill, playground.snow, playground.desert*/
                 }
             };
 
@@ -382,11 +390,17 @@ namespace player
                 client_sdk_uuid_dict.Remove(_proxy.PlayerInfo.sdk_uuid);
                 client_guid_dict.Remove(_proxy.PlayerInfo.guid);
 
+                var uuid_key = redis_help.BuildPlayerSDKUUIDCacheKey(_proxy.uuid);
+                player._redis_handle.DelData(uuid_key);
+
                 var player_key = redis_help.BuildPlayerSvrCacheKey(_proxy.PlayerInfo.sdk_uuid);
                 player._redis_handle.DelData(player_key);
 
                 var player_guid_key = redis_help.BuildPlayerGuidCacheKey(_proxy.PlayerInfo.guid);
                 player._redis_handle.DelData(player_guid_key);
+
+                var gate_key = redis_help.BuildPlayerGateCacheKey(_proxy.PlayerInfo.sdk_uuid);
+                player._redis_handle.DelData(gate_key);
             }
 
             List<string> token_list = new();
@@ -405,60 +419,64 @@ namespace player
             hub.hub._timer.addticktime(5 * 60 * 1000, tick_clear_timeout_player);
         }
 
-        public Task<string> token_player_login(string sdk_uuid)
+        public Task<client_proxy> load_client(string sdk_uuid)
         {
-            var ret = new TaskCompletionSource<string>();
+            var ret = new TaskCompletionSource<client_proxy>();
 
-            do
+            DBQueryHelper query = new();
+            query.condition("sdk_uuid", sdk_uuid);
+            GetPlayerCollection.getObjectInfo(query.query(), async (player_info_list) =>
             {
-                if (client_sdk_uuid_dict.TryGetValue(sdk_uuid, out client_proxy _proxy))
+                if (player_info_list.Count > 1)
                 {
-                    var token = Guid.NewGuid().ToString();
-                    PlayerClientCaller.get_client(_proxy.uuid).be_displacement();
-                    client_uuid_dict.Remove(_proxy.uuid);
-                    client_token_dict[token] = _proxy;
-                    ret.SetResult(token);
-                    break;
+                    log.log.err($"duplicate sdk_uuid:{sdk_uuid}");
+                    ret.SetException(new LoginException($"duplicate sdk_uuid:{sdk_uuid}"));
                 }
-
-                DBQueryHelper query = new();
-                query.condition("sdk_uuid", sdk_uuid);
-                GetPlayerCollection.getObjectInfo(query.query(), async (player_info_list) =>
+                else
                 {
-                    if (player_info_list.Count > 1)
+                    client_proxy _proxy = null;
+
+                    if (player_info_list.Count == 0)
                     {
-                        log.log.err($"duplicate sdk_uuid:{sdk_uuid}");
-                        ret.SetException(new LoginException($"duplicate sdk_uuid:{sdk_uuid}"));
+                        _proxy = new client_proxy(sdk_uuid);
                     }
-                    else
+                    else if (player_info_list.Count == 1)
                     {
-                        client_proxy _proxy = null;
-                        var token = Guid.NewGuid().ToString();
+                        var info = player_info_list[0];
+                        var _player_info_db = BsonSerializer.Deserialize<player_info>(info as BsonDocument);
+                        _proxy = new client_proxy(sdk_uuid, _player_info_db);
+                        
+                        client_guid_dict[_proxy.PlayerInfo.guid] = _proxy;
 
-                        if (player_info_list.Count == 0)
-                        {
-                            _proxy = new client_proxy(sdk_uuid);
-                        }
-                        else if (player_info_list.Count == 1)
-                        {
-                            var info = player_info_list[0];
-                            var _player_info_db = BsonSerializer.Deserialize<player_info>(info as BsonDocument);
-                            _proxy = new client_proxy(sdk_uuid, _player_info_db);
-                            client_guid_dict[_proxy.PlayerInfo.guid] = _proxy;
-
-                            var player_svr_key = redis_help.BuildPlayerGuidCacheKey(_proxy.PlayerInfo.guid);
-                            await player._redis_handle.SetStrData(player_svr_key, hub.hub.name);
-                        }
-                        client_token_dict[token] = _proxy;
-                        client_sdk_uuid_dict[sdk_uuid] = _proxy;
-
-                        ret.SetResult(token);
+                        var player_svr_key = redis_help.BuildPlayerGuidCacheKey(_proxy.PlayerInfo.guid);
+                        await player._redis_handle.SetStrData(player_svr_key, hub.hub.name);
                     }
-                }, () => { });
+                    client_sdk_uuid_dict[sdk_uuid] = _proxy;
 
-            } while (false);
-            
+                    ret.SetResult(_proxy);
+                }
+            }, () => { });
+
             return ret.Task;
+        }
+
+        public async Task<string> token_player_login(string sdk_uuid)
+        {
+            var token = Guid.NewGuid().ToString();
+
+            if (client_sdk_uuid_dict.TryGetValue(sdk_uuid, out client_proxy _proxy))
+            {
+                PlayerClientCaller.get_client(_proxy.uuid).be_displacement();
+                client_uuid_dict.Remove(_proxy.uuid);
+                client_token_dict[token] = _proxy;
+            }
+            else
+            {
+                var _client = await load_client(sdk_uuid);
+                client_token_dict[token] = _client;
+            }
+
+            return token;
         }
 
         public client_proxy token_get_client_proxy(string uuid, string token)
@@ -469,6 +487,10 @@ namespace player
             }
             _proxy.uuid = uuid;
             client_uuid_dict[uuid] = _proxy;
+
+            var uuid_key = redis_help.BuildPlayerSDKUUIDCacheKey(uuid);
+            player._redis_handle.SetStrData(uuid_key, _proxy.SDK_UUID);
+
             return _proxy;
         }
 
@@ -485,20 +507,34 @@ namespace player
             return _proxy;
         }
 
-        public client_proxy uuid_get_client_proxy(string uuid)
+        public async Task<client_proxy> uuid_get_client_proxy(string uuid)
         {
             if (!client_uuid_dict.TryGetValue(uuid, out client_proxy _proxy))
             {
-                throw new GetPlayerException($"invaild uuid:{uuid}");
+                var uuid_key = redis_help.BuildPlayerSDKUUIDCacheKey(uuid);
+                var sdk_uuid = await player._redis_handle.GetStrData(uuid_key);
+
+                var gate_key = redis_help.BuildPlayerGateCacheKey(sdk_uuid);
+                var gate_name = await player._redis_handle.GetStrData(gate_key);
+
+                _proxy = await load_client(sdk_uuid);
+                client_uuid_dict[uuid] = _proxy;
+
+                hub.hub._gates.client_seep(uuid, gate_name);
             }
             return _proxy;
         }
 
-        public client_proxy sdk_uuid_get_client_proxy(string sdk_uuid)
+        public async Task<client_proxy> sdk_uuid_get_client_proxy(string sdk_uuid)
         {
             if (!client_sdk_uuid_dict.TryGetValue(sdk_uuid, out client_proxy _proxy))
             {
-                throw new GetPlayerException($"invaild sdk_uuid:{sdk_uuid}");
+                _proxy = await load_client(sdk_uuid);
+
+                var gate_key = redis_help.BuildPlayerGateCacheKey(sdk_uuid);
+                var gate_name = await player._redis_handle.GetStrData(gate_key);
+
+                hub.hub._gates.client_seep(_proxy.uuid, gate_name);
             }
             return _proxy;
         }

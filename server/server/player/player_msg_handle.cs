@@ -33,13 +33,13 @@ namespace player
             }
         }
 
-        private void Player_Player_Room_Module_on_invite_role_join_room(string sdk_uuid, string room_id, string invite_role_name)
+        private async void Player_Player_Room_Module_on_invite_role_join_room(string sdk_uuid, string room_id, string invite_role_name)
         {
             log.log.err("on_invite_role_join_room begin!");
 
             try
             {
-                var _player_proxy = player.client_Mng.sdk_uuid_get_client_proxy(sdk_uuid);
+                var _player_proxy = await player.client_Mng.sdk_uuid_get_client_proxy(sdk_uuid);
                 client_mng.PlayerRoomClientCaller.get_client(_player_proxy.uuid).invite_role_join_room(room_id, invite_role_name);
             }
             catch (System.Exception ex)

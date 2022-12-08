@@ -111,6 +111,9 @@ namespace room
             _playground = ground;
             _owner = owner;
             uuid_clients[owner.uuid] = owner;
+
+            var room_key = redis_help.BuildRoomSvrNameCacheKey(room_id);
+            room._redis_handle.SetStrData(room_key, hub.hub.name);
         }
 
         public void join_room(client_proxy _client)
@@ -239,6 +242,12 @@ namespace room
             return _proxy;
         }
 
+        private void del_room_cache(string room_id)
+        {
+            var room_key = redis_help.BuildRoomSvrNameCacheKey(room_id);
+            room._redis_handle.DelData(room_key);
+        }
+
         public void leave_room(string leave_player_uuid)
         {
             if (uuid_clients.Remove(leave_player_uuid, out client_proxy _client))
@@ -247,6 +256,7 @@ namespace room
                 if (_client.RoomImpl.Count <= 0)
                 {
                     guid_room.Remove(_client.RoomImpl.RoomID);
+                    del_room_cache(_client.RoomImpl.RoomID);
                 }
             }
         }
@@ -256,6 +266,7 @@ namespace room
             if (guid_room.Remove(room_id, out room_impl _room))
             {
                 _room.disband();
+                del_room_cache(room_id);
             }
         }
 

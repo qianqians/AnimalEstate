@@ -60,8 +60,8 @@ namespace match
 
                 foreach(var _player_info in player_List)
                 {
+                    var token = $"lock_{_player_info.guid}";
                     var lock_key = redis_help.BuildPlayerGameCacheLockKey(_player_info.guid);
-                    var token = $"{_player_info.guid}";
                     try
                     {
                         await match._redis_handle.Lock(lock_key, token, 1000);

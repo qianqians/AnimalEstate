@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace game
@@ -509,11 +510,7 @@ namespace game
         {
             _game_client_caller = _caller;
             _playground = playground;
-            if (_playground == playground.random)
-            {
-                _playground = random_playground();
-            }
-
+            
             foreach (var _player in room_player_list)
             {
                 var _client = new client_proxy(_player, this);
@@ -528,11 +525,17 @@ namespace game
                 _player_robot.guid = -1;
                 _player_robot.hero_list = new List<animal> { animal.chicken, animal.monkey, animal.rabbit, animal.duck, animal.mouse, animal.bear, animal.tiger, animal.lion };
                 _player_robot.skin_list = new List<skin> { skin.chicken, skin.monkey, skin.rabbit, skin.duck, skin.mouse, skin.bear, skin.tiger, skin.lion };
+                _player_robot.playground_list = new List<playground> { playground.lakeside/*, playground.grassland, playground.hill, playground.snow, playground.desert*/ };
                 var _client = new client_proxy(_player_robot, this);
                 _client_proxys.Add(_client);
                 _client.set_ready();
                 _client.set_auto_active(true);
                 _client.IsOffline = true;
+            }
+
+            if (_playground == playground.random)
+            {
+                _playground = random_playground();
             }
 
             _current_client_index = 0;
@@ -580,7 +583,23 @@ namespace game
                         player_hub_list.Add(player_hub_name);
                     }
 
-                    
+                    var token = $"lock_{_client_Proxy.PlayerGameInfo.guid}";
+                    var lock_key = redis_help.BuildPlayerGameCacheLockKey(_client_Proxy.PlayerGameInfo.guid);
+                    try
+                    {
+                        await game._redis_handle.Lock(lock_key, token, 1000);
+
+                        var player_game_key = redis_help.BuildPlayerGameCacheKey(_client_Proxy.PlayerGameInfo.guid);
+                        var game_hub_name = await game._redis_handle.GetStrData(player_game_key);
+                        if (game_hub_name == hub.hub.name)
+                        {
+                            game._redis_handle.DelData(player_game_key);
+                        }
+                    }
+                    finally
+                    {
+                        await game._redis_handle.UnLock(lock_key, token);
+                    }
                 }
 
                 foreach (var palyer_hub_name in player_hub_list)

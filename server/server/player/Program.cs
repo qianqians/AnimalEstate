@@ -35,11 +35,11 @@ namespace player
             _hub.on_hubproxy += on_hubproxy;
             _hub.on_hubproxy_reconn += on_hubproxy;
 
-            _hub.on_client_msg += (uuid) =>
+            _hub.on_client_msg += async (uuid) =>
             {
                 try
                 {
-                    var _client = client_Mng.uuid_get_client_proxy(uuid);
+                    var _client = await client_Mng.uuid_get_client_proxy(uuid);
                     _client.LastActiveTime = timerservice.Tick;
                 }
                 catch (System.Exception ex)
