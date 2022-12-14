@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "bear",
+    "_name": "chicken",
     "_objFlags": 0,
     "_native": "",
     "data": {
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "bear",
+    "_name": "chicken",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -52,7 +52,7 @@
       "y": 1,
       "z": 1
     },
-    "_layer": 33554432,
+    "_layer": 1073741824,
     "_euler": {
       "__type__": "cc.Vec3",
       "x": 0,
@@ -75,7 +75,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 92,
-      "height": 100
+      "height": 108
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -86,7 +86,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "41UpUojqBLM7+Z/uNdEdCW"
+    "fileId": "b2JIDKw+5B16jC50kCHUI2"
   },
   {
     "__type__": "cc.Sprite",
@@ -110,7 +110,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "ded26d75-971a-4b23-bbda-e1c90406bd87@f9941",
+      "__uuid__": "726acaad-aa3c-4105-82dc-79bf8941aaff@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -130,7 +130,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "4cn6YWkBBJ/Koa8mK27ZDR"
+    "fileId": "6c2usPt31EsqC+BfWrT3nW"
   },
   {
     "__type__": "cc.Animation",
@@ -146,23 +146,23 @@
     "playOnLoad": true,
     "_clips": [
       {
-        "__uuid__": "353e42b9-fd05-43bd-ac0c-0c19e26857fd",
+        "__uuid__": "9cd2c889-bf2f-459f-9a36-f9902529c952",
         "__expectedType__": "cc.AnimationClip"
       },
       {
-        "__uuid__": "1f922bb0-a117-4cc6-bc47-81a1bb14bf27",
+        "__uuid__": "d6d94d5f-ec59-4bc3-a22e-6bb761b68d83",
         "__expectedType__": "cc.AnimationClip"
       }
     ],
     "_defaultClip": {
-      "__uuid__": "353e42b9-fd05-43bd-ac0c-0c19e26857fd",
+      "__uuid__": "9cd2c889-bf2f-459f-9a36-f9902529c952",
       "__expectedType__": "cc.AnimationClip"
     },
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "daQNXVUKpHpoKeZZ1+70u5"
+    "fileId": "eaLmW5DYZJlKiPN+JQfOcM"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -172,6 +172,6 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "c2w5GTG4xAaqf2o/PTlStH"
+    "fileId": "a3HRwz84VPe7Tc4VU4eZv8"
   }
 ]
