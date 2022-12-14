@@ -1,5 +1,6 @@
 ﻿using abelkhan;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Principal;
 
@@ -73,7 +74,7 @@ namespace game
         {
             foreach (var _effect_info in effect_list)
             {
-                if (_effect_info.grids.Contains(_client.PlayerGameInfo.current_pos))
+                if (_effect_info.grids.Contains(_client.PlayerGameInfo.animal_info[_client.PlayerGameInfo.current_animal_index].current_pos))
                 {
                     switch (_effect_info.effect_id)
                     {
@@ -88,7 +89,7 @@ namespace game
 
                         case effect.banana_peel:
                             {
-                                var from = _client.PlayerGameInfo.current_pos;
+                                var from = _client.PlayerGameInfo.animal_info[_client.PlayerGameInfo.current_animal_index].current_pos;
                                 var to = 0;
                                 if (hub.hub.randmon_uint(2) < 1)
                                 {

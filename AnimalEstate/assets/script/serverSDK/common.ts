@@ -249,6 +249,7 @@ export class animal_game_info
 {
     public animal_id : animal;
     public skin_id : skin;
+    public current_pos : number;
 
     constructor(){
     }
@@ -266,6 +267,9 @@ export function protcol_to_animal_game_info(_protocol:any){
         else if (key === "skin_id"){
             _struct.skin_id = val as skin;
         }
+        else if (key === "current_pos"){
+            _struct.current_pos = val as number;
+        }
     return _struct;
 }
 
@@ -276,7 +280,6 @@ export class player_game_info
     public name : string;
     public animal_info : animal_game_info[];
     public current_animal_index : number;
-    public current_pos : number;
 
     constructor(){
     }
@@ -305,9 +308,6 @@ export function protcol_to_player_game_info(_protocol:any){
         }
         else if (key === "current_animal_index"){
             _struct.current_animal_index = val as number;
-        }
-        else if (key === "current_pos"){
-            _struct.current_pos = val as number;
         }
     return _struct;
 }

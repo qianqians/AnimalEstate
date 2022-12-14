@@ -65,8 +65,8 @@
     "_prefab": null,
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 320,
-      "y": 480.00000000000006,
+      "x": 320.00000000000006,
+      "y": 479.99999999999994,
       "z": 0
     },
     "_lrot": {
@@ -7421,10 +7421,10 @@
     "__prefab": null,
     "_alignFlags": 45,
     "_target": null,
-    "_left": 0,
-    "_right": 0,
-    "_top": 5.684341886080802e-14,
-    "_bottom": 5.684341886080802e-14,
+    "_left": 5.684341886080802e-14,
+    "_right": 5.684341886080802e-14,
+    "_top": -5.684341886080802e-14,
+    "_bottom": -5.684341886080802e-14,
     "_horizontalCenter": 0,
     "_verticalCenter": 0,
     "_isAbsLeft": true,
@@ -7456,6 +7456,38 @@
     },
     "lake": {
       "__id__": 241
+    },
+    "bear": {
+      "__uuid__": "547a45a3-c571-4205-b78f-ab982665eab9",
+      "__expectedType__": "cc.Prefab"
+    },
+    "chicken": {
+      "__uuid__": "e2fa6648-1a1c-4b9b-b308-f0b63270ab31",
+      "__expectedType__": "cc.Prefab"
+    },
+    "duck": {
+      "__uuid__": "7be15e60-9d59-4ce8-8c56-6d3ed4c5b194",
+      "__expectedType__": "cc.Prefab"
+    },
+    "lion": {
+      "__uuid__": "3d2cb3db-34ea-4cac-862b-83c89b16aedb",
+      "__expectedType__": "cc.Prefab"
+    },
+    "monkey": {
+      "__uuid__": "68c04ecc-51e9-46a7-b13e-f0bd9af50434",
+      "__expectedType__": "cc.Prefab"
+    },
+    "mouse": {
+      "__uuid__": "662d388f-263f-4f62-ba35-532b5da1fde1",
+      "__expectedType__": "cc.Prefab"
+    },
+    "rabbit": {
+      "__uuid__": "adb1c09d-8526-45ad-afc5-046131ff5fdb",
+      "__expectedType__": "cc.Prefab"
+    },
+    "tiger": {
+      "__uuid__": "14d16a45-9d97-46ff-a902-f15d7c39e202",
+      "__expectedType__": "cc.Prefab"
     },
     "_id": "e14B+wdYlAbKY6/jESllQJ"
   },

@@ -108,6 +108,7 @@ struct animal_game_info
 {
 	animal animal_id;
 	skin skin_id;
+	int16 current_pos;
 }
 
 struct player_game_info
@@ -117,7 +118,6 @@ struct player_game_info
 	string name;
 	animal_game_info[] animal_info;
 	int16 current_animal_index;
-	int16 current_pos;
 }
 
 struct game_player_settle_info

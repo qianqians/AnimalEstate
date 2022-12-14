@@ -321,10 +321,12 @@ namespace abelkhan
     {
         public animal animal_id;
         public skin skin_id;
+        public Int16 current_pos;
         public static MsgPack.MessagePackObjectDictionary animal_game_info_to_protcol(animal_game_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
             _protocol.Add("animal_id", (Int32)_struct.animal_id);
             _protocol.Add("skin_id", (Int32)_struct.skin_id);
+            _protocol.Add("current_pos", _struct.current_pos);
             return _protocol;
         }
         public static animal_game_info protcol_to_animal_game_info(MsgPack.MessagePackObjectDictionary _protocol){
@@ -335,6 +337,9 @@ namespace abelkhan
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "skin_id"){
                     _struct0f490332_8543_30ad_92b2_6c49981b121d.skin_id = (skin)((MsgPack.MessagePackObject)i.Value).AsInt32();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "current_pos"){
+                    _struct0f490332_8543_30ad_92b2_6c49981b121d.current_pos = ((MsgPack.MessagePackObject)i.Value).AsInt16();
                 }
             }
             return _struct0f490332_8543_30ad_92b2_6c49981b121d;
@@ -348,7 +353,6 @@ namespace abelkhan
         public string name;
         public List<animal_game_info> animal_info;
         public Int16 current_animal_index;
-        public Int16 current_pos;
         public static MsgPack.MessagePackObjectDictionary player_game_info_to_protcol(player_game_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
             _protocol.Add("uuid", _struct.uuid);
@@ -360,7 +364,6 @@ namespace abelkhan
             }
             _protocol.Add("animal_info", new MsgPack.MessagePackObject(_array_animal_info));
             _protocol.Add("current_animal_index", _struct.current_animal_index);
-            _protocol.Add("current_pos", _struct.current_pos);
             return _protocol;
         }
         public static player_game_info protcol_to_player_game_info(MsgPack.MessagePackObjectDictionary _protocol){
@@ -384,9 +387,6 @@ namespace abelkhan
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "current_animal_index"){
                     _structa9e105de_cbf5_3520_93fb_036b8466d4f5.current_animal_index = ((MsgPack.MessagePackObject)i.Value).AsInt16();
-                }
-                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "current_pos"){
-                    _structa9e105de_cbf5_3520_93fb_036b8466d4f5.current_pos = ((MsgPack.MessagePackObject)i.Value).AsInt16();
                 }
             }
             return _structa9e105de_cbf5_3520_93fb_036b8466d4f5;

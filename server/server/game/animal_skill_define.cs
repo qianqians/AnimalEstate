@@ -107,16 +107,19 @@ namespace game
 
             var _effect = new effect_info();
             _effect.effect_id = effect.mouse_trap;
-            _effect.grids = new List<short> { _game_info.current_pos };
+            _effect.grids = new List<short> { _game_info.animal_info[_game_info.current_animal_index].current_pos };
             _impl.effect_list.Add(_effect);
         }
 
         private void do_bear_skill()
         {
-            PlayerGameInfo.current_pos -= 4;
-            if (PlayerGameInfo.current_pos < 0)
+            foreach (var animal_info in PlayerGameInfo.animal_info) 
             {
-                PlayerGameInfo.current_pos = 0;
+                animal_info.current_pos -= 4;
+                if (animal_info.current_pos < 0)
+                {
+                    animal_info.current_pos = 0;
+                }
             }
         }
 

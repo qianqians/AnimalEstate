@@ -181,17 +181,16 @@ namespace game
                 uuid = _info.uuid,
                 guid = _info.guid,
                 name = _info.name,
-                current_pos = 0,
                 current_animal_index = 0,
                 animal_info = new ()
             };
 
             var animal_list = new List<animal>(_info.hero_list);
-            for (var i = 0; i < 4; i++)
+            for (var i = 0; i < 3; i++)
             {
                 var _animal_id = animal_list[(int)hub.hub.randmon_uint((uint)animal_list.Count)];
                 var _skin_id = (skin)((int)_animal_id * 100 + 1);
-                _game_info.animal_info.Add(new animal_game_info() { animal_id = _animal_id, skin_id = _skin_id });
+                _game_info.animal_info.Add(new animal_game_info() { animal_id = _animal_id, skin_id = _skin_id, current_pos = -1 });
                 animal_list.Remove(_animal_id);
             }
         }
@@ -203,9 +202,9 @@ namespace game
 
         public void set_animal_order(List<animal_game_info> animal_info)
         {
-            if (animal_info.Count != 4)
+            if (animal_info.Count != 3)
             {
-                throw new SetAnimalOrderError($"animal_info count != 4, player.guid:{_game_info.guid}");
+                throw new SetAnimalOrderError($"animal_info count != 3, player.guid:{_game_info.guid}");
             }
             _game_info.animal_info = animal_info;
         }
@@ -340,14 +339,14 @@ namespace game
                 _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).throw_dice(_game_info.guid, dice_list);
 
                 var move = (short)(dice * _effect.move_coefficient);
-                var from = _game_info.current_pos;
-                var to = _game_info.current_pos + move;
+                var from = _game_info.animal_info[_game_info.current_animal_index].current_pos;
+                var to = _game_info.animal_info[_game_info.current_animal_index].current_pos + move;
                 bool relay = false;
                 if (_impl.PlayergroundLenght <= to)
                 {
                     to = _impl.PlayergroundLenght - 1;
-                    _game_info.current_pos = 0;
-                    _game_info.current_animal_index++;
+                    //_game_info.current_pos = 0;
+                    //_game_info.current_animal_index++;
                     if (_game_info.current_animal_index >= _game_info.animal_info.Count)
                     {
                         is_done_play = true;
