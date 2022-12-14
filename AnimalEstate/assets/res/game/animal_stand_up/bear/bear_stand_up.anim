@@ -1,0 +1,170 @@
+[
+  {
+    "__type__": "cc.AnimationClip",
+    "_name": "bear_stand_up",
+    "_objFlags": 0,
+    "__editorExtras__": {
+      "embeddedPlayerGroups": [
+        {
+          "key": "1671007765885",
+          "name": "animation-clip",
+          "type": "animation-clip"
+        },
+        {
+          "key": "1671008074453",
+          "name": "animation-clip",
+          "type": "animation-clip"
+        },
+        {
+          "key": "1671008076261",
+          "name": "particle-system",
+          "type": "particle-system"
+        }
+      ]
+    },
+    "_native": "",
+    "sample": 60,
+    "speed": 1,
+    "wrapMode": 1,
+    "enableTrsBlending": false,
+    "_duration": 0.8166666666666667,
+    "_hash": 500763545,
+    "_tracks": [
+      {
+        "__id__": 1
+      }
+    ],
+    "_exoticAnimation": null,
+    "_events": [
+      {
+        "frame": 0,
+        "func": "",
+        "params": []
+      }
+    ],
+    "_embeddedPlayers": [
+      {
+        "__id__": 6
+      },
+      {
+        "__id__": 8
+      },
+      {
+        "__id__": 10
+      }
+    ]
+  },
+  {
+    "__type__": "cc.animation.ObjectTrack",
+    "_binding": {
+      "__type__": "cc.animation.TrackBinding",
+      "path": {
+        "__id__": 2
+      }
+    },
+    "_channel": {
+      "__id__": 4
+    }
+  },
+  {
+    "__type__": "cc.animation.TrackPath",
+    "_paths": [
+      {
+        "__id__": 3
+      },
+      "spriteFrame"
+    ]
+  },
+  {
+    "__type__": "cc.animation.ComponentPath",
+    "component": "cc.Sprite"
+  },
+  {
+    "__type__": "cc.animation.Channel",
+    "_curve": {
+      "__id__": 5
+    }
+  },
+  {
+    "__type__": "cc.ObjectCurve",
+    "_times": [
+      0,
+      0.2,
+      0.4,
+      0.6,
+      0.8
+    ],
+    "_values": [
+      {
+        "__uuid__": "ded26d75-971a-4b23-bbda-e1c90406bd87@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "63d3972a-f8c1-4cf0-ac6b-4586cf96f7f5@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "4defb81d-762a-41f9-8e44-9f6ef216ebd8@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "f925286f-c19d-4326-b4aa-abf175284801@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      },
+      {
+        "__uuid__": "1023dd1b-22fe-4def-a001-75deebf40f45@f9941",
+        "__expectedType__": "cc.SpriteFrame"
+      }
+    ]
+  },
+  {
+    "__type__": "cc.animation.EmbeddedPlayer",
+    "__editorExtras__": {
+      "group": "1671007765885"
+    },
+    "begin": 0,
+    "end": 0.08333333333333333,
+    "reconciledSpeed": false,
+    "playable": {
+      "__id__": 7
+    }
+  },
+  {
+    "__type__": "cc.animation.EmbeddedAnimationClipPlayable",
+    "path": "",
+    "clip": null
+  },
+  {
+    "__type__": "cc.animation.EmbeddedPlayer",
+    "__editorExtras__": {
+      "group": "1671008074453"
+    },
+    "begin": 0,
+    "end": 0.08333333333333333,
+    "reconciledSpeed": false,
+    "playable": {
+      "__id__": 9
+    }
+  },
+  {
+    "__type__": "cc.animation.EmbeddedAnimationClipPlayable",
+    "path": "",
+    "clip": null
+  },
+  {
+    "__type__": "cc.animation.EmbeddedPlayer",
+    "__editorExtras__": {
+      "group": "1671008076261"
+    },
+    "begin": 0,
+    "end": 0.08333333333333333,
+    "reconciledSpeed": false,
+    "playable": {
+      "__id__": 11
+    }
+  },
+  {
+    "__type__": "cc.animation.EmbeddedParticleSystemPlayable",
+    "path": ""
+  }
+]

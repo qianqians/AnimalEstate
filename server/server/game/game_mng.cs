@@ -651,7 +651,7 @@ namespace game
         private void wait_next_player()
         {
             turn_next_player = true;
-            idle_time = service.timerservice.Tick + 2000;
+            idle_time = service.timerservice.Tick + 3000;
         }
 
         public void player_use_skill(client_proxy _client)
