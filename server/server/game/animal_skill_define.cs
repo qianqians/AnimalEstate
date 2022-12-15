@@ -7,6 +7,20 @@ namespace game
 {
     partial class client_proxy
     {
+        private bool check_could_use_chicken_skill()
+        {
+            if (rounds < 3)
+            {
+                return false;
+            }
+
+            if (skill_rounds < 6)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         private void chicken_skill()
         {

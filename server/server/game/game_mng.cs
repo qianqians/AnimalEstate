@@ -316,18 +316,25 @@ namespace game
             }
         }
 
-        public bool throw_dice_and_check_end_round()
+        private bool check_done_play()
+        {
+            foreach (var animal_info in _game_info.animal_info)
+            {
+                if (animal_info.current_pos < _impl.PlayergroundLenght)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public void throw_dice()
         {
             var _effect_and_round_actives = current_effect;
             var _effect = _effect_and_round_actives.Item1;
-            var _round_active_num = _effect_and_round_actives.Item2;
-            do
+            
+            if (_effect.could_move)
             {
-                if (!_effect.could_move)
-                {
-                    break;
-                }
-
                 var dice = 0;
                 var dice_list = new List<int>();
                 for (var i = 0; i < _effect.dice_num; i++)
@@ -341,31 +348,27 @@ namespace game
                 var move = (short)(dice * _effect.move_coefficient);
                 var from = _game_info.animal_info[_game_info.current_animal_index].current_pos;
                 var to = _game_info.animal_info[_game_info.current_animal_index].current_pos + move;
-                bool relay = false;
                 if (_impl.PlayergroundLenght <= to)
                 {
                     to = _impl.PlayergroundLenght - 1;
-                    //_game_info.current_pos = 0;
-                    //_game_info.current_animal_index++;
-                    if (_game_info.current_animal_index >= _game_info.animal_info.Count)
+                    _game_info.animal_info[_game_info.current_animal_index].current_pos = (short)_impl.PlayergroundLenght;
+                    if (check_done_play())
                     {
                         is_done_play = true;
                         _impl.DonePlayClient.Add(this);
                         rank = _impl.DonePlayClient.Count;
-                        _impl.check_done_play();
-                        return true;
                     }
-                    relay = true;
                 }
                 _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).move(_game_info.guid, from, to);
-                if (relay)
-                {
-                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).relay(_game_info.guid, _game_info.current_animal_index);
-                }
-
+                
                 _impl.check_grid_effect(this);
+            }
+        }
 
-            } while (false);
+        public bool check_end_round()
+        {
+            var _effect_and_round_actives = current_effect;
+            var _round_active_num = _effect_and_round_actives.Item2;
 
             round_actives++;
             if (round_actives < _round_active_num)
@@ -376,6 +379,7 @@ namespace game
             round_actives = 0;
             rounds++;
             skill_rounds++;
+
             return true;
         }
 
@@ -389,9 +393,9 @@ namespace game
             is_auto_active = is_auto;
         }
 
-        public bool auto_active_and_check_end_round()
+        public void auto_active_and_check_end_round()
         {
-            return throw_dice_and_check_end_round();
+            throw_dice();
         }
     }
 
@@ -659,6 +663,7 @@ namespace game
             if (_client.PlayerGameInfo.guid == _current_client.PlayerGameInfo.guid)
             {
                 _client.use_skill();
+                wait_next_player();
             }
             else
             {
