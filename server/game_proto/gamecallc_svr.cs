@@ -149,9 +149,11 @@ namespace abelkhan
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_relay", _argv_24e2d4a2_c288_30c5_b96e_6dd1d36278a9);
         }
 
-        public void use_skill(Int64 guid){
+        public void use_skill(Int64 guid, Int64 target_guid, Int16 target_animal_index){
             var _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe = new ArrayList();
             _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe.Add(guid);
+            _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe.Add(target_guid);
+            _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe.Add(target_animal_index);
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_use_skill", _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe);
         }
 

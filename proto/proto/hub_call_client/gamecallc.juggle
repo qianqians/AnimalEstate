@@ -18,6 +18,6 @@ module game_client{
 	throw_dice multicast(int64 guid, int32[] dice);
 	move multicast(int64 guid, int32 from, int32 to);
 	relay multicast(int64 guid, int16 new_animal_index);
-	use_skill multicast(int64 guid);
+	use_skill multicast(int64 guid, int64 target_guid, int16 target_animal_index);
 	effect_move multicast(int64 guid, effect effect_id, int32 from, int32 to);
 }

@@ -32,6 +32,35 @@ export enum effect{
     mouse_trap = 100
 }
 
+export enum skill{
+    phantom_dice = 1,
+    soul_moving_method = 2,
+    thief_reborn = 3,
+    step_lotus = 4,
+    preemptiv_strike = 5,
+    swap_places = 6,
+    altec_lightwave = 7,
+    reset_position = 8
+}
+
+export enum props{
+    horn = 1,
+    bomb = 2,
+    help_vellus = 3,
+    thunder = 4,
+    clown_gift_box = 5,
+    excited_petals = 6,
+    clip = 7,
+    landmine = 8,
+    spring = 9,
+    turtle_shell = 10,
+    banana = 11,
+    watermelon_rind = 12,
+    red_mushroom = 13,
+    gacha = 14,
+    fake_dice = 15
+}
+
 export enum playground{
     random = 0,
     lakeside = 1,
@@ -162,6 +191,7 @@ export class player_inline_info
     public score : number;
     public hero_list : animal[];
     public skin_list : skin[];
+    public skill_list : skill[];
     public playground_list : playground[];
 
     constructor(){
@@ -199,6 +229,12 @@ export function protcol_to_player_inline_info(_protocol:any){
             _struct.skin_list = [];
             for(let v_ of val){
                 _struct.skin_list.push(v_);
+    }
+        }
+        else if (key === "skill_list"){
+            _struct.skill_list = [];
+            for(let v_ of val){
+                _struct.skill_list.push(v_);
     }
         }
         else if (key === "playground_list"){
@@ -278,6 +314,7 @@ export class player_game_info
     public uuid : string;
     public guid : number;
     public name : string;
+    public skill_id : skill;
     public animal_info : animal_game_info[];
     public current_animal_index : number;
 
@@ -299,6 +336,9 @@ export function protcol_to_player_game_info(_protocol:any){
         }
         else if (key === "name"){
             _struct.name = val as string;
+        }
+        else if (key === "skill_id"){
+            _struct.skill_id = val as skill;
         }
         else if (key === "animal_info"){
             _struct.animal_info = [];

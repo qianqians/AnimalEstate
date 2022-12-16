@@ -36,6 +36,33 @@ namespace abelkhan
         monkey_wine = 5,
         mouse_trap = 100
     }
+    public enum skill{
+        phantom_dice = 1,
+        soul_moving_method = 2,
+        thief_reborn = 3,
+        step_lotus = 4,
+        preemptiv_strike = 5,
+        swap_places = 6,
+        altec_lightwave = 7,
+        reset_position = 8
+    }
+    public enum props{
+        horn = 1,
+        bomb = 2,
+        help_vellus = 3,
+        thunder = 4,
+        clown_gift_box = 5,
+        excited_petals = 6,
+        clip = 7,
+        landmine = 8,
+        spring = 9,
+        turtle_shell = 10,
+        banana = 11,
+        watermelon_rind = 12,
+        red_mushroom = 13,
+        gacha = 14,
+        fake_dice = 15
+    }
     public enum playground{
         random = 0,
         lakeside = 1,
@@ -206,6 +233,7 @@ namespace abelkhan
         public Int32 score;
         public List<animal> hero_list;
         public List<skin> skin_list;
+        public List<skill> skill_list;
         public List<playground> playground_list;
         public static MsgPack.MessagePackObjectDictionary player_inline_info_to_protcol(player_inline_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
@@ -224,6 +252,11 @@ namespace abelkhan
                 _array_skin_list.Add((Int32)v_);
             }
             _protocol.Add("skin_list", new MsgPack.MessagePackObject(_array_skin_list));
+            var _array_skill_list = new List<MsgPack.MessagePackObject>();
+            foreach(var v_ in _struct.skill_list){
+                _array_skill_list.Add((Int32)v_);
+            }
+            _protocol.Add("skill_list", new MsgPack.MessagePackObject(_array_skill_list));
             var _array_playground_list = new List<MsgPack.MessagePackObject>();
             foreach(var v_ in _struct.playground_list){
                 _array_playground_list.Add((Int32)v_);
@@ -261,6 +294,13 @@ namespace abelkhan
                     var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
                     foreach (var v_ in _protocol_array){
                         _structcdacc51b_f718_3ebb_ad22_096d86e7efee.skin_list.Add((skin)((MsgPack.MessagePackObject)v_).AsInt32());
+                    }
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "skill_list"){
+                    _structcdacc51b_f718_3ebb_ad22_096d86e7efee.skill_list = new();
+                    var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
+                    foreach (var v_ in _protocol_array){
+                        _structcdacc51b_f718_3ebb_ad22_096d86e7efee.skill_list.Add((skill)((MsgPack.MessagePackObject)v_).AsInt32());
                     }
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "playground_list"){
@@ -351,6 +391,7 @@ namespace abelkhan
         public string uuid;
         public Int64 guid;
         public string name;
+        public skill skill_id;
         public List<animal_game_info> animal_info;
         public Int16 current_animal_index;
         public static MsgPack.MessagePackObjectDictionary player_game_info_to_protcol(player_game_info _struct){
@@ -358,6 +399,7 @@ namespace abelkhan
             _protocol.Add("uuid", _struct.uuid);
             _protocol.Add("guid", _struct.guid);
             _protocol.Add("name", _struct.name);
+            _protocol.Add("skill_id", (Int32)_struct.skill_id);
             var _array_animal_info = new List<MsgPack.MessagePackObject>();
             foreach(var v_ in _struct.animal_info){
                 _array_animal_info.Add( new MsgPack.MessagePackObject(animal_game_info.animal_game_info_to_protcol(v_)));
@@ -377,6 +419,9 @@ namespace abelkhan
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "name"){
                     _structa9e105de_cbf5_3520_93fb_036b8466d4f5.name = ((MsgPack.MessagePackObject)i.Value).AsString();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "skill_id"){
+                    _structa9e105de_cbf5_3520_93fb_036b8466d4f5.skill_id = (skill)((MsgPack.MessagePackObject)i.Value).AsInt32();
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "animal_info"){
                     _structa9e105de_cbf5_3520_93fb_036b8466d4f5.animal_info = new();

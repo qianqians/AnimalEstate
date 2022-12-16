@@ -152,11 +152,13 @@ namespace abelkhan
             }
         }
 
-        public event Action<Int64> on_use_skill;
+        public event Action<Int64, Int64, Int16> on_use_skill;
         public void use_skill(IList<MsgPack.MessagePackObject> inArray){
             var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
+            var _target_guid = ((MsgPack.MessagePackObject)inArray[1]).AsInt64();
+            var _target_animal_index = ((MsgPack.MessagePackObject)inArray[2]).AsInt16();
             if (on_use_skill != null){
-                on_use_skill(_guid);
+                on_use_skill(_guid, _target_guid, _target_animal_index);
             }
         }
 

@@ -100,9 +100,22 @@ namespace game
         }
 
         private int rounds = 0;
-        private int skill_rounds = int.MaxValue;
 
-        private int round_actives = 0;
+        private int ThrowDiceCount
+        {
+            get
+            {
+                if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].animal_id == animal.rabbit)
+                {
+                    return 2;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+        }
+
         public class special_grid_effect
         {
             public float move_coefficient = 1.0f;
@@ -119,11 +132,7 @@ namespace game
 
         class skill_effect
         {
-            public bool could_move = true;
-            public bool is_immunity = false;
-            public int dice_num = 1;
-            public float move_coefficient = 1.0f;
-
+            public enum_skill_state skill_state;
             public int continued_rounds = 0;
 
             public skill_effect()
@@ -131,14 +140,19 @@ namespace game
             }
         }
         private List<skill_effect> skill_Effects = new ();
-        private Tuple<skill_effect, int> current_effect = null;
-        public bool CouldMove
+        
+        class active_state
         {
-            get
-            {
-                return current_effect.Item1.could_move;
-            }
+            public bool could_use_skill;
+            public bool could_use_props;
+            public int use_props_count;
+            public bool could_throw_dice;
+            public int throw_dice_count;
+            public float move_coefficient;
+            public int round_active_num;
         }
+        private active_state active_State;
+        private bool skill_is_used = false;
 
         private bool is_done_play = false;
         public bool IsDonePlay
@@ -158,7 +172,9 @@ namespace game
             }
         }
 
-        private readonly Dictionary<animal, Action> skill_list = new ();
+        public List<props> props_list = new ();
+
+        private readonly Dictionary<skill, Action<long, short> > skill_list = new ();
 
         private error_code_ntf_caller _error_code_ntf_caller = new ();
 
@@ -166,15 +182,6 @@ namespace game
         {
             _info = info;
             _impl = impl;
-
-            skill_list.Add(animal.chicken, chicken_skill);
-            skill_list.Add(animal.monkey, monkey_skill);
-            skill_list.Add(animal.rabbit, rabbit_skill);
-            skill_list.Add(animal.duck, duck_skill);
-            skill_list.Add(animal.mouse, mouse_skill);
-            skill_list.Add(animal.bear, bear_skill);
-            skill_list.Add(animal.tiger, tiger_skill);
-            skill_list.Add(animal.lion, lion_skill);
 
             _game_info = new()
             {
@@ -295,23 +302,19 @@ namespace game
             }
         }
 
-        public void use_skill()
+        public void use_skill(long target_client_guid, short target_animal_index)
         {
-            var _effect_and_round_actives = current_effect;
-            var _effect = _effect_and_round_actives.Item1;
-            var _round_active_num = _effect_and_round_actives.Item2;
-
-            if (_effect.could_move)
+            if (active_State.could_use_skill)
             {
-                var current_animal = _game_info.animal_info[_game_info.current_animal_index];
-                if (skill_list.TryGetValue(current_animal.animal_id, out Action skill_func))
+                if (skill_list.TryGetValue(PlayerGameInfo.skill_id, out Action<long, short> skill_func))
                 {
-                    skill_func.Invoke();
-                    _impl.ntf_player_use_skill(_game_info.guid);
+                    check_set_active_state_unactive();
+                    skill_func.Invoke(target_client_guid, target_animal_index);
+                    _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
                 }
                 else
                 {
-                    log.log.err($"invaild animal id:{current_animal.animal_id}, player.name:{_game_info.name}, player.guid:{_game_info.guid}");
+                    log.log.err($"invaild skill id:{PlayerGameInfo.skill_id}, player.name:{_game_info.name}, player.guid:{_game_info.guid}");
                 }
             }
         }
@@ -365,20 +368,34 @@ namespace game
             }
         }
 
+        private void check_set_active_state_unactive()
+        {
+            active_State.could_use_skill = false;
+            active_State.could_use_props = false;
+            active_State.could_throw_dice = false;
+        }
+
         public bool check_end_round()
         {
-            var _effect_and_round_actives = current_effect;
-            var _round_active_num = _effect_and_round_actives.Item2;
-
-            round_actives++;
-            if (round_actives < _round_active_num)
+            if (active_State.could_use_skill || active_State.could_use_props || active_State.could_throw_dice)
             {
                 return false;
             }
 
-            round_actives = 0;
+            if (active_State.round_active_num > 0)
+            {
+                active_State.round_active_num--;
+
+                active_State.could_use_skill = true;
+                active_State.could_use_props = true;
+                active_State.use_props_count = 1;
+                active_State.could_throw_dice = true;
+                active_State.throw_dice_count = ThrowDiceCount;
+
+                return false;
+            }
+
             rounds++;
-            skill_rounds++;
 
             return true;
         }
@@ -620,9 +637,21 @@ namespace game
             _game_client_caller.get_multicast(ClientUUIDS).game_info(_playground, PlayerGameInfo, _round_player.PlayerGameInfo.guid);
         }
 
-        public void ntf_player_use_skill(long guid)
+        public void ntf_player_use_skill(long guid, long target_client_guid, short target_animal_index)
         {
-            _game_client_caller.get_multicast(ClientUUIDS).use_skill(guid);
+            _game_client_caller.get_multicast(ClientUUIDS).use_skill(guid, target_client_guid, target_animal_index);
+        }
+
+        public client_proxy get_client_proxy(long guid)
+        {
+            foreach (var client_proxy in _client_proxys)
+            {
+                if (client_proxy.PlayerGameInfo.guid == guid)
+                {
+                    return client_proxy;
+                }
+            }
+            return null;
         }
 
         private void next_player()
@@ -657,12 +686,12 @@ namespace game
             idle_time = service.timerservice.Tick + 3000;
         }
 
-        public void player_use_skill(client_proxy _client)
+        public void player_use_skill(client_proxy _client, long target_client_guid, short target_animal_index)
         {
             var _current_client = _client_proxys[_current_client_index];
             if (_client.PlayerGameInfo.guid == _current_client.PlayerGameInfo.guid)
             {
-                _client.use_skill();
+                _client.use_skill(target_client_guid, target_animal_index);
                 wait_next_player();
             }
             else

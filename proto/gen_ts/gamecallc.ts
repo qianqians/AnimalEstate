@@ -159,10 +159,12 @@ export class game_client_module extends client_handle.imodule {
         }
     }
 
-    public cb_use_skill : (guid:number)=>void | null;
+    public cb_use_skill : (guid:number, target_guid:number, target_animal_index:number)=>void | null;
     use_skill(inArray:any[]){
         let _argv_:any[] = [];
         _argv_.push(inArray[0]);
+        _argv_.push(inArray[1]);
+        _argv_.push(inArray[2]);
         if (this.cb_use_skill){
             this.cb_use_skill.apply(null, _argv_);
         }

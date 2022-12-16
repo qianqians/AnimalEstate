@@ -50,6 +50,37 @@ enum effect
 	mouse_trap = 100;
 }
 
+enum skill
+{
+	phantom_dice = 1; 		//幻影骰子
+	soul_moving_method = 2; //移魂大法
+	thief_reborn = 3;		//神偷再世
+	step_lotus = 4;			//步步生莲
+	preemptiv_strike = 5;	//先发制人
+	swap_places = 6;		//移形换影
+	altec_lightwave = 7;	//奥特光波
+	reset_position = 8;		//乾坤大挪移
+}
+
+enum props
+{
+	horn = 1;				//号角
+	bomb = 2;				//炸弹
+	help_vellus = 3;		//救命毫毛
+	thunder = 4;			//天雷
+	clown_gift_box = 5;		//小丑礼盒
+	excited_petals = 6;		//亢奋花瓣
+	clip = 7;				//夹子
+	landmine = 8;			//地雷
+	spring = 9;				//弹簧
+	turtle_shell = 10;		//无敌龟壳
+	banana = 11;			//香蕉
+	watermelon_rind = 12;	//西瓜皮
+	red_mushroom = 13;		//红蘑菇
+	gacha = 14;				//扭蛋
+	fake_dice = 15;			//假骰子
+}
+
 enum playground
 {
 	random = 0;    // 随机地图
@@ -93,6 +124,7 @@ struct player_inline_info
 	int32 score;
 	animal[] hero_list;
 	skin[] skin_list;
+	skill[] skill_list;
 	playground[] playground_list;
 }
 
@@ -116,6 +148,7 @@ struct player_game_info
 	string uuid;
 	int64 guid;
 	string name;
+	skill skill_id;
 	animal_game_info[] animal_info;
 	int16 current_animal_index;
 }
