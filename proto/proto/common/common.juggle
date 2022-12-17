@@ -39,12 +39,17 @@ enum skin
 
 enum effect 
 {
-	// 场景随机事件 1-99
+	// 场景随机事件 1-100
 	muddy = 1;
-	banana_peel = 2;
-	golden_apple = 3;
-	rice_ear = 4;
-	monkey_wine = 5;
+	golden_apple = 2;
+	rice_ear = 3;
+	monkey_wine = 4;
+	
+	// 玩家道具/技能产生
+	clip = 101;
+	landmine = 102;
+	spring = 103;
+	watermelon_rind = 104;
 }
 
 enum skill
@@ -139,6 +144,7 @@ struct animal_game_info
 	skin skin_id;
 	int16 current_pos;
 	bool could_move = true;
+	int32 unmovable_rounds = 0;
 }
 
 struct player_game_info

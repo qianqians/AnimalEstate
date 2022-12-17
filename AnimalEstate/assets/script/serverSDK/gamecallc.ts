@@ -34,30 +34,6 @@ export function protcol_to_effect_info(_protocol:any){
     return _struct;
 }
 
-export class props_info
-{
-    public grid_pos : number;
-    public props_id : common.props;
-
-    constructor(){
-    }
-}
-
-export function props_info_to_protcol(_struct:props_info){
-    return _struct;
-}
-
-export function protcol_to_props_info(_protocol:any){
-    let _struct = new props_info();
-    for (const [key, val] of Object.entries(_protocol))        if (key === "grid_pos"){
-            _struct.grid_pos = val as number;
-        }
-        else if (key === "props_id"){
-            _struct.props_id = val as common.props;
-        }
-    return _struct;
-}
-
 /*this module code is codegen by abelkhan codegen for typescript*/
 export class game_client_choose_dice_rsp {
     private uuid_7ed84a95_822b_31ca_bfce_b880528f1fc1 : number;
@@ -92,8 +68,6 @@ export class game_client_module extends client_handle.imodule {
         this._client_handle._modulemng.add_method("game_client_game_info", this.game_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_ntf_effect_info", this.ntf_effect_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_ntf_new_effect_info", this.ntf_new_effect_info.bind(this));
-        this._client_handle._modulemng.add_method("game_client_ntf_props_info", this.ntf_props_info.bind(this));
-        this._client_handle._modulemng.add_method("game_client_ntf_new_props_info", this.ntf_new_props_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_turn_player_round", this.turn_player_round.bind(this));
         this._client_handle._modulemng.add_method("game_client_throw_dice", this.throw_dice.bind(this));
         this._client_handle._modulemng.add_method("game_client_choose_dice", this.choose_dice.bind(this));
@@ -108,8 +82,6 @@ export class game_client_module extends client_handle.imodule {
         this.cb_game_info = null;
         this.cb_ntf_effect_info = null;
         this.cb_ntf_new_effect_info = null;
-        this.cb_ntf_props_info = null;
-        this.cb_ntf_new_props_info = null;
         this.cb_turn_player_round = null;
         this.cb_throw_dice = null;
         this.cb_choose_dice = null;
@@ -171,28 +143,6 @@ export class game_client_module extends client_handle.imodule {
         _argv_.push(protcol_to_effect_info(inArray[0]));
         if (this.cb_ntf_new_effect_info){
             this.cb_ntf_new_effect_info.apply(null, _argv_);
-        }
-    }
-
-    public cb_ntf_props_info : (info:props_info[])=>void | null;
-    ntf_props_info(inArray:any[]){
-        let _argv_:any[] = [];
-        let _array_:any[] = [];
-        for(let v_ of inArray[0]){
-            _array_.push(protcol_to_props_info(v_));
-        }
-        _argv_.push(_array_);
-        if (this.cb_ntf_props_info){
-            this.cb_ntf_props_info.apply(null, _argv_);
-        }
-    }
-
-    public cb_ntf_new_props_info : (info:props_info)=>void | null;
-    ntf_new_props_info(inArray:any[]){
-        let _argv_:any[] = [];
-        _argv_.push(protcol_to_props_info(inArray[0]));
-        if (this.cb_ntf_new_props_info){
-            this.cb_ntf_new_props_info.apply(null, _argv_);
         }
     }
 

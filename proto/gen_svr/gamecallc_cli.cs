@@ -46,30 +46,6 @@ namespace abelkhan
         }
     }
 
-    public class props_info
-    {
-        public Int16 grid_pos;
-        public props props_id;
-        public static MsgPack.MessagePackObjectDictionary props_info_to_protcol(props_info _struct){
-            var _protocol = new MsgPack.MessagePackObjectDictionary();
-            _protocol.Add("grid_pos", _struct.grid_pos);
-            _protocol.Add("props_id", (Int32)_struct.props_id);
-            return _protocol;
-        }
-        public static props_info protcol_to_props_info(MsgPack.MessagePackObjectDictionary _protocol){
-            var _struct25db016e_d798_3806_93d8_f09f1f88c495 = new props_info();
-            foreach (var i in _protocol){
-                if (((MsgPack.MessagePackObject)i.Key).AsString() == "grid_pos"){
-                    _struct25db016e_d798_3806_93d8_f09f1f88c495.grid_pos = ((MsgPack.MessagePackObject)i.Value).AsInt16();
-                }
-                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "props_id"){
-                    _struct25db016e_d798_3806_93d8_f09f1f88c495.props_id = (props)((MsgPack.MessagePackObject)i.Value).AsInt32();
-                }
-            }
-            return _struct25db016e_d798_3806_93d8_f09f1f88c495;
-        }
-    }
-
 /*this module code is codegen by abelkhan codegen for c#*/
     public class game_client_choose_dice_rsp : common.Response {
         private UInt64 uuid_7ed84a95_822b_31ca_bfce_b880528f1fc1;
@@ -106,8 +82,6 @@ namespace abelkhan
             _client_handle.modulemanager.add_mothed("game_client_game_info", game_info);
             _client_handle.modulemanager.add_mothed("game_client_ntf_effect_info", ntf_effect_info);
             _client_handle.modulemanager.add_mothed("game_client_ntf_new_effect_info", ntf_new_effect_info);
-            _client_handle.modulemanager.add_mothed("game_client_ntf_props_info", ntf_props_info);
-            _client_handle.modulemanager.add_mothed("game_client_ntf_new_props_info", ntf_new_props_info);
             _client_handle.modulemanager.add_mothed("game_client_turn_player_round", turn_player_round);
             _client_handle.modulemanager.add_mothed("game_client_throw_dice", throw_dice);
             _client_handle.modulemanager.add_mothed("game_client_choose_dice", choose_dice);
@@ -164,26 +138,6 @@ namespace abelkhan
             var _info = effect_info.protcol_to_effect_info(((MsgPack.MessagePackObject)inArray[0]).AsDictionary());
             if (on_ntf_new_effect_info != null){
                 on_ntf_new_effect_info(_info);
-            }
-        }
-
-        public event Action<List<props_info>> on_ntf_props_info;
-        public void ntf_props_info(IList<MsgPack.MessagePackObject> inArray){
-            var _info = new List<props_info>();
-            var _protocol_arrayinfo = ((MsgPack.MessagePackObject)inArray[0]).AsList();
-            foreach (var v_d856b000_56e0_5f62_a6f3_e6a0c7859745 in _protocol_arrayinfo){
-                _info.Add(props_info.protcol_to_props_info(((MsgPack.MessagePackObject)v_d856b000_56e0_5f62_a6f3_e6a0c7859745).AsDictionary()));
-            }
-            if (on_ntf_props_info != null){
-                on_ntf_props_info(_info);
-            }
-        }
-
-        public event Action<props_info> on_ntf_new_props_info;
-        public void ntf_new_props_info(IList<MsgPack.MessagePackObject> inArray){
-            var _info = props_info.protcol_to_props_info(((MsgPack.MessagePackObject)inArray[0]).AsDictionary());
-            if (on_ntf_new_props_info != null){
-                on_ntf_new_props_info(_info);
             }
         }
 

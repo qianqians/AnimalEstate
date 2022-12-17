@@ -30,10 +30,13 @@ namespace abelkhan
     }
     public enum effect{
         muddy = 1,
-        banana_peel = 2,
-        golden_apple = 3,
-        rice_ear = 4,
-        monkey_wine = 5
+        golden_apple = 2,
+        rice_ear = 3,
+        monkey_wine = 4,
+        clip = 101,
+        landmine = 102,
+        spring = 103,
+        watermelon_rind = 104
     }
     public enum skill{
         phantom_dice = 1,
@@ -362,12 +365,14 @@ namespace abelkhan
         public skin skin_id;
         public Int16 current_pos;
         public bool could_move = true;
+        public Int32 unmovable_rounds = 0;
         public static MsgPack.MessagePackObjectDictionary animal_game_info_to_protcol(animal_game_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
             _protocol.Add("animal_id", (Int32)_struct.animal_id);
             _protocol.Add("skin_id", (Int32)_struct.skin_id);
             _protocol.Add("current_pos", _struct.current_pos);
             _protocol.Add("could_move", _struct.could_move);
+            _protocol.Add("unmovable_rounds", _struct.unmovable_rounds);
             return _protocol;
         }
         public static animal_game_info protcol_to_animal_game_info(MsgPack.MessagePackObjectDictionary _protocol){
@@ -384,6 +389,9 @@ namespace abelkhan
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "could_move"){
                     _struct0f490332_8543_30ad_92b2_6c49981b121d.could_move = ((MsgPack.MessagePackObject)i.Value).AsBoolean();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "unmovable_rounds"){
+                    _struct0f490332_8543_30ad_92b2_6c49981b121d.unmovable_rounds = ((MsgPack.MessagePackObject)i.Value).AsInt32();
                 }
             }
             return _struct0f490332_8543_30ad_92b2_6c49981b121d;

@@ -472,7 +472,7 @@ namespace game
                         }
                     }
 
-                    _impl.check_grid_effect(this);
+                    _impl.check_grid_effect(this, from, to);
                 }
             }
             catch (System.Exception ex)
@@ -711,7 +711,6 @@ namespace game
         public List<client_proxy> DonePlayClient = new ();
 
         public List<effect_info> effect_list = new ();
-        public List<props_info> props_list = new ();
 
         private long idle_time = service.timerservice.Tick;
         private bool turn_next_player = false;

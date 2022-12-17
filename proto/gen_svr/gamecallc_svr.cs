@@ -46,30 +46,6 @@ namespace abelkhan
         }
     }
 
-    public class props_info
-    {
-        public Int16 grid_pos;
-        public props props_id;
-        public static MsgPack.MessagePackObjectDictionary props_info_to_protcol(props_info _struct){
-            var _protocol = new MsgPack.MessagePackObjectDictionary();
-            _protocol.Add("grid_pos", _struct.grid_pos);
-            _protocol.Add("props_id", (Int32)_struct.props_id);
-            return _protocol;
-        }
-        public static props_info protcol_to_props_info(MsgPack.MessagePackObjectDictionary _protocol){
-            var _struct25db016e_d798_3806_93d8_f09f1f88c495 = new props_info();
-            foreach (var i in _protocol){
-                if (((MsgPack.MessagePackObject)i.Key).AsString() == "grid_pos"){
-                    _struct25db016e_d798_3806_93d8_f09f1f88c495.grid_pos = ((MsgPack.MessagePackObject)i.Value).AsInt16();
-                }
-                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "props_id"){
-                    _struct25db016e_d798_3806_93d8_f09f1f88c495.props_id = (props)((MsgPack.MessagePackObject)i.Value).AsInt32();
-                }
-            }
-            return _struct25db016e_d798_3806_93d8_f09f1f88c495;
-        }
-    }
-
 /*this caller code is codegen by abelkhan codegen for c#*/
     public class game_client_choose_dice_cb
     {
@@ -249,22 +225,6 @@ namespace abelkhan
             var _argv_fba818df_3af0_36da_a270_f40974bad0a2 = new ArrayList();
             _argv_fba818df_3af0_36da_a270_f40974bad0a2.Add(effect_info.effect_info_to_protcol(info));
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_ntf_new_effect_info", _argv_fba818df_3af0_36da_a270_f40974bad0a2);
-        }
-
-        public void ntf_props_info(List<props_info> info){
-            var _argv_2b74a11c_40e2_3a3b_a0c7_ce77cd94975e = new ArrayList();
-            var _array_391fd3d4_2d55_3f5e_9223_7f450a814a15 = new ArrayList();
-            foreach(var v_0c15545d_d42a_5fe0_bed7_a9496851e88b in info){
-                _array_391fd3d4_2d55_3f5e_9223_7f450a814a15.Add(props_info.props_info_to_protcol(v_0c15545d_d42a_5fe0_bed7_a9496851e88b));
-            }
-            _argv_2b74a11c_40e2_3a3b_a0c7_ce77cd94975e.Add(_array_391fd3d4_2d55_3f5e_9223_7f450a814a15);
-            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_ntf_props_info", _argv_2b74a11c_40e2_3a3b_a0c7_ce77cd94975e);
-        }
-
-        public void ntf_new_props_info(props_info info){
-            var _argv_d4adcefd_a6d2_372a_bb05_87c8e284cef6 = new ArrayList();
-            _argv_d4adcefd_a6d2_372a_bb05_87c8e284cef6.Add(props_info.props_info_to_protcol(info));
-            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_ntf_new_props_info", _argv_d4adcefd_a6d2_372a_bb05_87c8e284cef6);
         }
 
         public void turn_player_round(Int64 guid){

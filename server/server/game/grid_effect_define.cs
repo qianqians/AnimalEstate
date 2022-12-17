@@ -8,7 +8,7 @@ namespace game
 {
     partial class game_impl
     {
-        private List<effect> effects_define = new () { effect.muddy, effect.banana_peel, effect.golden_apple, effect.rice_ear, effect.monkey_wine };
+        private List<effect> effects_define = new () { effect.muddy, effect.golden_apple, effect.rice_ear, effect.monkey_wine };
 
         private bool already_has_effect_grid(short pos)
         {
@@ -68,7 +68,7 @@ namespace game
             }
         }
 
-        public void check_grid_effect(client_proxy _client)
+        public void check_grid_effect(client_proxy _client, int _from, int _to)
         {
             foreach (var _effect_info in effect_list)
             {
@@ -82,22 +82,6 @@ namespace game
                                 _effect.move_coefficient = 0.67f;
                                 _effect.continued_rounds = 1;
                                 _client.add_special_grid_effect(_effect);
-                            }
-                            break;
-
-                        case effect.banana_peel:
-                            {
-                                var from = _client.PlayerGameInfo.animal_info[_client.PlayerGameInfo.current_animal_index].current_pos;
-                                var to = 0;
-                                if (hub.hub.randmon_uint(2) < 1)
-                                {
-                                    to = from + 3;
-                                }
-                                else
-                                {
-                                    to = from - 3;
-                                }
-                                _game_client_caller.get_multicast(ClientUUIDS).effect_move(_client.PlayerGameInfo.guid, effect.banana_peel, from, to);
                             }
                             break;
 
@@ -125,6 +109,61 @@ namespace game
                                 var _effect = new client_proxy.special_grid_effect();
                                 _effect.stop_rounds = 1;
                                 _client.add_special_grid_effect(_effect);
+                            }
+                            break;
+
+                        case effect.clip:
+                            {
+                                var _animal = _client.PlayerGameInfo.animal_info[_client.PlayerGameInfo.current_animal_index];
+                                _animal.could_move = false;
+                                _animal.unmovable_rounds = 1;
+
+                            }
+                            break;
+
+                        case effect.landmine:
+                            {
+                                var _animal = _client.PlayerGameInfo.animal_info[_client.PlayerGameInfo.current_animal_index];
+                                int from = _animal.current_pos;
+                                int to = from - 4;
+                                if (to < 0)
+                                {
+                                    to = 0;
+                                }
+                                _animal.current_pos = (short)to; 
+                                _game_client_caller.get_multicast(ClientUUIDS).effect_move(_client.PlayerGameInfo.guid, effect.landmine, from, to);
+                            }
+                            break;
+
+                        case effect.spring:
+                            {
+                                int from = _to;
+                                int to = _from;
+                                var _animal = _client.PlayerGameInfo.animal_info[_client.PlayerGameInfo.current_animal_index];
+                                _animal.current_pos = (short)to;
+                                _game_client_caller.get_multicast(ClientUUIDS).effect_move(_client.PlayerGameInfo.guid, effect.spring, from, to);
+                            }
+                            break;
+
+                        case effect.watermelon_rind:
+                            {
+                                var _animal = _client.PlayerGameInfo.animal_info[_client.PlayerGameInfo.current_animal_index];
+                                int from = _animal.current_pos;
+                                int to;
+                                if (hub.hub.randmon_uint(2) < 1)
+                                {
+                                    to = from + 3;
+                                }
+                                else
+                                {
+                                    to = from - 3;
+                                    if (to < 0)
+                                    {
+                                        to = 0;
+                                    }
+                                }
+                                _animal.current_pos = (short)to;
+                                _game_client_caller.get_multicast(ClientUUIDS).effect_move(_client.PlayerGameInfo.guid, effect.watermelon_rind, from, to);
                             }
                             break;
 

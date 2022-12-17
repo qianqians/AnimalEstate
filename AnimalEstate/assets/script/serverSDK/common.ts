@@ -25,10 +25,13 @@ export enum skin{
 
 export enum effect{
     muddy = 1,
-    banana_peel = 2,
-    golden_apple = 3,
-    rice_ear = 4,
-    monkey_wine = 5
+    golden_apple = 2,
+    rice_ear = 3,
+    monkey_wine = 4,
+    clip = 101,
+    landmine = 102,
+    spring = 103,
+    watermelon_rind = 104
 }
 
 export enum skill{
@@ -286,6 +289,7 @@ export class animal_game_info
     public skin_id : skin;
     public current_pos : number;
     public could_move : boolean = true;
+    public unmovable_rounds : number = 0;
 
     constructor(){
     }
@@ -308,6 +312,9 @@ export function protcol_to_animal_game_info(_protocol:any){
         }
         else if (key === "could_move"){
             _struct.could_move = val as boolean;
+        }
+        else if (key === "unmovable_rounds"){
+            _struct.unmovable_rounds = val as number;
         }
     return _struct;
 }
