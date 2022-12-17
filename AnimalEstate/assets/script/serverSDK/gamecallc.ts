@@ -2,6 +2,11 @@ import * as client_handle from "./client_handle";
 import * as common from "./common";
 /*this enum code is codegen by abelkhan codegen for ts*/
 
+export enum enum_add_props_type{
+    pick_up = 1,
+    gacha_add = 2
+}
+
 /*this struct code is codegen by abelkhan codegen for typescript*/
 export class effect_info
 {
@@ -78,6 +83,7 @@ export class game_client_module extends client_handle.imodule {
         this._client_handle._modulemng.add_method("game_client_reset_position", this.reset_position.bind(this));
         this._client_handle._modulemng.add_method("game_client_effect_move", this.effect_move.bind(this));
         this._client_handle._modulemng.add_method("game_client_use_props", this.use_props.bind(this));
+        this._client_handle._modulemng.add_method("game_client_add_props", this.add_props.bind(this));
 
         this.cb_game_wait_start_info = null;
         this.cb_game_info = null;
@@ -94,6 +100,7 @@ export class game_client_module extends client_handle.imodule {
         this.cb_reset_position = null;
         this.cb_effect_move = null;
         this.cb_use_props = null;
+        this.cb_add_props = null;
     }
 
     public cb_game_wait_start_info : (countdown:number, _playground:common.playground, info:common.player_game_info[])=>void | null;
@@ -258,6 +265,17 @@ export class game_client_module extends client_handle.imodule {
         _argv_.push(inArray[3]);
         if (this.cb_use_props){
             this.cb_use_props.apply(null, _argv_);
+        }
+    }
+
+    public cb_add_props : (add_type:enum_add_props_type, guid:number, props_id:common.props)=>void | null;
+    add_props(inArray:any[]){
+        let _argv_:any[] = [];
+        _argv_.push(inArray[0]);
+        _argv_.push(inArray[1]);
+        _argv_.push(inArray[2]);
+        if (this.cb_add_props){
+            this.cb_add_props.apply(null, _argv_);
         }
     }
 

@@ -8,6 +8,10 @@ namespace abelkhan
 {
 /*this enum code is codegen by abelkhan codegen for c#*/
 
+    public enum enum_add_props_type{
+        pick_up = 1,
+        gacha_add = 2
+    }
 /*this struct code is codegen by abelkhan codegen for c#*/
     public class effect_info
     {
@@ -92,6 +96,7 @@ namespace abelkhan
             _client_handle.modulemanager.add_mothed("game_client_reset_position", reset_position);
             _client_handle.modulemanager.add_mothed("game_client_effect_move", effect_move);
             _client_handle.modulemanager.add_mothed("game_client_use_props", use_props);
+            _client_handle.modulemanager.add_mothed("game_client_add_props", add_props);
         }
 
         public event Action<Int32, playground, List<player_game_info>> on_game_wait_start_info;
@@ -242,6 +247,16 @@ namespace abelkhan
             var _target_animal_index = ((MsgPack.MessagePackObject)inArray[3]).AsInt16();
             if (on_use_props != null){
                 on_use_props(_guid, _props_id, _target_guid, _target_animal_index);
+            }
+        }
+
+        public event Action<enum_add_props_type, Int64, props> on_add_props;
+        public void add_props(IList<MsgPack.MessagePackObject> inArray){
+            var _add_type = (enum_add_props_type)((MsgPack.MessagePackObject)inArray[0]).AsInt32();
+            var _guid = ((MsgPack.MessagePackObject)inArray[1]).AsInt64();
+            var _props_id = (props)((MsgPack.MessagePackObject)inArray[2]).AsInt32();
+            if (on_add_props != null){
+                on_add_props(_add_type, _guid, _props_id);
             }
         }
 

@@ -9,6 +9,12 @@ struct effect_info
 	int32 continued_rounds;
 }
 
+enum enum_add_props_type
+{
+	pick_up = 1;		//场景随机生成 拾取
+	gacha_add = 2;		//扭蛋获得
+}
+
 module game_client{
 	
 	game_wait_start_info multicast(int32 countdown, playground _playground, player_game_info[] info);
@@ -38,4 +44,6 @@ module game_client{
 	effect_move multicast(effect effect_id, int64 guid, int16 target_animal_index, int32 from, int32 to);
 	
 	use_props multicast(int64 guid, props props_id, int64 target_guid, int16 target_animal_index);
+	
+	add_props multicast(enum_add_props_type add_type, int64 guid, props props_id);
 }

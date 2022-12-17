@@ -8,7 +8,7 @@ namespace game
 {
     partial class game_impl
     {
-        private List<props> props_define = new() {
+        public List<props> props_define = new() {
             props.horn,
             props.bomb,
             props.help_vellus,
@@ -232,7 +232,47 @@ namespace game
 
         private void red_mushroom_props(long target_client_guid, short target_animal_index)
         {
+            var _animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index];
+            if (_animal.current_pos < _impl.PlayergroundLenght)
+            {
+                var from = _animal.current_pos;
+                _animal.current_pos += 4;
+                if (_animal.current_pos >= _impl.PlayergroundLenght)
+                {
+                    _animal.current_pos = (short)_impl.PlayergroundLenght;
+                    if (check_done_play())
+                    {
+                        is_done_play = true;
+                        _impl.DonePlayClient.Add(this);
+                        rank = _impl.DonePlayClient.Count;
+                    }
+                }
+                var to = _animal.current_pos;
+                _impl.ntf_player_use_props(_game_info.guid, props.red_mushroom, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index);
+                _impl.ntf_effect_move(effect.red_mushroom, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index, from, to);
+            }
+        }
 
+        private void gacha_props(long target_client_guid, short target_animal_index)
+        {
+            var add = _impl.props_define[(int)hub.hub.randmon_uint((uint)_impl.props_define.Count)];
+            props_list.Add(add);
+
+            _impl.ntf_player_use_props(_game_info.guid, props.gacha, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index);
+            _impl.ntf_add_props(enum_add_props_type.gacha_add, _game_info.guid, add);
+        }
+
+        private void fake_dice_props(long target_client_guid, short target_animal_index)
+        {
+            var target_client = _impl.get_client_proxy(target_client_guid);
+
+            target_client.skill_Effects.Add(new()
+            {
+                skill_state = enum_skill_state.em_fake_dice,
+                continued_rounds = 1,
+            });
+
+            _impl.ntf_player_use_props(_game_info.guid, props.fake_dice, target_client_guid, target_animal_index);
         }
     }
 }

@@ -38,7 +38,8 @@ namespace abelkhan
         landmine = 103,
         spring = 104,
         banana = 105,
-        watermelon_rind = 106
+        watermelon_rind = 106,
+        red_mushroom = 107
     }
     public enum skill{
         phantom_dice = 1,

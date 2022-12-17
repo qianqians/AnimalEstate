@@ -8,6 +8,10 @@ namespace abelkhan
 {
 /*this enum code is codegen by abelkhan codegen for c#*/
 
+    public enum enum_add_props_type{
+        pick_up = 1,
+        gacha_add = 2
+    }
 /*this struct code is codegen by abelkhan codegen for c#*/
     public class effect_info
     {
@@ -300,6 +304,14 @@ namespace abelkhan
             _argv_20fdd6aa_1127_36f5_b101_2ce394d2e1c9.Add(target_guid);
             _argv_20fdd6aa_1127_36f5_b101_2ce394d2e1c9.Add(target_animal_index);
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_use_props", _argv_20fdd6aa_1127_36f5_b101_2ce394d2e1c9);
+        }
+
+        public void add_props(enum_add_props_type add_type, Int64 guid, props props_id){
+            var _argv_14a91df5_0d98_382a_9dfd_5ad28895e731 = new ArrayList();
+            _argv_14a91df5_0d98_382a_9dfd_5ad28895e731.Add((int)add_type);
+            _argv_14a91df5_0d98_382a_9dfd_5ad28895e731.Add(guid);
+            _argv_14a91df5_0d98_382a_9dfd_5ad28895e731.Add((int)props_id);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_add_props", _argv_14a91df5_0d98_382a_9dfd_5ad28895e731);
         }
 
     }

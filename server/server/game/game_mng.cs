@@ -197,6 +197,21 @@ namespace game
             skill_list.Add(skill.altec_lightwave, altec_lightwave);
             skill_list.Add(skill.reset_position, reset_position);
 
+            props_callback_list.Add(props.horn, horn_props);
+            props_callback_list.Add(props.bomb, bomb_props);
+            props_callback_list.Add(props.help_vellus, help_vellus_props);
+            props_callback_list.Add(props.thunder, thunder_props);
+            props_callback_list.Add(props.clown_gift_box, clown_gift_box_props);
+            props_callback_list.Add(props.excited_petals, excited_petals_props);
+            props_callback_list.Add(props.clip, clip_props);
+            props_callback_list.Add(props.landmine, landmine_props);
+            props_callback_list.Add(props.spring, spring_props);
+            props_callback_list.Add(props.banana, banana_props);
+            props_callback_list.Add(props.watermelon_rind, watermelon_rind_props);
+            props_callback_list.Add(props.red_mushroom, red_mushroom_props);
+            props_callback_list.Add(props.gacha, gacha_props);
+            props_callback_list.Add(props.fake_dice, fake_dice_props);
+
             _info = info;
             _impl = impl;
 
@@ -882,6 +897,11 @@ namespace game
         public void ntf_player_use_props(long guid, props props_id, long target_client_guid, short target_animal_index)
         {
             _game_client_caller.get_multicast(ClientUUIDS).use_props(guid, props_id, target_client_guid, target_animal_index);
+        }
+
+        public void ntf_add_props(enum_add_props_type add_type, long guid, props props_id)
+        {
+            _game_client_caller.get_multicast(ClientUUIDS).add_props(add_type, guid, props_id);
         }
 
         public void ntf_reset_position()
