@@ -92,6 +92,8 @@ namespace game
                                 _effect.continued_rounds = 3;
                                 _effect.stop_rounds = 1;
                                 _client.add_special_grid_effect(_effect);
+
+                                effect_list.Remove(_effect_info);
                             }
                             break;
 
@@ -101,6 +103,8 @@ namespace game
                                 _effect.move_coefficient = 2;
                                 _effect.continued_rounds = 3;
                                 _client.add_special_grid_effect(_effect);
+
+                                effect_list.Remove(_effect_info);
                             }
                             break;
 
@@ -109,6 +113,8 @@ namespace game
                                 var _effect = new client_proxy.special_grid_effect();
                                 _effect.stop_rounds = 1;
                                 _client.add_special_grid_effect(_effect);
+
+                                effect_list.Remove(_effect_info);
                             }
                             break;
 
@@ -118,6 +124,7 @@ namespace game
                                 _animal.could_move = false;
                                 _animal.unmovable_rounds = 1;
 
+                                effect_list.Remove(_effect_info);
                             }
                             break;
 
@@ -132,6 +139,8 @@ namespace game
                                 }
                                 _animal.current_pos = (short)to;
                                 ntf_effect_move(effect.landmine, _client.PlayerGameInfo.guid, _client.PlayerGameInfo.current_animal_index, from, to);
+
+                                effect_list.Remove(_effect_info);
                             }
                             break;
 
@@ -142,6 +151,8 @@ namespace game
                                 var _animal = _client.PlayerGameInfo.animal_info[_client.PlayerGameInfo.current_animal_index];
                                 _animal.current_pos = (short)to;
                                 ntf_effect_move(effect.spring, _client.PlayerGameInfo.guid, _client.PlayerGameInfo.current_animal_index, from, to);
+
+                                effect_list.Remove(_effect_info);
                             }
                             break;
 
@@ -164,6 +175,8 @@ namespace game
                                 }
                                 _animal.current_pos = (short)to;
                                 ntf_effect_move(effect.watermelon_rind, _client.PlayerGameInfo.guid, _client.PlayerGameInfo.current_animal_index, from, to);
+
+                                effect_list.Remove(_effect_info);
                             }
                             break;
 
@@ -171,7 +184,6 @@ namespace game
                             break;
                     }
 
-                    effect_list.Remove(_effect_info);
                     break;
                 }
             }

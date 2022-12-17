@@ -474,7 +474,7 @@ namespace game
                     var to = _animal_info.current_pos + move;
                     if (_impl.PlayergroundLenght <= to)
                     {
-                        to = _impl.PlayergroundLenght - 1;
+                        to = _impl.PlayergroundLenght;
                         _animal_info.current_pos = (short)_impl.PlayergroundLenght;
                         if (check_done_play())
                         {

@@ -89,11 +89,13 @@ namespace game
                 continued_rounds = 3,
             });
 
-            _impl.ntf_player_use_props(_game_info.guid, props.help_vellus, target_client_guid, target_animal_index);
+            _impl.ntf_player_use_props(_game_info.guid, props.help_vellus, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index);
         }
 
         private void thunder_props(long target_client_guid, short target_animal_index)
         {
+            _impl.ntf_player_use_props(_game_info.guid, props.thunder, target_client_guid, target_animal_index);
+
             var targetClientList = new List<client_proxy>();
             foreach (var _client in _impl.ClientProxys)
             {
@@ -105,18 +107,132 @@ namespace game
 
             foreach (var target in targetClientList)
             {
-                foreach(var _animal in target.PlayerGameInfo.animal_info)
+                for (short i = 0; i < target.PlayerGameInfo.animal_info.Count; i++)
                 {
-                    var from = _animal.current_pos;
-                    _animal.current_pos -= 3;
-                    if (_animal.current_pos < 0)
+                    var _animal = target.PlayerGameInfo.animal_info[i];
+                    if (_animal.current_pos > 0 && _animal.current_pos < _impl.PlayergroundLenght)
                     {
-                        _animal.current_pos = 0;
+                        var from = _animal.current_pos;
+                        _animal.current_pos -= 3;
+                        if (_animal.current_pos < 0)
+                        {
+                            _animal.current_pos = 0;
+                        }
+                        var to = _animal.current_pos;
+                        _impl.ntf_effect_move(effect.thunder, target.PlayerGameInfo.guid, i, from, to);
                     }
-                    var to = _animal.current_pos;
-                    _impl.ntf_effect_move(effect.landmine, _client.PlayerGameInfo.guid, _client.PlayerGameInfo.current_animal_index, from, to);
                 }
             }
+        }
+
+        private client_proxy random_props_target()
+        {
+            var targetClientList = new List<client_proxy>();
+            foreach (var _client in _impl.ClientProxys)
+            {
+                if (_client != this)
+                {
+                    targetClientList.Add(_client);
+                }
+            }
+
+            return targetClientList[(int)hub.hub.randmon_uint((uint)targetClientList.Count)];
+        }
+
+        private void clown_gift_box_props(long target_client_guid, short target_animal_index)
+        {
+            var _target = random_props_target();
+            _target.skill_Effects.Add(new () 
+            {
+                skill_state = enum_skill_state.em_unable_use_props,
+                continued_rounds = 3,
+            });
+
+            _impl.ntf_player_use_props(_game_info.guid, props.clown_gift_box, _target.PlayerGameInfo.guid, _target.PlayerGameInfo.current_animal_index);
+        }
+
+        private void excited_petals_props(long target_client_guid, short target_animal_index)
+        {
+            skill_Effects.Add(new()
+            {
+                skill_state = enum_skill_state.em_action_three,
+                continued_rounds = 1,
+            });
+
+            _impl.ntf_player_use_props(_game_info.guid, props.excited_petals, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index);
+        }
+
+        private void clip_props(long target_client_guid, short target_animal_index)
+        {
+            var _animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index];
+
+            var _effect_info = new effect_info();
+            _effect_info.effect_id = effect.clip;
+            _effect_info.grids = new List<short>();
+            _effect_info.grids.Add(_animal.current_pos);
+
+            _impl.effect_list.Add(_effect_info);
+
+            _impl.ntf_player_use_props(_game_info.guid, props.clip, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index);
+        }
+
+        private void landmine_props(long target_client_guid, short target_animal_index)
+        {
+            var _animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index];
+
+            var _effect_info = new effect_info();
+            _effect_info.effect_id = effect.landmine;
+            _effect_info.grids = new List<short>();
+            _effect_info.grids.Add(_animal.current_pos);
+
+            _impl.effect_list.Add(_effect_info);
+
+            _impl.ntf_player_use_props(_game_info.guid, props.landmine, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index);
+        }
+
+        private void spring_props(long target_client_guid, short target_animal_index)
+        {
+            var _animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index];
+
+            var _effect_info = new effect_info();
+            _effect_info.effect_id = effect.spring;
+            _effect_info.grids = new List<short>();
+            _effect_info.grids.Add(_animal.current_pos);
+
+            _impl.effect_list.Add(_effect_info);
+
+            _impl.ntf_player_use_props(_game_info.guid, props.landmine, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index);
+        }
+
+        private void banana_props(long target_client_guid, short target_animal_index)
+        {
+            var _target = random_props_target();
+            _target.skill_Effects.Add(new ()
+            {
+                skill_state = enum_skill_state.em_banana,
+                continued_rounds = 1,
+            });
+
+            _impl.ntf_player_use_props(_game_info.guid, props.banana, _target.PlayerGameInfo.guid, _target.PlayerGameInfo.current_animal_index);
+        }
+
+        private void watermelon_rind_props(long target_client_guid, short target_animal_index)
+        {
+            var _animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index];
+
+            var _effect_info = new effect_info();
+            _effect_info.effect_id = effect.watermelon_rind;
+            _effect_info.grids = new List<short>();
+            _effect_info.grids.Add(_animal.current_pos);
+
+            _impl.effect_list.Add(_effect_info);
+
+            _impl.ntf_player_use_props(_game_info.guid, props.watermelon_rind, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index);
+        }
+
+        private void red_mushroom_props(long target_client_guid, short target_animal_index)
+        {
+
         }
     }
 }

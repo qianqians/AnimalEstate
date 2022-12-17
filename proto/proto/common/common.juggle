@@ -52,6 +52,7 @@ enum effect
 	spring = 104;
 	banana = 105;
 	watermelon_rind = 106;
+	red_mushroom = 107;
 }
 
 enum skill

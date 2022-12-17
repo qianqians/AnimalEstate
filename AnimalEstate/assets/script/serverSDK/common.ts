@@ -28,10 +28,12 @@ export enum effect{
     golden_apple = 2,
     rice_ear = 3,
     monkey_wine = 4,
-    clip = 101,
-    landmine = 102,
-    spring = 103,
-    watermelon_rind = 104
+    thunder = 101,
+    clip = 102,
+    landmine = 103,
+    spring = 104,
+    banana = 105,
+    watermelon_rind = 106
 }
 
 export enum skill{

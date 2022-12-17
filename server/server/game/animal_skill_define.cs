@@ -32,7 +32,7 @@ namespace game
             em_immunity = 6,            //免疫道具攻击 
             em_unable_use_props = 7,    //不可以使用道具 
             em_action_three = 8,        //当前回合可以行动3次
-            em_turtle_shell = 9,        //反射负面道具效果到发射道具者之外的其他人
+            em_banana = 9,              //反方向移动
             em_fake_dice = 10,          //固定掷出1-3
         }
 
