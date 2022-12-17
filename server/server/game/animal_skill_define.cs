@@ -24,17 +24,16 @@ namespace game
 
         enum enum_skill_state
         {
-            em_phantom_dice = 1,
-            em_thief = 2,
-            em_step_lotus = 3,
-            em_preemptive_strike = 4,
-            em_move_halved = 5,
-            em_can_not_move = 6,
-            em_immunity = 7,
-            em_unable_use_props = 8,
-            em_action_three = 9,
-            em_turtle_shell = 10,
-            em_fake_dice = 11,
+            em_phantom_dice = 1,        //固定掷出6
+            em_step_lotus = 2,          //步步生莲,移动以30%的概率在路过的格子放下夹子
+            em_preemptive_strike = 3,   //掷出3可以额外行动一次
+            em_move_halved = 4,         //移动速度减半
+            em_can_not_move = 5,        //不可以移动
+            em_immunity = 6,            //免疫道具攻击 
+            em_unable_use_props = 7,    //不可以使用道具 
+            em_action_three = 8,        //当前回合可以行动3次
+            em_turtle_shell = 9,        //反射负面道具效果到发射道具者之外的其他人
+            em_fake_dice = 10,          //固定掷出1-3
         }
 
         private void phantom_dice_skill(long target_client_guid, short target_animal_index)

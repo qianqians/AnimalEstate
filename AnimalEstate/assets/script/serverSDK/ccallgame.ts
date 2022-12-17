@@ -57,9 +57,18 @@ export class game_hubproxy
         this._client_handle.call_hub(this.hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_play_order", _argv_72cd38c4_f976_3ca7_aeef_12b6fc619413);
     }
 
-    public use_skill(){
+    public use_skill(target_guid:number, target_animal_index:number){
         let _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe:any[] = [];
+        _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe.push(target_guid);
+        _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe.push(target_animal_index);
         this._client_handle.call_hub(this.hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_use_skill", _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe);
+    }
+
+    public use_props(target_guid:number, target_animal_index:number){
+        let _argv_20fdd6aa_1127_36f5_b101_2ce394d2e1c9:any[] = [];
+        _argv_20fdd6aa_1127_36f5_b101_2ce394d2e1c9.push(target_guid);
+        _argv_20fdd6aa_1127_36f5_b101_2ce394d2e1c9.push(target_animal_index);
+        this._client_handle.call_hub(this.hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_use_props", _argv_20fdd6aa_1127_36f5_b101_2ce394d2e1c9);
     }
 
     public throw_dice(){

@@ -68,9 +68,18 @@ namespace abelkhan
             _client_handle.call_hub(hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_play_order", _argv_72cd38c4_f976_3ca7_aeef_12b6fc619413);
         }
 
-        public void use_skill(){
+        public void use_skill(Int64 target_guid, Int16 target_animal_index){
             var _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe = new ArrayList();
+            _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe.Add(target_guid);
+            _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe.Add(target_animal_index);
             _client_handle.call_hub(hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_use_skill", _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe);
+        }
+
+        public void use_props(Int64 target_guid, Int16 target_animal_index){
+            var _argv_20fdd6aa_1127_36f5_b101_2ce394d2e1c9 = new ArrayList();
+            _argv_20fdd6aa_1127_36f5_b101_2ce394d2e1c9.Add(target_guid);
+            _argv_20fdd6aa_1127_36f5_b101_2ce394d2e1c9.Add(target_animal_index);
+            _client_handle.call_hub(hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47, "game_use_props", _argv_20fdd6aa_1127_36f5_b101_2ce394d2e1c9);
         }
 
         public void throw_dice(){

@@ -139,16 +139,19 @@ namespace game
         class active_state
         {
             public animal active_animal;
-            public bool is_step_lotus;
             public bool could_use_skill;
             public bool could_use_props;
             public int use_props_count;
             public bool could_throw_dice;
             public int throw_dice_count;
             public float move_coefficient;
+            public bool phantom_dice;
+            public bool fake_dice;
+            public bool is_step_lotus;
+            public bool preemptive_strike;
             public int round_active_num;
         }
-        private active_state active_State;
+        private active_state active_State = new ();
         private bool skill_is_used = false;
         public bool CouldMove
         {
@@ -236,19 +239,91 @@ namespace game
 
         public void summary_skill_effect()
         {
-            if (check_could_use_skill())
+            do
             {
-                active_State.could_use_skill = true;
-            }
-
-            if (props_list.Count > 0)
-            {
-                active_State.could_use_props = true;
-                if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].animal_id == animal.monkey)
+                if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].could_move)
                 {
-                    active_State.use_props_count = 2;
+                    break;
                 }
-            }
+
+                for (PlayerGameInfo.current_animal_index = 0; PlayerGameInfo.current_animal_index < PlayerGameInfo.animal_info.Count; PlayerGameInfo.current_animal_index++)
+                {
+                    if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].could_move)
+                    {
+                        break;
+                    }
+                }
+
+                if (!PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].could_move)
+                {
+                    break;
+                }
+                active_State.active_animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].animal_id;
+
+                if (check_could_use_skill())
+                {
+                    active_State.could_use_skill = true;
+                }
+
+                active_State.move_coefficient = 1.0f;
+                bool unable_use_props = false;
+                bool can_not_move = false;
+                foreach (var skill in skill_Effects)
+                {
+                    if (skill.skill_state == enum_skill_state.em_unable_use_props)
+                    {
+                        unable_use_props = true;
+                    }
+                    else if (skill.skill_state == enum_skill_state.em_can_not_move)
+                    {
+                        can_not_move = true;
+                    }
+                    else if (skill.skill_state == enum_skill_state.em_phantom_dice)
+                    {
+                        active_State.phantom_dice = true;
+                    }
+                    else if (skill.skill_state == enum_skill_state.em_step_lotus)
+                    {
+                        active_State.is_step_lotus = true;
+                    }
+                    else if (skill.skill_state == enum_skill_state.em_move_halved)
+                    {
+                        active_State.move_coefficient *= 0.5f;
+                    }
+                    else if (skill.skill_state == enum_skill_state.em_action_three)
+                    {
+                        active_State.round_active_num = 3;
+                    }
+                    else if (skill.skill_state == enum_skill_state.em_preemptive_strike)
+                    {
+                        active_State.preemptive_strike = true;
+                    }
+                    else if (skill.skill_state == enum_skill_state.em_fake_dice)
+                    {
+                        active_State.fake_dice = true;
+                    }
+                }
+
+                if (!unable_use_props && props_list.Count > 0)
+                {
+                    active_State.could_use_props = true;
+                    if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].animal_id == animal.monkey)
+                    {
+                        active_State.use_props_count = 2;
+                    }
+                }
+
+                if (can_not_move)
+                {
+                    active_State.could_throw_dice = false;
+                }
+                else
+                {
+                    active_State.could_throw_dice = true;
+                    active_State.throw_dice_count = ThrowDiceCount;
+                }
+
+            } while (false);
         }
 
         public void iterater_skill_effect()
@@ -854,6 +929,27 @@ namespace game
             }
         }
 
+        public void player_use_props(client_proxy _client, long target_client_guid, short target_animal_index)
+        {
+            var _current_client = _client_proxys[_current_client_index];
+            if (_client.PlayerGameInfo.guid == _current_client.PlayerGameInfo.guid)
+            {
+                _client.use_props(target_client_guid, target_animal_index);
+                if (_client.check_end_round())
+                {
+                    wait_next_player();
+                }
+                else
+                {
+                    _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
+                }
+            }
+            else
+            {
+                log.log.warn($"use_props not client:{_client.PlayerGameInfo.guid} round active!");
+            }
+        }
+
         public void player_throw_dice(client_proxy _client)
         {
             var _current_client = _client_proxys[_current_client_index];
@@ -1035,6 +1131,18 @@ namespace game
             if (uuid_clients.TryGetValue(uuid, out client_proxy _client))
             {
                 _client.GameImpl.player_use_skill(_client, target_client_guid, target_animal_index);
+            }
+            else
+            {
+                log.log.warn($"client not inline uuid:{uuid}");
+            }
+        }
+
+        public void player_use_props(string uuid, long target_client_guid, short target_animal_index)
+        {
+            if (uuid_clients.TryGetValue(uuid, out client_proxy _client))
+            {
+                _client.GameImpl.player_use_props(_client, target_client_guid, target_animal_index);
             }
             else
             {
