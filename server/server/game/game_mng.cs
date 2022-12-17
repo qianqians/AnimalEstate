@@ -258,6 +258,7 @@ namespace game
             {
                 if (effect.skill_state == enum_skill_state.em_immunity)
                 {
+                    skill_Effects.Remove(effect);
                     return true;
                 }
             }

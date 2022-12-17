@@ -164,9 +164,26 @@ namespace game
             {
                 for (short i = 0; i < target.PlayerGameInfo.animal_info.Count; i++)
                 {
+                    var _target = target;
                     var _animal = target.PlayerGameInfo.animal_info[i];
+                    var index = i;
+
                     if (_animal.current_pos > 0 && _animal.current_pos < _impl.PlayergroundLenght)
                     {
+                        if (_target.reverse_props())
+                        {
+                            var _reverse = randmon_reverse_props_target(_target);
+                            _animal = _reverse.PlayerGameInfo.animal_info[_reverse.PlayerGameInfo.current_animal_index];
+                            _impl.ntf_reverse_props(_game_info.guid, _target.PlayerGameInfo.guid, props.clown_gift_box, _reverse.PlayerGameInfo.guid, _reverse.PlayerGameInfo.current_animal_index);
+                            _target = _reverse;
+                            index = _reverse.PlayerGameInfo.current_animal_index;
+                        }
+                        else if (_target.immunity_props())
+                        {
+                            _impl.ntf_immunity_props(_game_info.guid, props.clown_gift_box, _target.PlayerGameInfo.guid, _target.PlayerGameInfo.current_animal_index);
+                            continue;
+                        }
+
                         var from = _animal.current_pos;
                         _animal.current_pos -= 3;
                         if (_animal.current_pos < 0)
@@ -174,7 +191,7 @@ namespace game
                             _animal.current_pos = 0;
                         }
                         var to = _animal.current_pos;
-                        _impl.ntf_effect_move(effect.thunder, target.PlayerGameInfo.guid, i, from, to);
+                        _impl.ntf_effect_move(effect.thunder, _target.PlayerGameInfo.guid, index, from, to);
                     }
                 }
             }
@@ -188,6 +205,7 @@ namespace game
             {
                 var _reverse = randmon_reverse_props_target(_target);
                 _impl.ntf_reverse_props(_game_info.guid, _target.PlayerGameInfo.guid, props.clown_gift_box, _reverse.PlayerGameInfo.guid, _reverse.PlayerGameInfo.current_animal_index);
+                _target = _reverse;
             }
             else if (_target.immunity_props())
             {
@@ -267,6 +285,7 @@ namespace game
             {
                 var _reverse = randmon_reverse_props_target(_target);
                 _impl.ntf_reverse_props(_game_info.guid, _target.PlayerGameInfo.guid, props.clown_gift_box, _reverse.PlayerGameInfo.guid, _reverse.PlayerGameInfo.current_animal_index);
+                _target = _reverse;
             }
             else if (_target.immunity_props())
             {
@@ -339,6 +358,7 @@ namespace game
             {
                 var _reverse = randmon_reverse_props_target(_target);
                 _impl.ntf_reverse_props(_game_info.guid, _target.PlayerGameInfo.guid, props.clown_gift_box, _reverse.PlayerGameInfo.guid, _reverse.PlayerGameInfo.current_animal_index);
+                _target = _reverse;
             }
             else if (_target.immunity_props())
             {
