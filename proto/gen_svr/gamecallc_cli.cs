@@ -97,6 +97,8 @@ namespace abelkhan
             _client_handle.modulemanager.add_mothed("game_client_effect_move", effect_move);
             _client_handle.modulemanager.add_mothed("game_client_use_props", use_props);
             _client_handle.modulemanager.add_mothed("game_client_add_props", add_props);
+            _client_handle.modulemanager.add_mothed("game_client_reverse_props", reverse_props);
+            _client_handle.modulemanager.add_mothed("game_client_immunity_props", immunity_props);
         }
 
         public event Action<Int32, playground, List<player_game_info>> on_game_wait_start_info;
@@ -257,6 +259,29 @@ namespace abelkhan
             var _props_id = (props)((MsgPack.MessagePackObject)inArray[2]).AsInt32();
             if (on_add_props != null){
                 on_add_props(_add_type, _guid, _props_id);
+            }
+        }
+
+        public event Action<Int64, Int64, props, Int64, Int16> on_reverse_props;
+        public void reverse_props(IList<MsgPack.MessagePackObject> inArray){
+            var _src_guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
+            var _target_guid = ((MsgPack.MessagePackObject)inArray[1]).AsInt64();
+            var _props_id = (props)((MsgPack.MessagePackObject)inArray[2]).AsInt32();
+            var _reverse_target_guid = ((MsgPack.MessagePackObject)inArray[3]).AsInt64();
+            var _reverse_target_animal_index = ((MsgPack.MessagePackObject)inArray[4]).AsInt16();
+            if (on_reverse_props != null){
+                on_reverse_props(_src_guid, _target_guid, _props_id, _reverse_target_guid, _reverse_target_animal_index);
+            }
+        }
+
+        public event Action<Int64, props, Int64, Int16> on_immunity_props;
+        public void immunity_props(IList<MsgPack.MessagePackObject> inArray){
+            var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
+            var _props_id = (props)((MsgPack.MessagePackObject)inArray[1]).AsInt32();
+            var _target_guid = ((MsgPack.MessagePackObject)inArray[2]).AsInt64();
+            var _target_animal_index = ((MsgPack.MessagePackObject)inArray[3]).AsInt16();
+            if (on_immunity_props != null){
+                on_immunity_props(_guid, _props_id, _target_guid, _target_animal_index);
             }
         }
 

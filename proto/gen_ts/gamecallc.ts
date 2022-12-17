@@ -84,6 +84,8 @@ export class game_client_module extends client_handle.imodule {
         this._client_handle._modulemng.add_method("game_client_effect_move", this.effect_move.bind(this));
         this._client_handle._modulemng.add_method("game_client_use_props", this.use_props.bind(this));
         this._client_handle._modulemng.add_method("game_client_add_props", this.add_props.bind(this));
+        this._client_handle._modulemng.add_method("game_client_reverse_props", this.reverse_props.bind(this));
+        this._client_handle._modulemng.add_method("game_client_immunity_props", this.immunity_props.bind(this));
 
         this.cb_game_wait_start_info = null;
         this.cb_game_info = null;
@@ -101,6 +103,8 @@ export class game_client_module extends client_handle.imodule {
         this.cb_effect_move = null;
         this.cb_use_props = null;
         this.cb_add_props = null;
+        this.cb_reverse_props = null;
+        this.cb_immunity_props = null;
     }
 
     public cb_game_wait_start_info : (countdown:number, _playground:common.playground, info:common.player_game_info[])=>void | null;
@@ -276,6 +280,31 @@ export class game_client_module extends client_handle.imodule {
         _argv_.push(inArray[2]);
         if (this.cb_add_props){
             this.cb_add_props.apply(null, _argv_);
+        }
+    }
+
+    public cb_reverse_props : (src_guid:number, target_guid:number, props_id:common.props, reverse_target_guid:number, reverse_target_animal_index:number)=>void | null;
+    reverse_props(inArray:any[]){
+        let _argv_:any[] = [];
+        _argv_.push(inArray[0]);
+        _argv_.push(inArray[1]);
+        _argv_.push(inArray[2]);
+        _argv_.push(inArray[3]);
+        _argv_.push(inArray[4]);
+        if (this.cb_reverse_props){
+            this.cb_reverse_props.apply(null, _argv_);
+        }
+    }
+
+    public cb_immunity_props : (guid:number, props_id:common.props, target_guid:number, target_animal_index:number)=>void | null;
+    immunity_props(inArray:any[]){
+        let _argv_:any[] = [];
+        _argv_.push(inArray[0]);
+        _argv_.push(inArray[1]);
+        _argv_.push(inArray[2]);
+        _argv_.push(inArray[3]);
+        if (this.cb_immunity_props){
+            this.cb_immunity_props.apply(null, _argv_);
         }
     }
 

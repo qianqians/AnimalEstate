@@ -46,4 +46,8 @@ module game_client{
 	use_props multicast(int64 guid, props props_id, int64 target_guid, int16 target_animal_index);
 	
 	add_props multicast(enum_add_props_type add_type, int64 guid, props props_id);
+	
+	reverse_props multicast(int64 src_guid, int64 target_guid, props props_id, int64 reverse_target_guid, int16 reverse_target_animal_index);
+	
+	immunity_props multicast(int64 guid, props props_id, int64 target_guid, int16 target_animal_index);
 }

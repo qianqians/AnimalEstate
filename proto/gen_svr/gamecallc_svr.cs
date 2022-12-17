@@ -314,6 +314,25 @@ namespace abelkhan
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_add_props", _argv_14a91df5_0d98_382a_9dfd_5ad28895e731);
         }
 
+        public void reverse_props(Int64 src_guid, Int64 target_guid, props props_id, Int64 reverse_target_guid, Int16 reverse_target_animal_index){
+            var _argv_729da852_62b2_37ba_b119_feec1b0d80bb = new ArrayList();
+            _argv_729da852_62b2_37ba_b119_feec1b0d80bb.Add(src_guid);
+            _argv_729da852_62b2_37ba_b119_feec1b0d80bb.Add(target_guid);
+            _argv_729da852_62b2_37ba_b119_feec1b0d80bb.Add((int)props_id);
+            _argv_729da852_62b2_37ba_b119_feec1b0d80bb.Add(reverse_target_guid);
+            _argv_729da852_62b2_37ba_b119_feec1b0d80bb.Add(reverse_target_animal_index);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_reverse_props", _argv_729da852_62b2_37ba_b119_feec1b0d80bb);
+        }
+
+        public void immunity_props(Int64 guid, props props_id, Int64 target_guid, Int16 target_animal_index){
+            var _argv_2888feac_1d9b_3c9f_9a00_e626b2c72788 = new ArrayList();
+            _argv_2888feac_1d9b_3c9f_9a00_e626b2c72788.Add(guid);
+            _argv_2888feac_1d9b_3c9f_9a00_e626b2c72788.Add((int)props_id);
+            _argv_2888feac_1d9b_3c9f_9a00_e626b2c72788.Add(target_guid);
+            _argv_2888feac_1d9b_3c9f_9a00_e626b2c72788.Add(target_animal_index);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_immunity_props", _argv_2888feac_1d9b_3c9f_9a00_e626b2c72788);
+        }
+
     }
 
     public class game_client_broadcast {

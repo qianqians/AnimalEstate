@@ -239,6 +239,31 @@ namespace game
             _error_code_ntf_caller.get_client(uuid).error_code(err_code);
         }
 
+        private bool reverse_props()
+        {
+            foreach (var _props in props_list)
+            {
+                if (_props == props.turtle_shell)
+                {
+                    props_list.Remove(_props);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool immunity_props()
+        {
+            foreach (var effect in skill_Effects)
+            {
+                if (effect.skill_state == enum_skill_state.em_immunity)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void set_animal_order(List<animal_game_info> animal_info)
         {
             if (animal_info.Count != 3)
@@ -276,19 +301,15 @@ namespace game
                 }
                 active_State.active_animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].animal_id;
 
-                if (check_could_use_skill())
-                {
-                    active_State.could_use_skill = true;
-                }
-
                 active_State.move_coefficient = 1.0f;
-                bool unable_use_props = false;
+                bool can_not_use_skill = false;
+                bool can_not_use_props = false;
                 bool can_not_move = false;
                 foreach (var skill in skill_Effects)
                 {
                     if (skill.skill_state == enum_skill_state.em_unable_use_props)
                     {
-                        unable_use_props = true;
+                        can_not_use_props = true;
                     }
                     else if (skill.skill_state == enum_skill_state.em_can_not_move)
                     {
@@ -320,7 +341,30 @@ namespace game
                     }
                 }
 
-                if (!unable_use_props && props_list.Count > 0)
+                foreach (var grid_effect in special_grid_effects)
+                {
+                    if (grid_effect.continued_rounds > 0)
+                    {
+                        active_State.move_coefficient *= grid_effect.move_coefficient;
+                        if (active_State.round_active_num < grid_effect.mutil_rounds)
+                        {
+                            active_State.round_active_num = grid_effect.mutil_rounds;
+                        }
+                    }
+                    else if (grid_effect.stop_rounds > 0)
+                    {
+                        can_not_use_skill = true;
+                        can_not_use_props = true;
+                        can_not_move = true;
+                    } 
+                }
+
+                if (!can_not_use_skill && check_could_use_skill())
+                {
+                    active_State.could_use_skill = true;
+                }
+
+                if (!can_not_use_props && props_list.Count > 0)
                 {
                     active_State.could_use_props = true;
                     if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].animal_id == animal.monkey)
@@ -902,6 +946,16 @@ namespace game
         public void ntf_add_props(enum_add_props_type add_type, long guid, props props_id)
         {
             _game_client_caller.get_multicast(ClientUUIDS).add_props(add_type, guid, props_id);
+        }
+
+        public void ntf_reverse_props(long src_guid, long guid, props props_id, long target_guid, short target_animal_index)
+        {
+            _game_client_caller.get_multicast(ClientUUIDS).reverse_props(src_guid, guid, props_id, target_guid, target_animal_index);
+        }
+
+        public void ntf_immunity_props(long guid, props props_id, long target_client_guid, short target_animal_index)
+        {
+            _game_client_caller.get_multicast(ClientUUIDS).immunity_props(guid, props_id, target_client_guid, target_animal_index);
         }
 
         public void ntf_reset_position()

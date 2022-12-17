@@ -57,17 +57,58 @@ namespace game
 
     partial class client_proxy
     {
+        private client_proxy random_props_target()
+        {
+            var targetClientList = new List<client_proxy>();
+            foreach (var _client in _impl.ClientProxys)
+            {
+                if (_client != this)
+                {
+                    targetClientList.Add(_client);
+                }
+            }
+
+            return targetClientList[(int)hub.hub.randmon_uint((uint)targetClientList.Count)];
+        }
+
+        private client_proxy randmon_reverse_props_target(client_proxy target)
+        {
+            var targetClientList = new List<client_proxy>();
+            foreach (var _client in _impl.ClientProxys)
+            {
+                if (_client != this && _client != target)
+                {
+                    targetClientList.Add(_client);
+                }
+            }
+
+            return targetClientList[(int)hub.hub.randmon_uint((uint)targetClientList.Count)];
+        }
+
         private void horn_props(long target_client_guid, short target_animal_index)
         {
             var target_client = _impl.get_client_proxy(target_client_guid);
+
+            if (target_client.reverse_props())
+            {
+                target_client = randmon_reverse_props_target(target_client);
+                _impl.ntf_reverse_props(_game_info.guid, target_client_guid, props.horn, target_client.PlayerGameInfo.guid, target_client.PlayerGameInfo.current_animal_index);
+            }
+            else if (target_client.immunity_props())
+            {
+                _impl.ntf_immunity_props(_game_info.guid, props.horn, target_client_guid, target_animal_index);
+                return;
+            }
+            else
+            {
+                _impl.ntf_player_use_props(_game_info.guid, props.horn, target_client_guid, target_animal_index);
+            }
 
             target_client.skill_Effects.Add(new()
             {
                  skill_state = enum_skill_state.em_move_halved,
                  continued_rounds = 2,
             });
-
-            _impl.ntf_player_use_props(_game_info.guid, props.horn, target_client_guid, target_animal_index);
         }
 
         private void bomb_props(long target_client_guid, short target_animal_index)
@@ -75,10 +116,24 @@ namespace game
             var target_client = _impl.get_client_proxy(target_client_guid);
             var target_animal = target_client.PlayerGameInfo.animal_info[target_animal_index];
 
+            if (target_client.reverse_props())
+            {
+                target_client = randmon_reverse_props_target(target_client);
+                target_animal = target_client.PlayerGameInfo.animal_info[target_client.PlayerGameInfo.current_animal_index];
+                _impl.ntf_reverse_props(_game_info.guid, target_client_guid, props.horn, target_client.PlayerGameInfo.guid, target_client.PlayerGameInfo.current_animal_index);
+            }
+            else if (target_client.immunity_props())
+            {
+                _impl.ntf_immunity_props(_game_info.guid, props.bomb, target_client_guid, target_animal_index);
+                return;
+            }
+            else
+            {
+                _impl.ntf_player_use_props(_game_info.guid, props.bomb, target_client_guid, target_animal_index);
+            }
+
             target_animal.could_move = false;
             target_animal.unmovable_rounds = 2;
-
-            _impl.ntf_player_use_props(_game_info.guid, props.bomb, target_client_guid, target_animal_index);
         }
 
         private void help_vellus_props(long target_client_guid, short target_animal_index)
@@ -125,30 +180,30 @@ namespace game
             }
         }
 
-        private client_proxy random_props_target()
-        {
-            var targetClientList = new List<client_proxy>();
-            foreach (var _client in _impl.ClientProxys)
-            {
-                if (_client != this)
-                {
-                    targetClientList.Add(_client);
-                }
-            }
-
-            return targetClientList[(int)hub.hub.randmon_uint((uint)targetClientList.Count)];
-        }
-
         private void clown_gift_box_props(long target_client_guid, short target_animal_index)
         {
             var _target = random_props_target();
+
+            if (_target.reverse_props())
+            {
+                var _reverse = randmon_reverse_props_target(_target);
+                _impl.ntf_reverse_props(_game_info.guid, _target.PlayerGameInfo.guid, props.clown_gift_box, _reverse.PlayerGameInfo.guid, _reverse.PlayerGameInfo.current_animal_index);
+            }
+            else if (_target.immunity_props())
+            {
+                _impl.ntf_immunity_props(_game_info.guid, props.clown_gift_box, _target.PlayerGameInfo.guid, _target.PlayerGameInfo.current_animal_index);
+                return;
+            }
+            else
+            {
+                _impl.ntf_player_use_props(_game_info.guid, props.clown_gift_box, _target.PlayerGameInfo.guid, _target.PlayerGameInfo.current_animal_index);
+            }
+
             _target.skill_Effects.Add(new () 
             {
                 skill_state = enum_skill_state.em_unable_use_props,
                 continued_rounds = 3,
             });
-
-            _impl.ntf_player_use_props(_game_info.guid, props.clown_gift_box, _target.PlayerGameInfo.guid, _target.PlayerGameInfo.current_animal_index);
         }
 
         private void excited_petals_props(long target_client_guid, short target_animal_index)
@@ -207,13 +262,27 @@ namespace game
         private void banana_props(long target_client_guid, short target_animal_index)
         {
             var _target = random_props_target();
+
+            if (_target.reverse_props())
+            {
+                var _reverse = randmon_reverse_props_target(_target);
+                _impl.ntf_reverse_props(_game_info.guid, _target.PlayerGameInfo.guid, props.clown_gift_box, _reverse.PlayerGameInfo.guid, _reverse.PlayerGameInfo.current_animal_index);
+            }
+            else if (_target.immunity_props())
+            {
+                _impl.ntf_immunity_props(_game_info.guid, props.clown_gift_box, _target.PlayerGameInfo.guid, _target.PlayerGameInfo.current_animal_index);
+                return;
+            }
+            else
+            {
+                _impl.ntf_player_use_props(_game_info.guid, props.clown_gift_box, _target.PlayerGameInfo.guid, _target.PlayerGameInfo.current_animal_index);
+            }
+
             _target.skill_Effects.Add(new ()
             {
                 skill_state = enum_skill_state.em_banana,
                 continued_rounds = 1,
             });
-
-            _impl.ntf_player_use_props(_game_info.guid, props.banana, _target.PlayerGameInfo.guid, _target.PlayerGameInfo.current_animal_index);
         }
 
         private void watermelon_rind_props(long target_client_guid, short target_animal_index)
@@ -264,15 +333,28 @@ namespace game
 
         private void fake_dice_props(long target_client_guid, short target_animal_index)
         {
-            var target_client = _impl.get_client_proxy(target_client_guid);
+            var _target = _impl.get_client_proxy(target_client_guid);
 
-            target_client.skill_Effects.Add(new()
+            if (_target.reverse_props())
+            {
+                var _reverse = randmon_reverse_props_target(_target);
+                _impl.ntf_reverse_props(_game_info.guid, _target.PlayerGameInfo.guid, props.clown_gift_box, _reverse.PlayerGameInfo.guid, _reverse.PlayerGameInfo.current_animal_index);
+            }
+            else if (_target.immunity_props())
+            {
+                _impl.ntf_immunity_props(_game_info.guid, props.clown_gift_box, _target.PlayerGameInfo.guid, _target.PlayerGameInfo.current_animal_index);
+                return;
+            }
+            else
+            {
+                _impl.ntf_player_use_props(_game_info.guid, props.clown_gift_box, _target.PlayerGameInfo.guid, _target.PlayerGameInfo.current_animal_index);
+            }
+
+            _target.skill_Effects.Add(new()
             {
                 skill_state = enum_skill_state.em_fake_dice,
                 continued_rounds = 1,
             });
-
-            _impl.ntf_player_use_props(_game_info.guid, props.fake_dice, target_client_guid, target_animal_index);
         }
     }
 }
