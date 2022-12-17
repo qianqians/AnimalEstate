@@ -71,10 +71,107 @@ namespace abelkhan
     }
 
 /*this caller code is codegen by abelkhan codegen for c#*/
+    public class game_client_choose_dice_cb
+    {
+        private UInt64 cb_uuid;
+        private game_client_rsp_cb module_rsp_cb;
+
+        public game_client_choose_dice_cb(UInt64 _cb_uuid, game_client_rsp_cb _module_rsp_cb)
+        {
+            cb_uuid = _cb_uuid;
+            module_rsp_cb = _module_rsp_cb;
+        }
+
+        public event Action<Int16> on_choose_dice_cb;
+        public event Action on_choose_dice_err;
+        public event Action on_choose_dice_timeout;
+
+        public game_client_choose_dice_cb callBack(Action<Int16> cb, Action err)
+        {
+            on_choose_dice_cb += cb;
+            on_choose_dice_err += err;
+            return this;
+        }
+
+        public void timeout(UInt64 tick, Action timeout_cb)
+        {
+            TinyTimer.add_timer(tick, ()=>{
+                module_rsp_cb.choose_dice_timeout(cb_uuid);
+            });
+            on_choose_dice_timeout += timeout_cb;
+        }
+
+        public void call_cb(Int16 dice_index)
+        {
+            if (on_choose_dice_cb != null)
+            {
+                on_choose_dice_cb(dice_index);
+            }
+        }
+
+        public void call_err()
+        {
+            if (on_choose_dice_err != null)
+            {
+                on_choose_dice_err();
+            }
+        }
+
+        public void call_timeout()
+        {
+            if (on_choose_dice_timeout != null)
+            {
+                on_choose_dice_timeout();
+            }
+        }
+
+    }
+
 /*this cb code is codegen by abelkhan for c#*/
     public class game_client_rsp_cb : common.imodule {
+        public Dictionary<UInt64, game_client_choose_dice_cb> map_choose_dice;
         public game_client_rsp_cb() 
         {
+            map_choose_dice = new Dictionary<UInt64, game_client_choose_dice_cb>();
+            hub.hub._modules.add_mothed("game_client_rsp_cb_choose_dice_rsp", choose_dice_rsp);
+            hub.hub._modules.add_mothed("game_client_rsp_cb_choose_dice_err", choose_dice_err);
+        }
+
+        public void choose_dice_rsp(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var _dice_index = ((MsgPack.MessagePackObject)inArray[1]).AsInt16();
+            var rsp = try_get_and_del_choose_dice_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_cb(_dice_index);
+            }
+        }
+
+        public void choose_dice_err(IList<MsgPack.MessagePackObject> inArray){
+            var uuid = ((MsgPack.MessagePackObject)inArray[0]).AsUInt64();
+            var rsp = try_get_and_del_choose_dice_cb(uuid);
+            if (rsp != null)
+            {
+                rsp.call_err();
+            }
+        }
+
+        public void choose_dice_timeout(UInt64 cb_uuid){
+            var rsp = try_get_and_del_choose_dice_cb(cb_uuid);
+            if (rsp != null){
+                rsp.call_timeout();
+            }
+        }
+
+        private game_client_choose_dice_cb try_get_and_del_choose_dice_cb(UInt64 uuid){
+            lock(map_choose_dice)
+            {
+                if (map_choose_dice.TryGetValue(uuid, out game_client_choose_dice_cb rsp))
+                {
+                    map_choose_dice.Remove(uuid);
+                }
+                return rsp;
+            }
         }
 
     }
@@ -88,6 +185,19 @@ namespace abelkhan
         public game_client_clientproxy(game_client_rsp_cb rsp_cb_game_client_handle_)
         {
             rsp_cb_game_client_handle = rsp_cb_game_client_handle_;
+        }
+
+        public game_client_choose_dice_cb choose_dice(){
+            var uuid_3ce28ca0_8b60_5302_9362_48ea595b7a44 = (UInt64)Interlocked.Increment(ref uuid_b99eae25_99b5_3006_b19c_ccf531aff983);
+
+            var _argv_ffefe8e1_59c2_3292_8600_93dfa9b71e7f = new ArrayList();
+            _argv_ffefe8e1_59c2_3292_8600_93dfa9b71e7f.Add(uuid_3ce28ca0_8b60_5302_9362_48ea595b7a44);
+            hub.hub._gates.call_client(client_uuid_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_choose_dice", _argv_ffefe8e1_59c2_3292_8600_93dfa9b71e7f);
+
+            var cb_choose_dice_obj = new game_client_choose_dice_cb(uuid_3ce28ca0_8b60_5302_9362_48ea595b7a44, rsp_cb_game_client_handle);
+            lock(rsp_cb_game_client_handle.map_choose_dice)
+            {                rsp_cb_game_client_handle.map_choose_dice.Add(uuid_3ce28ca0_8b60_5302_9362_48ea595b7a44, cb_choose_dice_obj);
+            }            return cb_choose_dice_obj;
         }
 
     }
@@ -172,6 +282,12 @@ namespace abelkhan
             }
             _argv_89caa8aa_910b_3726_9283_63467ea68426.Add(_array_50efb5f9_e76d_39f6_a8f5_087df183aa5b);
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_throw_dice", _argv_89caa8aa_910b_3726_9283_63467ea68426);
+        }
+
+        public void rabbit_choose_dice(Int32 dice){
+            var _argv_61d85040_12b5_380a_9077_58950d26e18b = new ArrayList();
+            _argv_61d85040_12b5_380a_9077_58950d26e18b.Add(dice);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_rabbit_choose_dice", _argv_61d85040_12b5_380a_9077_58950d26e18b);
         }
 
         public void move(Int64 guid, Int32 from, Int32 to){

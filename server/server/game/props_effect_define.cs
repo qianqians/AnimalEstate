@@ -8,13 +8,35 @@ namespace game
 {
     partial class game_impl
     {
-        private List<effect> effects_define = new () { effect.muddy, effect.banana_peel, effect.golden_apple, effect.rice_ear, effect.monkey_wine };
+        private List<props> props_define = new () {
+            props.horn,
+            props.bomb,
+            props.help_vellus,
+            props.thunder,
+            props.clown_gift_box,
+            props.excited_petals,
+            props.clip,
+            props.landmine,
+            props.spring,
+            props.turtle_shell,
+            props.banana,
+            props.watermelon_rind,
+            props.red_mushroom,
+            props.gacha,
+            props.fake_dice
+        };
+        
+        private List<props> step_lotus_props_define = new() {
+            props.clip,
+            props.landmine,
+            props.spring
+        };
 
-        private bool already_has_effect_grid(short pos)
+        private bool already_has_props_grid(short pos)
         {
-            foreach (var _effect_info in effect_list)
+            foreach (var _props_info in props_list)
             {
-                if (_effect_info.grids.Contains(pos))
+                if (_props_info.grid_pos == pos)
                 {
                     return true;
                 }
@@ -22,53 +44,28 @@ namespace game
             return false;
         }
 
-        public void check_randmon_effect()
+        public void check_randmon_step_lotus_props(short pos)
         {
-            if (game_rounds < 6)
+            if (already_has_props_grid(pos))
             {
                 return;
             }
 
-            var r = hub.hub.randmon_uint(2);
+            var r = hub.hub.randmon_uint(3);
             if (r < 1)
             {
-                var _effect = effects_define[(int)hub.hub.randmon_uint((uint)effects_define.Count)];
+                var props_id = step_lotus_props_define[(int)hub.hub.randmon_uint((uint)step_lotus_props_define.Count)];
 
-                var _effect_info = new effect_info();
-                _effect_info.effect_id = _effect;
-                _effect_info.grids = new List<short>();
+                var _props_info = new props_info();
+                _props_info.props_id = props_id;
+                _props_info.grid_pos = pos;
+                props_list.Add(_props_info);
 
-                var pos = hub.hub.randmon_uint((uint)PlayergroundLenght);
-                while (already_has_effect_grid((short)pos))
-                {
-                    pos = hub.hub.randmon_uint((uint)PlayergroundLenght);
-                }
-
-                if (_effect == effect.muddy)
-                {
-                    var len = hub.hub.randmon_uint(3) + 3;
-                    for (int i = 0; i < len; i++)
-                    {
-                        var grid_pos = pos + i;
-                        if (grid_pos > PlayergroundLenght)
-                        {
-                            grid_pos -= PlayergroundLenght;
-                        }
-                        _effect_info.grids.Add((short)grid_pos);
-                    }
-                    _effect_info.continued_rounds = 3;
-                }
-                else
-                {
-                    _effect_info.grids.Add((short)pos);
-                }
-                effect_list.Add(_effect_info);
-
-                _game_client_caller.get_multicast(ClientUUIDS).ntf_new_effect_info(_effect_info);
+                _game_client_caller.get_multicast(ClientUUIDS).ntf_new_props_info(_props_info);
             }
         }
 
-        public void check_grid_effect(client_proxy _client)
+        public void check_props_effect(client_proxy _client)
         {
             foreach (var _effect_info in effect_list)
             {

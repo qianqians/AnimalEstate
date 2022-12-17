@@ -33,8 +33,7 @@ namespace abelkhan
         banana_peel = 2,
         golden_apple = 3,
         rice_ear = 4,
-        monkey_wine = 5,
-        mouse_trap = 100
+        monkey_wine = 5
     }
     public enum skill{
         phantom_dice = 1,

@@ -45,9 +45,6 @@ enum effect
 	golden_apple = 3;
 	rice_ear = 4;
 	monkey_wine = 5;
-
-	// 动物技能效果 100-999
-	mouse_trap = 100;
 }
 
 enum skill

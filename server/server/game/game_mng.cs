@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -130,11 +131,14 @@ namespace game
         {
             public enum_skill_state skill_state;
             public int continued_rounds = 0;
+
+            public animal active_animal;
         }
         private List<skill_effect> skill_Effects = new ();
         
         class active_state
         {
+            public animal active_animal;
             public bool is_step_lotus;
             public bool could_use_skill;
             public bool could_use_props;
@@ -146,6 +150,13 @@ namespace game
         }
         private active_state active_State;
         private bool skill_is_used = false;
+        public bool CouldMove
+        {
+            get
+            {
+                return active_State.could_use_skill || active_State.could_use_props || active_State.could_throw_dice;
+            }
+        }
         
         private bool is_done_play = false;
         public bool IsDonePlay
@@ -173,6 +184,15 @@ namespace game
 
         public client_proxy(player_inline_info info, game_impl impl)
         {
+            skill_list.Add(skill.phantom_dice, phantom_dice_skill);
+            skill_list.Add(skill.soul_moving_method, soul_moving_method);
+            skill_list.Add(skill.thief_reborn, thief_reborn);
+            skill_list.Add(skill.step_lotus, step_lotus);
+            skill_list.Add(skill.preemptiv_strike, preemptive_strike);
+            skill_list.Add(skill.swap_places, swap_places);
+            skill_list.Add(skill.altec_lightwave, altec_lightwave);
+            skill_list.Add(skill.reset_position, reset_position);
+
             _info = info;
             _impl = impl;
 
@@ -216,6 +236,19 @@ namespace game
 
         public void summary_skill_effect()
         {
+            if (check_could_use_skill())
+            {
+                active_State.could_use_skill = true;
+            }
+
+            if (props_list.Count > 0)
+            {
+                active_State.could_use_props = true;
+                if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].animal_id == animal.monkey)
+                {
+                    active_State.use_props_count = 2;
+                }
+            }
         }
 
         public void iterater_skill_effect()
@@ -276,40 +309,179 @@ namespace game
             }
         }
 
-        public void throw_dice()
+        public void use_props(long target_client_guid, short target_animal_index)
         {
+            if (active_State.could_use_props)
+            {
+                active_State.use_props_count--;
+                if (active_State.use_props_count <= 0)
+                {
+                    check_set_active_state_unactive();
+                }
+            }
+        }
+
+        private Task<int> choose_dice(List<int> dice_list)
+        {
+            var retTask = new TaskCompletionSource<int>();
+
+            if (IsAutoActive)
+            {
+                var dice = dice_list[0];
+                _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).rabbit_choose_dice(dice);
+                retTask.SetResult(dice);
+            }
+            else
+            {
+                _impl.GameClientCaller.get_client(uuid).choose_dice().callBack((index) =>
+                {
+                    var dice = dice_list[index];
+                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).rabbit_choose_dice(dice);
+                    retTask.SetResult(dice);
+                }, () =>
+                {
+                    var dice = dice_list[0];
+                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).rabbit_choose_dice(dice);
+                    retTask.SetResult(dice);
+                }).timeout(8000, () =>
+                {
+                    var dice = dice_list[0];
+                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).rabbit_choose_dice(dice);
+                    retTask.SetResult(dice);
+                });
+            }
+
+            return retTask.Task;
+        }
+
+        public async void throw_dice()
+        {
+            try
+            {
+                if (active_State.could_throw_dice)
+                {
+                    check_set_active_state_unactive();
+
+                    var dice_list = new List<int>();
+                    for (var i = 0; i < active_State.throw_dice_count; i++)
+                    {
+                        var n = (int)hub.hub.randmon_uint(6) + 1;
+                        dice_list.Add(n);
+                    }
+                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).throw_dice(_game_info.guid, dice_list);
+                    var dice = await choose_dice(dice_list);
+
+                    var _animal_info = _game_info.animal_info[_game_info.current_animal_index];
+
+                    var move = (short)(dice * active_State.move_coefficient);
+                    var from = _animal_info.current_pos;
+                    var to = _animal_info.current_pos + move;
+                    if (_impl.PlayergroundLenght <= to)
+                    {
+                        to = _impl.PlayergroundLenght - 1;
+                        _animal_info.current_pos = (short)_impl.PlayergroundLenght;
+                        if (check_done_play())
+                        {
+                            is_done_play = true;
+                            _impl.DonePlayClient.Add(this);
+                            rank = _impl.DonePlayClient.Count;
+                        }
+                    }
+                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).move(_game_info.guid, from, to);
+
+                    if (active_State.is_step_lotus && active_State.active_animal == _animal_info.animal_id)
+                    {
+                        for (var i = from; i <= to; i++)
+                        {
+                            _impl.check_randmon_step_lotus_props(i);
+                        }
+                    }
+
+                    _impl.check_grid_effect(this);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                log.log.err($"{ex}");
+            }
+        }
+
+        private Tuple<long, short> random_target()
+        {
+            long target_guid;
+            short target_animal_index;
+            if (PlayerGameInfo.skill_id == skill.step_lotus)
+            {
+                target_guid = PlayerGameInfo.guid;
+                target_animal_index = PlayerGameInfo.current_animal_index;
+            }
+            else
+            {
+                client_proxy _target_client = null;
+                foreach (var _client in _impl.ClientProxys)
+                {
+                    if (_client != this)
+                    {
+                        _target_client = _client;
+                        break;
+                    }
+                }
+
+                target_guid = _target_client.PlayerGameInfo.guid;
+                target_animal_index = _target_client.PlayerGameInfo.current_animal_index;
+            }
+
+            return Tuple.Create(target_guid, target_animal_index);
+        }
+
+        private void auto_use_skill()
+        {
+            var target = random_target();
+            use_skill(target.Item1, target.Item2);
+        }
+
+        private void auto_use_props()
+        {
+            var target = random_target();
+            use_props(target.Item1, target.Item2);
+        }
+
+        public void auto_active()
+        {
+            var active_list = new List<int>();
+            if (active_State.could_use_skill)
+            {
+                active_list.Add(0);
+            }
+            if (active_State.could_use_props)
+            {
+                active_list.Add(1);
+            }
             if (active_State.could_throw_dice)
             {
-                var dice_list = new List<int>();
-                var n = (int)hub.hub.randmon_uint(6) + 1;
-                dice_list.Add(n);
-                var dice = n;
-                _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).throw_dice(_game_info.guid, dice_list);
+                active_list.Add(2);
+            }
 
-                var move = (short)(dice * active_State.move_coefficient);
-                var from = _game_info.animal_info[_game_info.current_animal_index].current_pos;
-                var to = _game_info.animal_info[_game_info.current_animal_index].current_pos + move;
-                if (_impl.PlayergroundLenght <= to)
-                {
-                    to = _impl.PlayergroundLenght - 1;
-                    _game_info.animal_info[_game_info.current_animal_index].current_pos = (short)_impl.PlayergroundLenght;
-                    if (check_done_play())
+            var r = active_list[(int)hub.hub.randmon_uint((uint)active_list.Count)];
+            switch (r)
+            {
+                case 0:
                     {
-                        is_done_play = true;
-                        _impl.DonePlayClient.Add(this);
-                        rank = _impl.DonePlayClient.Count;
+                        auto_use_skill();
                     }
-                }
-                _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).move(_game_info.guid, from, to);
-                if (active_State.is_step_lotus)
-                {
-                    for (var i = from; i <= to; i++)
-                    {
-                        _impl.
-                    }
-                }
+                    break;
 
-                _impl.check_grid_effect(this);
+                case 1:
+                    {
+                        auto_use_props();
+                    }
+                    break;
+
+                case 2:
+                    {
+                        throw_dice();
+                    }
+                    break;
             }
         }
 
@@ -365,11 +537,6 @@ namespace game
         public void set_auto_active(bool is_auto)
         {
             is_auto_active = is_auto;
-        }
-
-        public void auto_active_and_check_end_round()
-        {
-            throw_dice();
         }
     }
 
@@ -430,6 +597,21 @@ namespace game
                 return player_game_info_list;
             }
         }
+        public int ActivePlayerCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (var _client in _client_proxys)
+                {
+                    if (!_client.IsDonePlay)
+                    {
+                        count++;
+                    }
+                }
+                return count;
+            }
+        }
         public int _current_client_index = 0;
 
         private long wait_ready_time = service.timerservice.Tick + 25000;
@@ -454,10 +636,12 @@ namespace game
         public List<client_proxy> DonePlayClient = new ();
 
         public List<effect_info> effect_list = new ();
-        public List
+        public List<props_info> props_list = new ();
 
         private long idle_time = service.timerservice.Tick;
         private bool turn_next_player = false;
+        private int round_active_players = 0;
+        private int game_rounds = 0;
 
         private readonly game_client_caller _game_client_caller;
         public game_client_caller GameClientCaller
@@ -655,7 +839,14 @@ namespace game
             if (_client.PlayerGameInfo.guid == _current_client.PlayerGameInfo.guid)
             {
                 _client.use_skill(target_client_guid, target_animal_index);
-                wait_next_player();
+                if (_client.check_end_round())
+                {
+                    wait_next_player();
+                }
+                else
+                {
+                    _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
+                }
             }
             else
             {
@@ -668,9 +859,14 @@ namespace game
             var _current_client = _client_proxys[_current_client_index];
             if (_client.PlayerGameInfo.guid == _current_client.PlayerGameInfo.guid)
             {
-                if (_client.throw_dice_and_check_end_round())
+                _client.throw_dice();
+                if (_client.check_end_round())
                 {
                     wait_next_player();
+                }
+                else
+                {
+                    _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
                 }
             }
             else
@@ -724,26 +920,31 @@ namespace game
                 {
                     next_player();
                     check_randmon_effect();
+
+                    if (++round_active_players >= ActivePlayerCount)
+                    {
+                        round_active_players = 0;
+                        game_rounds++;
+                    }
                 }
 
                 var _client = _client_proxys[_current_client_index];
-                if (_client.IsAutoActive)
-                {
-                    if (!_client.auto_active_and_check_end_round())
-                    {
-                        break;
-                    }
-                }
                 if ((_client.WaitActiveTime + 15000) < service.timerservice.Tick)
                 {
                     _client.set_auto_active(true);
-                    if (!_client.auto_active_and_check_end_round())
+                }
+                if (_client.IsAutoActive)
+                {
+                    _client.auto_active();
+                    if (_client.check_end_round())
                     {
-                        break;
+                        wait_next_player();
+                    }
+                    else
+                    {
+                        _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
                     }
                 }
-
-                wait_next_player();
 
             } while (false);
 
@@ -829,11 +1030,11 @@ namespace game
             return _client;
         }
 
-        public void player_use_skill(string uuid)
+        public void player_use_skill(string uuid, long target_client_guid, short target_animal_index)
         {
             if (uuid_clients.TryGetValue(uuid, out client_proxy _client))
             {
-                _client.GameImpl.player_use_skill(_client);
+                _client.GameImpl.player_use_skill(_client, target_client_guid, target_animal_index);
             }
             else
             {
