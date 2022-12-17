@@ -77,6 +77,7 @@ export class game_client_module extends client_handle.imodule {
         this._client_handle._modulemng.add_method("game_client_use_skill", this.use_skill.bind(this));
         this._client_handle._modulemng.add_method("game_client_reset_position", this.reset_position.bind(this));
         this._client_handle._modulemng.add_method("game_client_effect_move", this.effect_move.bind(this));
+        this._client_handle._modulemng.add_method("game_client_use_props", this.use_props.bind(this));
 
         this.cb_game_wait_start_info = null;
         this.cb_game_info = null;
@@ -92,6 +93,7 @@ export class game_client_module extends client_handle.imodule {
         this.cb_use_skill = null;
         this.cb_reset_position = null;
         this.cb_effect_move = null;
+        this.cb_use_props = null;
     }
 
     public cb_game_wait_start_info : (countdown:number, _playground:common.playground, info:common.player_game_info[])=>void | null;
@@ -234,15 +236,28 @@ export class game_client_module extends client_handle.imodule {
         }
     }
 
-    public cb_effect_move : (guid:number, effect_id:common.effect, from:number, to:number)=>void | null;
+    public cb_effect_move : (effect_id:common.effect, guid:number, target_animal_index:number, from:number, to:number)=>void | null;
     effect_move(inArray:any[]){
         let _argv_:any[] = [];
         _argv_.push(inArray[0]);
         _argv_.push(inArray[1]);
         _argv_.push(inArray[2]);
         _argv_.push(inArray[3]);
+        _argv_.push(inArray[4]);
         if (this.cb_effect_move){
             this.cb_effect_move.apply(null, _argv_);
+        }
+    }
+
+    public cb_use_props : (guid:number, props_id:common.props, target_guid:number, target_animal_index:number)=>void | null;
+    use_props(inArray:any[]){
+        let _argv_:any[] = [];
+        _argv_.push(inArray[0]);
+        _argv_.push(inArray[1]);
+        _argv_.push(inArray[2]);
+        _argv_.push(inArray[3]);
+        if (this.cb_use_props){
+            this.cb_use_props.apply(null, _argv_);
         }
     }
 

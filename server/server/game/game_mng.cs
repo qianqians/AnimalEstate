@@ -182,6 +182,7 @@ namespace game
         public List<props> props_list = new ();
 
         private readonly Dictionary<skill, Action<long, short> > skill_list = new ();
+        private readonly Dictionary<props, Action<long, short> > props_callback_list = new ();
 
         private error_code_ntf_caller _error_code_ntf_caller = new ();
 
@@ -384,15 +385,35 @@ namespace game
             }
         }
 
-        public void use_props(long target_client_guid, short target_animal_index)
+        public void use_props(props _props_id, long target_client_guid, short target_animal_index)
         {
             if (active_State.could_use_props)
             {
-                active_State.use_props_count--;
-                if (active_State.use_props_count <= 0)
+                if (props_list.Remove(_props_id))
                 {
-                    check_set_active_state_unactive();
+                    active_State.use_props_count--;
+                    if (active_State.use_props_count <= 0 || props_list.Count <= 0)
+                    {
+                        check_set_active_state_unactive();
+                    }
+
+                    if (props_callback_list.TryGetValue(_props_id, out Action<long, short> props_func))
+                    {
+                        props_func.Invoke(target_client_guid, target_animal_index);
+                    }
+                    else
+                    {
+                        log.log.err($"invaild props id:{_props_id}, player.name:{_game_info.name}, player.guid:{_game_info.guid}");
+                    }
                 }
+                else
+                {
+                    log.log.err($"not own props id:{_props_id}, player.name:{_game_info.name}, player.guid:{_game_info.guid}");
+                }
+            }
+            else
+            {
+                log.log.err($"could not use props, player.name:{_game_info.name}, player.guid:{_game_info.guid}");
             }
         }
 
@@ -518,7 +539,7 @@ namespace game
         private void auto_use_props()
         {
             var target = random_target();
-            use_props(target.Item1, target.Item2);
+            use_props(props_list[0], target.Item1, target.Item2);
         }
 
         public void auto_active()
@@ -858,9 +879,19 @@ namespace game
             _game_client_caller.get_multicast(ClientUUIDS).use_skill(guid, target_client_guid, target_animal_index);
         }
 
+        public void ntf_player_use_props(long guid, props props_id, long target_client_guid, short target_animal_index)
+        {
+            _game_client_caller.get_multicast(ClientUUIDS).use_props(guid, props_id, target_client_guid, target_animal_index);
+        }
+
         public void ntf_reset_position()
         {
             _game_client_caller.get_multicast(ClientUUIDS).reset_position(PlayerGameInfo);
+        }
+
+        public void ntf_effect_move(effect effect_id, Int64 guid, Int16 target_animal_index, Int32 from, Int32 to)
+        {
+            _game_client_caller.get_multicast(ClientUUIDS).effect_move(effect_id, guid, target_animal_index, from, to);
         }
 
         public client_proxy get_client_proxy(long guid)
@@ -928,12 +959,12 @@ namespace game
             }
         }
 
-        public void player_use_props(client_proxy _client, long target_client_guid, short target_animal_index)
+        public void player_use_props(client_proxy _client, props _props_id, long target_client_guid, short target_animal_index)
         {
             var _current_client = _client_proxys[_current_client_index];
             if (_client.PlayerGameInfo.guid == _current_client.PlayerGameInfo.guid)
             {
-                _client.use_props(target_client_guid, target_animal_index);
+                _client.use_props(_props_id, target_client_guid, target_animal_index);
                 if (_client.check_end_round())
                 {
                     wait_next_player();
@@ -1137,11 +1168,11 @@ namespace game
             }
         }
 
-        public void player_use_props(string uuid, long target_client_guid, short target_animal_index)
+        public void player_use_props(string uuid, props _props_id, long target_client_guid, short target_animal_index)
         {
             if (uuid_clients.TryGetValue(uuid, out client_proxy _client))
             {
-                _client.GameImpl.player_use_props(_client, target_client_guid, target_animal_index);
+                _client.GameImpl.player_use_props(_client, _props_id, target_client_guid, target_animal_index);
             }
             else
             {

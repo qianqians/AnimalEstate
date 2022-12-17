@@ -18,14 +18,14 @@ namespace game
             game_Module.on_throw_dice += Game_Module_on_throw_dice;
         }
 
-        private void Game_Module_on_use_props(long _target_guid, short _target_animal_index)
+        private void Game_Module_on_use_props(props _props_id, long _target_guid, short _target_animal_index)
         {
             log.log.trace($"on_use_props begin!");
 
             try
             {
                 var uuid = hub.hub._gates.current_client_uuid;
-                game._game_mng.player_use_props(uuid, _target_guid, _target_animal_index);
+                game._game_mng.player_use_props(uuid, _props_id, _target_guid, _target_animal_index);
             }
             catch (System.Exception ex)
             {

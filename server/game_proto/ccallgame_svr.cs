@@ -49,12 +49,13 @@ namespace abelkhan
             }
         }
 
-        public event Action<Int64, Int16> on_use_props;
+        public event Action<props, Int64, Int16> on_use_props;
         public void use_props(IList<MsgPack.MessagePackObject> inArray){
-            var _target_guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
-            var _target_animal_index = ((MsgPack.MessagePackObject)inArray[1]).AsInt16();
+            var _props_id = (props)((MsgPack.MessagePackObject)inArray[0]).AsInt32();
+            var _target_guid = ((MsgPack.MessagePackObject)inArray[1]).AsInt64();
+            var _target_animal_index = ((MsgPack.MessagePackObject)inArray[2]).AsInt16();
             if (on_use_props != null){
-                on_use_props(_target_guid, _target_animal_index);
+                on_use_props(_props_id, _target_guid, _target_animal_index);
             }
         }
 

@@ -35,7 +35,7 @@ module game_client{
 	
 	reset_position multicast(player_game_info[] info);
 	
-	effect_move multicast(int64 guid, effect effect_id, int32 from, int32 to);
+	effect_move multicast(effect effect_id, int64 guid, int16 target_animal_index, int32 from, int32 to);
 	
 	use_props multicast(int64 guid, props props_id, int64 target_guid, int16 target_animal_index);
 }

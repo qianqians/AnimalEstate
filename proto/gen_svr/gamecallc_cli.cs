@@ -91,6 +91,7 @@ namespace abelkhan
             _client_handle.modulemanager.add_mothed("game_client_use_skill", use_skill);
             _client_handle.modulemanager.add_mothed("game_client_reset_position", reset_position);
             _client_handle.modulemanager.add_mothed("game_client_effect_move", effect_move);
+            _client_handle.modulemanager.add_mothed("game_client_use_props", use_props);
         }
 
         public event Action<Int32, playground, List<player_game_info>> on_game_wait_start_info;
@@ -221,14 +222,26 @@ namespace abelkhan
             }
         }
 
-        public event Action<Int64, effect, Int32, Int32> on_effect_move;
+        public event Action<effect, Int64, Int16, Int32, Int32> on_effect_move;
         public void effect_move(IList<MsgPack.MessagePackObject> inArray){
-            var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
-            var _effect_id = (effect)((MsgPack.MessagePackObject)inArray[1]).AsInt32();
-            var _from = ((MsgPack.MessagePackObject)inArray[2]).AsInt32();
-            var _to = ((MsgPack.MessagePackObject)inArray[3]).AsInt32();
+            var _effect_id = (effect)((MsgPack.MessagePackObject)inArray[0]).AsInt32();
+            var _guid = ((MsgPack.MessagePackObject)inArray[1]).AsInt64();
+            var _target_animal_index = ((MsgPack.MessagePackObject)inArray[2]).AsInt16();
+            var _from = ((MsgPack.MessagePackObject)inArray[3]).AsInt32();
+            var _to = ((MsgPack.MessagePackObject)inArray[4]).AsInt32();
             if (on_effect_move != null){
-                on_effect_move(_guid, _effect_id, _from, _to);
+                on_effect_move(_effect_id, _guid, _target_animal_index, _from, _to);
+            }
+        }
+
+        public event Action<Int64, props, Int64, Int16> on_use_props;
+        public void use_props(IList<MsgPack.MessagePackObject> inArray){
+            var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
+            var _props_id = (props)((MsgPack.MessagePackObject)inArray[1]).AsInt32();
+            var _target_guid = ((MsgPack.MessagePackObject)inArray[2]).AsInt64();
+            var _target_animal_index = ((MsgPack.MessagePackObject)inArray[3]).AsInt16();
+            if (on_use_props != null){
+                on_use_props(_guid, _props_id, _target_guid, _target_animal_index);
             }
         }
 

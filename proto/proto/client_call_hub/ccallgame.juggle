@@ -8,7 +8,7 @@ module game{
 	
 	use_skill ntf(int64 target_guid, int16 target_animal_index);
 	
-	use_props ntf(int64 target_guid, props props_id, int16 target_animal_index);
+	use_props ntf(props props_id, int64 target_guid, int16 target_animal_index);
 	
 	throw_dice ntf();
 }

@@ -46,10 +46,12 @@ enum effect
 	monkey_wine = 4;
 	
 	// 玩家道具/技能产生
-	clip = 101;
-	landmine = 102;
-	spring = 103;
-	watermelon_rind = 104;
+	thunder = 101;
+	clip = 102;
+	landmine = 103;
+	spring = 104;
+	banana = 105;
+	watermelon_rind = 106;
 }
 
 enum skill

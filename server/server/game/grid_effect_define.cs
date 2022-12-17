@@ -130,8 +130,8 @@ namespace game
                                 {
                                     to = 0;
                                 }
-                                _animal.current_pos = (short)to; 
-                                _game_client_caller.get_multicast(ClientUUIDS).effect_move(_client.PlayerGameInfo.guid, effect.landmine, from, to);
+                                _animal.current_pos = (short)to;
+                                ntf_effect_move(effect.landmine, _client.PlayerGameInfo.guid, _client.PlayerGameInfo.current_animal_index, from, to);
                             }
                             break;
 
@@ -141,7 +141,7 @@ namespace game
                                 int to = _from;
                                 var _animal = _client.PlayerGameInfo.animal_info[_client.PlayerGameInfo.current_animal_index];
                                 _animal.current_pos = (short)to;
-                                _game_client_caller.get_multicast(ClientUUIDS).effect_move(_client.PlayerGameInfo.guid, effect.spring, from, to);
+                                ntf_effect_move(effect.spring, _client.PlayerGameInfo.guid, _client.PlayerGameInfo.current_animal_index, from, to);
                             }
                             break;
 
@@ -163,7 +163,7 @@ namespace game
                                     }
                                 }
                                 _animal.current_pos = (short)to;
-                                _game_client_caller.get_multicast(ClientUUIDS).effect_move(_client.PlayerGameInfo.guid, effect.watermelon_rind, from, to);
+                                ntf_effect_move(effect.watermelon_rind, _client.PlayerGameInfo.guid, _client.PlayerGameInfo.current_animal_index, from, to);
                             }
                             break;
 
