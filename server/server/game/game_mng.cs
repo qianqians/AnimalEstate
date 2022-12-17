@@ -264,6 +264,30 @@ namespace game
             return false;
         }
 
+        private bool phantom_dice()
+        {
+            foreach (var effect in skill_Effects)
+            {
+                if (effect.skill_state == enum_skill_state.em_phantom_dice)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool fake_dice()
+        {
+            foreach (var effect in skill_Effects)
+            {
+                if (effect.skill_state == enum_skill_state.em_fake_dice)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void set_animal_order(List<animal_game_info> animal_info)
         {
             if (animal_info.Count != 3)
@@ -520,8 +544,21 @@ namespace game
                     var dice_list = new List<int>();
                     for (var i = 0; i < active_State.throw_dice_count; i++)
                     {
-                        var n = (int)hub.hub.randmon_uint(6) + 1;
-                        dice_list.Add(n);
+                        if (phantom_dice())
+                        {
+                            var n = 6;
+                            dice_list.Add(n);
+                        }
+                        else if (fake_dice())
+                        {
+                            var n = (int)hub.hub.randmon_uint(3) + 1;
+                            dice_list.Add(n);
+                        }
+                        else
+                        {
+                            var n = (int)hub.hub.randmon_uint(6) + 1;
+                            dice_list.Add(n);
+                        }
                     }
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).throw_dice(_game_info.guid, dice_list);
                     var dice = await choose_dice(dice_list);
