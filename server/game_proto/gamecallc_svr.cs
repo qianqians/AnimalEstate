@@ -46,6 +46,30 @@ namespace abelkhan
         }
     }
 
+    public class props_info
+    {
+        public Int16 grid_pos;
+        public props props_id;
+        public static MsgPack.MessagePackObjectDictionary props_info_to_protcol(props_info _struct){
+            var _protocol = new MsgPack.MessagePackObjectDictionary();
+            _protocol.Add("grid_pos", _struct.grid_pos);
+            _protocol.Add("props_id", (Int32)_struct.props_id);
+            return _protocol;
+        }
+        public static props_info protcol_to_props_info(MsgPack.MessagePackObjectDictionary _protocol){
+            var _struct25db016e_d798_3806_93d8_f09f1f88c495 = new props_info();
+            foreach (var i in _protocol){
+                if (((MsgPack.MessagePackObject)i.Key).AsString() == "grid_pos"){
+                    _struct25db016e_d798_3806_93d8_f09f1f88c495.grid_pos = ((MsgPack.MessagePackObject)i.Value).AsInt16();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "props_id"){
+                    _struct25db016e_d798_3806_93d8_f09f1f88c495.props_id = (props)((MsgPack.MessagePackObject)i.Value).AsInt32();
+                }
+            }
+            return _struct25db016e_d798_3806_93d8_f09f1f88c495;
+        }
+    }
+
 /*this caller code is codegen by abelkhan codegen for c#*/
 /*this cb code is codegen by abelkhan for c#*/
     public class game_client_rsp_cb : common.imodule {
@@ -117,6 +141,22 @@ namespace abelkhan
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_ntf_new_effect_info", _argv_fba818df_3af0_36da_a270_f40974bad0a2);
         }
 
+        public void ntf_props_info(List<props_info> info){
+            var _argv_2b74a11c_40e2_3a3b_a0c7_ce77cd94975e = new ArrayList();
+            var _array_391fd3d4_2d55_3f5e_9223_7f450a814a15 = new ArrayList();
+            foreach(var v_0c15545d_d42a_5fe0_bed7_a9496851e88b in info){
+                _array_391fd3d4_2d55_3f5e_9223_7f450a814a15.Add(props_info.props_info_to_protcol(v_0c15545d_d42a_5fe0_bed7_a9496851e88b));
+            }
+            _argv_2b74a11c_40e2_3a3b_a0c7_ce77cd94975e.Add(_array_391fd3d4_2d55_3f5e_9223_7f450a814a15);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_ntf_props_info", _argv_2b74a11c_40e2_3a3b_a0c7_ce77cd94975e);
+        }
+
+        public void ntf_new_props_info(props_info info){
+            var _argv_d4adcefd_a6d2_372a_bb05_87c8e284cef6 = new ArrayList();
+            _argv_d4adcefd_a6d2_372a_bb05_87c8e284cef6.Add(props_info.props_info_to_protcol(info));
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_ntf_new_props_info", _argv_d4adcefd_a6d2_372a_bb05_87c8e284cef6);
+        }
+
         public void turn_player_round(Int64 guid){
             var _argv_ecab320c_0c7a_39d6_86e9_96ecfccda4c1 = new ArrayList();
             _argv_ecab320c_0c7a_39d6_86e9_96ecfccda4c1.Add(guid);
@@ -155,6 +195,16 @@ namespace abelkhan
             _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe.Add(target_guid);
             _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe.Add(target_animal_index);
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_use_skill", _argv_f54ecac1_af9c_3003_a2f2_ed93134bfdfe);
+        }
+
+        public void reset_position(List<player_game_info> info){
+            var _argv_8e6fd7da_b0c0_3084_a608_af3c644d3fcd = new ArrayList();
+            var _array_391fd3d4_2d55_3f5e_9223_7f450a814a15 = new ArrayList();
+            foreach(var v_0c15545d_d42a_5fe0_bed7_a9496851e88b in info){
+                _array_391fd3d4_2d55_3f5e_9223_7f450a814a15.Add(player_game_info.player_game_info_to_protcol(v_0c15545d_d42a_5fe0_bed7_a9496851e88b));
+            }
+            _argv_8e6fd7da_b0c0_3084_a608_af3c644d3fcd.Add(_array_391fd3d4_2d55_3f5e_9223_7f450a814a15);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_reset_position", _argv_8e6fd7da_b0c0_3084_a608_af3c644d3fcd);
         }
 
         public void effect_move(Int64 guid, effect effect_id, Int32 from, Int32 to){

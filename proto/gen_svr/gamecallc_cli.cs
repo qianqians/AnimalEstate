@@ -46,6 +46,30 @@ namespace abelkhan
         }
     }
 
+    public class props_info
+    {
+        public Int16 grid_pos;
+        public props props_id;
+        public static MsgPack.MessagePackObjectDictionary props_info_to_protcol(props_info _struct){
+            var _protocol = new MsgPack.MessagePackObjectDictionary();
+            _protocol.Add("grid_pos", _struct.grid_pos);
+            _protocol.Add("props_id", (Int32)_struct.props_id);
+            return _protocol;
+        }
+        public static props_info protcol_to_props_info(MsgPack.MessagePackObjectDictionary _protocol){
+            var _struct25db016e_d798_3806_93d8_f09f1f88c495 = new props_info();
+            foreach (var i in _protocol){
+                if (((MsgPack.MessagePackObject)i.Key).AsString() == "grid_pos"){
+                    _struct25db016e_d798_3806_93d8_f09f1f88c495.grid_pos = ((MsgPack.MessagePackObject)i.Value).AsInt16();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "props_id"){
+                    _struct25db016e_d798_3806_93d8_f09f1f88c495.props_id = (props)((MsgPack.MessagePackObject)i.Value).AsInt32();
+                }
+            }
+            return _struct25db016e_d798_3806_93d8_f09f1f88c495;
+        }
+    }
+
 /*this module code is codegen by abelkhan codegen for c#*/
     public class game_client_module : common.imodule {
         public client.client _client_handle;
@@ -56,11 +80,14 @@ namespace abelkhan
             _client_handle.modulemanager.add_mothed("game_client_game_info", game_info);
             _client_handle.modulemanager.add_mothed("game_client_ntf_effect_info", ntf_effect_info);
             _client_handle.modulemanager.add_mothed("game_client_ntf_new_effect_info", ntf_new_effect_info);
+            _client_handle.modulemanager.add_mothed("game_client_ntf_props_info", ntf_props_info);
+            _client_handle.modulemanager.add_mothed("game_client_ntf_new_props_info", ntf_new_props_info);
             _client_handle.modulemanager.add_mothed("game_client_turn_player_round", turn_player_round);
             _client_handle.modulemanager.add_mothed("game_client_throw_dice", throw_dice);
             _client_handle.modulemanager.add_mothed("game_client_move", move);
             _client_handle.modulemanager.add_mothed("game_client_relay", relay);
             _client_handle.modulemanager.add_mothed("game_client_use_skill", use_skill);
+            _client_handle.modulemanager.add_mothed("game_client_reset_position", reset_position);
             _client_handle.modulemanager.add_mothed("game_client_effect_move", effect_move);
         }
 
@@ -112,6 +139,26 @@ namespace abelkhan
             }
         }
 
+        public event Action<List<props_info>> on_ntf_props_info;
+        public void ntf_props_info(IList<MsgPack.MessagePackObject> inArray){
+            var _info = new List<props_info>();
+            var _protocol_arrayinfo = ((MsgPack.MessagePackObject)inArray[0]).AsList();
+            foreach (var v_d856b000_56e0_5f62_a6f3_e6a0c7859745 in _protocol_arrayinfo){
+                _info.Add(props_info.protcol_to_props_info(((MsgPack.MessagePackObject)v_d856b000_56e0_5f62_a6f3_e6a0c7859745).AsDictionary()));
+            }
+            if (on_ntf_props_info != null){
+                on_ntf_props_info(_info);
+            }
+        }
+
+        public event Action<props_info> on_ntf_new_props_info;
+        public void ntf_new_props_info(IList<MsgPack.MessagePackObject> inArray){
+            var _info = props_info.protcol_to_props_info(((MsgPack.MessagePackObject)inArray[0]).AsDictionary());
+            if (on_ntf_new_props_info != null){
+                on_ntf_new_props_info(_info);
+            }
+        }
+
         public event Action<Int64> on_turn_player_round;
         public void turn_player_round(IList<MsgPack.MessagePackObject> inArray){
             var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
@@ -159,6 +206,18 @@ namespace abelkhan
             var _target_animal_index = ((MsgPack.MessagePackObject)inArray[2]).AsInt16();
             if (on_use_skill != null){
                 on_use_skill(_guid, _target_guid, _target_animal_index);
+            }
+        }
+
+        public event Action<List<player_game_info>> on_reset_position;
+        public void reset_position(IList<MsgPack.MessagePackObject> inArray){
+            var _info = new List<player_game_info>();
+            var _protocol_arrayinfo = ((MsgPack.MessagePackObject)inArray[0]).AsList();
+            foreach (var v_d856b000_56e0_5f62_a6f3_e6a0c7859745 in _protocol_arrayinfo){
+                _info.Add(player_game_info.protcol_to_player_game_info(((MsgPack.MessagePackObject)v_d856b000_56e0_5f62_a6f3_e6a0c7859745).AsDictionary()));
+            }
+            if (on_reset_position != null){
+                on_reset_position(_info);
             }
         }
 

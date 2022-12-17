@@ -141,6 +141,7 @@ struct animal_game_info
 	animal animal_id;
 	skin skin_id;
 	int16 current_pos;
+	bool could_move = true;
 }
 
 struct player_game_info

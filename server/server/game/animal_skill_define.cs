@@ -70,6 +70,7 @@ namespace game
                 skill_state = enum_skill_state.em_phantom_dice,
                 continued_rounds = 5,
             });
+            _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
         }
 
         private void soul_moving_method(long target_client_guid, short target_animal_index)
@@ -80,6 +81,8 @@ namespace game
 
             target_client.PlayerGameInfo.animal_info[target_animal_index] = dest;
             PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index] = src;
+
+            _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
         }
 
         private void thief_reborn(long target_client_guid, short target_animal_index)
@@ -90,6 +93,8 @@ namespace game
 
             active_State.could_use_props = true;
             active_State.use_props_count = 3;
+
+            _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
         }
 
         private void step_lotus(long target_client_guid, short target_animal_index)
@@ -99,6 +104,8 @@ namespace game
                 skill_state = enum_skill_state.em_step_lotus,
                 continued_rounds = 5,
             });
+
+            _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
         }
 
         private void preemptive_strike(long target_client_guid, short target_animal_index)
@@ -111,6 +118,8 @@ namespace game
                 skill_state = enum_skill_state.em_preemptive_strike,
                 continued_rounds = int.MaxValue,
             });
+
+            _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
         }
 
         private void swap_places(long target_client_guid, short target_animal_index)
@@ -122,8 +131,61 @@ namespace game
             var tmp_pos = src.current_pos;
             src.current_pos = dest.current_pos;
             dest.current_pos = tmp_pos;
+
+            _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
         }
 
+        private void altec_lightwave(long target_client_guid, short target_animal_index)
+        {
+            var target_client = _impl.get_client_proxy(target_client_guid);
+            var target_animal = target_client.PlayerGameInfo.animal_info[target_animal_index];
+            target_animal.could_move = false;
 
+            _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
+        }
+
+        private void reset_position(long target_client_guid, short target_animal_index)
+        {
+            var src = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index];
+            var other_animal = new List<animal_game_info>();
+
+            foreach (var _client in _impl.ClientProxys)
+            {
+                foreach (var _animal in _client.PlayerGameInfo.animal_info)
+                {
+                    if (_animal == src)
+                    {
+                        continue;
+                    }
+
+                    int index = 0;
+                    for (int i = 0; i < other_animal.Count; i++)
+                    {
+                        if (other_animal[i].current_pos > src.current_pos)
+                        {
+                            index = i;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    other_animal.Insert(index, _animal);
+                }
+            }
+
+            var pos = src.current_pos;
+            foreach (var _target in other_animal)
+            {
+                _target.current_pos = --pos;
+                if (_target.current_pos < 0)
+                {
+                    _target.current_pos = 0;
+                }
+            }
+
+            _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
+            _impl.ntf_reset_position();
+        }
     }
 }

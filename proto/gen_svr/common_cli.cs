@@ -362,11 +362,13 @@ namespace abelkhan
         public animal animal_id;
         public skin skin_id;
         public Int16 current_pos;
+        public bool could_move = true;
         public static MsgPack.MessagePackObjectDictionary animal_game_info_to_protcol(animal_game_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
             _protocol.Add("animal_id", (Int32)_struct.animal_id);
             _protocol.Add("skin_id", (Int32)_struct.skin_id);
             _protocol.Add("current_pos", _struct.current_pos);
+            _protocol.Add("could_move", _struct.could_move);
             return _protocol;
         }
         public static animal_game_info protcol_to_animal_game_info(MsgPack.MessagePackObjectDictionary _protocol){
@@ -380,6 +382,9 @@ namespace abelkhan
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "current_pos"){
                     _struct0f490332_8543_30ad_92b2_6c49981b121d.current_pos = ((MsgPack.MessagePackObject)i.Value).AsInt16();
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "could_move"){
+                    _struct0f490332_8543_30ad_92b2_6c49981b121d.could_move = ((MsgPack.MessagePackObject)i.Value).AsBoolean();
                 }
             }
             return _struct0f490332_8543_30ad_92b2_6c49981b121d;

@@ -34,6 +34,30 @@ export function protcol_to_effect_info(_protocol:any){
     return _struct;
 }
 
+export class props_info
+{
+    public grid_pos : number;
+    public props_id : common.props;
+
+    constructor(){
+    }
+}
+
+export function props_info_to_protcol(_struct:props_info){
+    return _struct;
+}
+
+export function protcol_to_props_info(_protocol:any){
+    let _struct = new props_info();
+    for (const [key, val] of Object.entries(_protocol))        if (key === "grid_pos"){
+            _struct.grid_pos = val as number;
+        }
+        else if (key === "props_id"){
+            _struct.props_id = val as common.props;
+        }
+    return _struct;
+}
+
 /*this module code is codegen by abelkhan codegen for typescript*/
 export class game_client_module extends client_handle.imodule {
     public _client_handle:client_handle.client;
@@ -44,22 +68,28 @@ export class game_client_module extends client_handle.imodule {
         this._client_handle._modulemng.add_method("game_client_game_info", this.game_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_ntf_effect_info", this.ntf_effect_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_ntf_new_effect_info", this.ntf_new_effect_info.bind(this));
+        this._client_handle._modulemng.add_method("game_client_ntf_props_info", this.ntf_props_info.bind(this));
+        this._client_handle._modulemng.add_method("game_client_ntf_new_props_info", this.ntf_new_props_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_turn_player_round", this.turn_player_round.bind(this));
         this._client_handle._modulemng.add_method("game_client_throw_dice", this.throw_dice.bind(this));
         this._client_handle._modulemng.add_method("game_client_move", this.move.bind(this));
         this._client_handle._modulemng.add_method("game_client_relay", this.relay.bind(this));
         this._client_handle._modulemng.add_method("game_client_use_skill", this.use_skill.bind(this));
+        this._client_handle._modulemng.add_method("game_client_reset_position", this.reset_position.bind(this));
         this._client_handle._modulemng.add_method("game_client_effect_move", this.effect_move.bind(this));
 
         this.cb_game_wait_start_info = null;
         this.cb_game_info = null;
         this.cb_ntf_effect_info = null;
         this.cb_ntf_new_effect_info = null;
+        this.cb_ntf_props_info = null;
+        this.cb_ntf_new_props_info = null;
         this.cb_turn_player_round = null;
         this.cb_throw_dice = null;
         this.cb_move = null;
         this.cb_relay = null;
         this.cb_use_skill = null;
+        this.cb_reset_position = null;
         this.cb_effect_move = null;
     }
 
@@ -115,6 +145,28 @@ export class game_client_module extends client_handle.imodule {
         }
     }
 
+    public cb_ntf_props_info : (info:props_info[])=>void | null;
+    ntf_props_info(inArray:any[]){
+        let _argv_:any[] = [];
+        let _array_:any[] = [];
+        for(let v_ of inArray[0]){
+            _array_.push(protcol_to_props_info(v_));
+        }
+        _argv_.push(_array_);
+        if (this.cb_ntf_props_info){
+            this.cb_ntf_props_info.apply(null, _argv_);
+        }
+    }
+
+    public cb_ntf_new_props_info : (info:props_info)=>void | null;
+    ntf_new_props_info(inArray:any[]){
+        let _argv_:any[] = [];
+        _argv_.push(protcol_to_props_info(inArray[0]));
+        if (this.cb_ntf_new_props_info){
+            this.cb_ntf_new_props_info.apply(null, _argv_);
+        }
+    }
+
     public cb_turn_player_round : (guid:number)=>void | null;
     turn_player_round(inArray:any[]){
         let _argv_:any[] = [];
@@ -167,6 +219,19 @@ export class game_client_module extends client_handle.imodule {
         _argv_.push(inArray[2]);
         if (this.cb_use_skill){
             this.cb_use_skill.apply(null, _argv_);
+        }
+    }
+
+    public cb_reset_position : (info:common.player_game_info[])=>void | null;
+    reset_position(inArray:any[]){
+        let _argv_:any[] = [];
+        let _array_:any[] = [];
+        for(let v_ of inArray[0]){
+            _array_.push(common.protcol_to_player_game_info(v_));
+        }
+        _argv_.push(_array_);
+        if (this.cb_reset_position){
+            this.cb_reset_position.apply(null, _argv_);
         }
     }
 

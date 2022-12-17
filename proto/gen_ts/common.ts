@@ -286,6 +286,7 @@ export class animal_game_info
     public animal_id : animal;
     public skin_id : skin;
     public current_pos : number;
+    public could_move : boolean = true;
 
     constructor(){
     }
@@ -305,6 +306,9 @@ export function protcol_to_animal_game_info(_protocol:any){
         }
         else if (key === "current_pos"){
             _struct.current_pos = val as number;
+        }
+        else if (key === "could_move"){
+            _struct.could_move = val as boolean;
         }
     return _struct;
 }

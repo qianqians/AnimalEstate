@@ -9,15 +9,24 @@ struct effect_info
 	int32 continued_rounds;
 }
 
+struct props_info
+{
+	int16 grid_pos;
+	props props_id;
+}
+
 module game_client{
 	game_wait_start_info multicast(int32 countdown, playground _playground, player_game_info[] info);
 	game_info multicast(playground _playground, player_game_info[] info, int64 round_player_guid);
 	ntf_effect_info multicast(effect_info[] info);
 	ntf_new_effect_info multicast(effect_info info);
+	ntf_props_info multicast(props_info[] info);
+	ntf_new_props_info multicast(props_info info);
 	turn_player_round multicast(int64 guid);
 	throw_dice multicast(int64 guid, int32[] dice);
 	move multicast(int64 guid, int32 from, int32 to);
 	relay multicast(int64 guid, int16 new_animal_index);
 	use_skill multicast(int64 guid, int64 target_guid, int16 target_animal_index);
+	reset_position multicast(player_game_info[] info);
 	effect_move multicast(int64 guid, effect effect_id, int32 from, int32 to);
 }

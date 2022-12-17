@@ -123,10 +123,6 @@ namespace game
 
             public int continued_rounds = 0;
             public int stop_rounds = 0;
-
-            public special_grid_effect()
-            {
-            }
         }
         private List<special_grid_effect> special_grid_effects = new();
 
@@ -134,15 +130,12 @@ namespace game
         {
             public enum_skill_state skill_state;
             public int continued_rounds = 0;
-
-            public skill_effect()
-            {
-            }
         }
         private List<skill_effect> skill_Effects = new ();
         
         class active_state
         {
+            public bool is_step_lotus;
             public bool could_use_skill;
             public bool could_use_props;
             public int use_props_count;
@@ -153,7 +146,7 @@ namespace game
         }
         private active_state active_State;
         private bool skill_is_used = false;
-
+        
         private bool is_done_play = false;
         public bool IsDonePlay
         {
@@ -223,41 +216,6 @@ namespace game
 
         public void summary_skill_effect()
         {
-            var _effect = new skill_effect();
-            foreach (var _skill_effect in skill_Effects)
-            {
-                if (!_skill_effect.could_move)
-                {
-                    _effect.could_move = false;
-                }
-                else if (_skill_effect.is_immunity)
-                {
-                    _effect.is_immunity = true;
-                }
-                else if (_skill_effect.dice_num > _effect.dice_num)
-                {
-                    _effect.dice_num = _skill_effect.dice_num;
-                }
-                else if (_skill_effect.move_coefficient > 1.0f)
-                {
-                    _effect.move_coefficient *= _skill_effect.move_coefficient;
-                }
-            }
-
-            var round_actives = 0;
-            foreach (var grid_effect in special_grid_effects)
-            {
-                if (grid_effect.move_coefficient > 1.0f)
-                {
-                    _effect.move_coefficient *= grid_effect.move_coefficient;
-                }
-                if (grid_effect.mutil_rounds > round_actives)
-                {
-                    round_actives = grid_effect.mutil_rounds;
-                }
-            }
-
-            current_effect = Tuple.Create(_effect, round_actives);
         }
 
         public void iterater_skill_effect()
@@ -310,7 +268,6 @@ namespace game
                 {
                     check_set_active_state_unactive();
                     skill_func.Invoke(target_client_guid, target_animal_index);
-                    _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
                 }
                 else
                 {
@@ -319,36 +276,17 @@ namespace game
             }
         }
 
-        private bool check_done_play()
-        {
-            foreach (var animal_info in _game_info.animal_info)
-            {
-                if (animal_info.current_pos < _impl.PlayergroundLenght)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         public void throw_dice()
         {
-            var _effect_and_round_actives = current_effect;
-            var _effect = _effect_and_round_actives.Item1;
-            
-            if (_effect.could_move)
+            if (active_State.could_throw_dice)
             {
-                var dice = 0;
                 var dice_list = new List<int>();
-                for (var i = 0; i < _effect.dice_num; i++)
-                {
-                    var n = (int)hub.hub.randmon_uint(6) + 1;
-                    dice_list.Add(n);
-                    dice += n;
-                }
+                var n = (int)hub.hub.randmon_uint(6) + 1;
+                dice_list.Add(n);
+                var dice = n;
                 _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).throw_dice(_game_info.guid, dice_list);
 
-                var move = (short)(dice * _effect.move_coefficient);
+                var move = (short)(dice * active_State.move_coefficient);
                 var from = _game_info.animal_info[_game_info.current_animal_index].current_pos;
                 var to = _game_info.animal_info[_game_info.current_animal_index].current_pos + move;
                 if (_impl.PlayergroundLenght <= to)
@@ -363,7 +301,14 @@ namespace game
                     }
                 }
                 _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).move(_game_info.guid, from, to);
-                
+                if (active_State.is_step_lotus)
+                {
+                    for (var i = from; i <= to; i++)
+                    {
+                        _impl.
+                    }
+                }
+
                 _impl.check_grid_effect(this);
             }
         }
@@ -397,6 +342,18 @@ namespace game
 
             rounds++;
 
+            return true;
+        }
+
+        private bool check_done_play()
+        {
+            foreach (var animal_info in _game_info.animal_info)
+            {
+                if (animal_info.current_pos < _impl.PlayergroundLenght)
+                {
+                    return false;
+                }
+            }
             return true;
         }
 
@@ -497,6 +454,7 @@ namespace game
         public List<client_proxy> DonePlayClient = new ();
 
         public List<effect_info> effect_list = new ();
+        public List
 
         private long idle_time = service.timerservice.Tick;
         private bool turn_next_player = false;
@@ -640,6 +598,11 @@ namespace game
         public void ntf_player_use_skill(long guid, long target_client_guid, short target_animal_index)
         {
             _game_client_caller.get_multicast(ClientUUIDS).use_skill(guid, target_client_guid, target_animal_index);
+        }
+
+        public void ntf_reset_position()
+        {
+            _game_client_caller.get_multicast(ClientUUIDS).reset_position(PlayerGameInfo);
         }
 
         public client_proxy get_client_proxy(long guid)
