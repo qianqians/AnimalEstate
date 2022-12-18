@@ -307,18 +307,21 @@ namespace game
         {
             do
             {
-                if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].could_move)
-                {
-                    break;
-                }
-
-                for (PlayerGameInfo.current_animal_index = 0; PlayerGameInfo.current_animal_index < PlayerGameInfo.animal_info.Count; PlayerGameInfo.current_animal_index++)
+                do
                 {
                     if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].could_move)
                     {
                         break;
                     }
-                }
+
+                    for (PlayerGameInfo.current_animal_index = 0; PlayerGameInfo.current_animal_index < PlayerGameInfo.animal_info.Count; PlayerGameInfo.current_animal_index++)
+                    {
+                        if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].could_move)
+                        {
+                            break;
+                        }
+                    }
+                } while (false);
 
                 if (!PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].could_move)
                 {
@@ -392,7 +395,8 @@ namespace game
                 if (!can_not_use_props && props_list.Count > 0)
                 {
                     active_State.could_use_props = true;
-                    if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].animal_id == animal.monkey)
+                    active_State.use_props_count = 1;
+                    if (props_list.Count > 1 && PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].animal_id == animal.monkey)
                     {
                         active_State.use_props_count = 2;
                     }
@@ -568,10 +572,9 @@ namespace game
 
                     var move = (short)(dice * active_State.move_coefficient);
                     var from = _animal_info.current_pos;
-                    var to = _animal_info.current_pos + move;
-                    if (_impl.PlayergroundLenght <= to)
+                    _animal_info.current_pos += move;
+                    if (_impl.PlayergroundLenght <= _animal_info.current_pos)
                     {
-                        to = _impl.PlayergroundLenght;
                         _animal_info.current_pos = (short)_impl.PlayergroundLenght;
                         if (check_done_play())
                         {
@@ -580,17 +583,17 @@ namespace game
                             rank = _impl.DonePlayClient.Count;
                         }
                     }
-                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).move(_game_info.guid, from, to);
+                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).move(_game_info.guid, from, _animal_info.current_pos);
 
                     if (active_State.is_step_lotus && active_State.active_animal == _animal_info.animal_id)
                     {
-                        for (var i = from; i <= to; i++)
+                        for (var i = from; i <= _animal_info.current_pos; i++)
                         {
                             _impl.check_randmon_step_lotus_props(i);
                         }
                     }
 
-                    _impl.check_grid_effect(this, from, to);
+                    _impl.check_grid_effect(this, from, _animal_info.current_pos);
                 }
             }
             catch (System.Exception ex)
@@ -696,9 +699,15 @@ namespace game
             {
                 active_State.round_active_num--;
 
-                active_State.could_use_skill = true;
-                active_State.could_use_props = true;
-                active_State.use_props_count = 1;
+                if (check_could_use_skill())
+                {
+                    active_State.could_use_skill = true;
+                }
+                if (props_list.Count > 0)
+                {
+                    active_State.could_use_props = true;
+                    active_State.use_props_count = 1;
+                }
                 active_State.could_throw_dice = true;
                 active_State.throw_dice_count = ThrowDiceCount;
 
@@ -1113,6 +1122,23 @@ namespace game
             }
         }
 
+        private void check_effect_due()
+        {
+            var _due_effect_list = new List<effect_info>();
+            foreach (var _effect in effect_list)
+            {
+                _effect.continued_rounds--;
+                if (_effect.continued_rounds <= 0)
+                {
+                    _due_effect_list.Add(_effect);
+                }
+            }
+            foreach (var _due_effect in _due_effect_list)
+            {
+                effect_list.Remove(_due_effect);
+            }
+        }
+
         public bool tick()
         {
             do
@@ -1163,6 +1189,8 @@ namespace game
                     {
                         round_active_players = 0;
                         game_rounds++;
+
+                        check_effect_due();
                     }
                 }
 

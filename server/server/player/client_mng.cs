@@ -102,6 +102,7 @@ namespace player
                 info.score = _info.score;
                 info.hero_list = _info.hero_list;
                 info.skin_list = _info.skin_list;
+                info.skill_list = _info.skill_list;
                 info.playground_list = _info.playground_list;
                 return info;
             }
@@ -197,6 +198,16 @@ namespace player
                 },
                 skin_list = new List<skin>() { 
                     skin.chicken, skin.monkey, skin.rabbit, skin.duck, skin.mouse, skin.bear, skin.tiger, skin.lion
+                },
+                skill_list = new List<skill>() { 
+                    skill.phantom_dice,
+                    skill.soul_moving_method,
+                    skill.thief_reborn,
+                    skill.step_lotus,
+                    skill.preemptiv_strike,
+                    skill.swap_places,
+                    skill.altec_lightwave,
+                    skill.reset_position
                 },
                 playground_list = new List<playground>() { 
                     playground.lakeside/*, playground.grassland, playground.hill, playground.snow, playground.desert*/

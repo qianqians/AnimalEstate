@@ -124,6 +124,7 @@ namespace abelkhan
         public List<player_friend_info> be_invited_list;
         public List<animal> hero_list;
         public List<skin> skin_list;
+        public List<skill> skill_list;
         public List<playground> playground_list;
         public static MsgPack.MessagePackObjectDictionary player_info_to_protcol(player_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
@@ -157,6 +158,11 @@ namespace abelkhan
                 _array_skin_list.Add((Int32)v_);
             }
             _protocol.Add("skin_list", new MsgPack.MessagePackObject(_array_skin_list));
+            var _array_skill_list = new List<MsgPack.MessagePackObject>();
+            foreach(var v_ in _struct.skill_list){
+                _array_skill_list.Add((Int32)v_);
+            }
+            _protocol.Add("skill_list", new MsgPack.MessagePackObject(_array_skill_list));
             var _array_playground_list = new List<MsgPack.MessagePackObject>();
             foreach(var v_ in _struct.playground_list){
                 _array_playground_list.Add((Int32)v_);
@@ -215,6 +221,13 @@ namespace abelkhan
                     var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
                     foreach (var v_ in _protocol_array){
                         _structba9db598_9e11_365a_9abc_c16f0f380537.skin_list.Add((skin)((MsgPack.MessagePackObject)v_).AsInt32());
+                    }
+                }
+                else if (((MsgPack.MessagePackObject)i.Key).AsString() == "skill_list"){
+                    _structba9db598_9e11_365a_9abc_c16f0f380537.skill_list = new();
+                    var _protocol_array = ((MsgPack.MessagePackObject)i.Value).AsList();
+                    foreach (var v_ in _protocol_array){
+                        _structba9db598_9e11_365a_9abc_c16f0f380537.skill_list.Add((skill)((MsgPack.MessagePackObject)v_).AsInt32());
                     }
                 }
                 else if (((MsgPack.MessagePackObject)i.Key).AsString() == "playground_list"){

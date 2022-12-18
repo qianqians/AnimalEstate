@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Button, EditBox, find, director, Sprite, Camera, TiledLayer, TiledMap, Vec2, Prefab, instantiate } from 'cc';
+import { _decorator, Component, director, Sprite, Camera, Animation, AnimationClip, TiledMap, Vec2, Prefab, instantiate } from 'cc';
 const { ccclass, property } = _decorator;
 
 import * as singleton from '../netDriver/netSingleton';
@@ -41,7 +41,7 @@ export class main_game extends Component {
             this.mapPlayground.set(i, tile_pos);
         }
 
-        this.set_animal_pos();
+        this.set_animal_born_pos();
         
         if (!singleton.netSingleton.game.CurrentPlayerInfo) {
             this.set_camera_pos(0);
@@ -75,9 +75,13 @@ export class main_game extends Component {
         this.map.node.setPosition(view_center_x, view_center_y);
     }
 
-    set_animal_pos() {
+    set_animal_born_pos() {
         for(let index in singleton.netSingleton.game.PlayerGameInfo) {
             let info = singleton.netSingleton.game.PlayerGameInfo[index];
+
+            let animal_map = new Map<number, any>();
+            singleton.netSingleton.game.PlayerAnimalMap.set(info.guid, animal_map);
+
             for(let animal_index in info.animal_info) {
                 let animal_info = info.animal_info[animal_index];
 
@@ -142,7 +146,13 @@ export class main_game extends Component {
                 let animal_instance = instantiate(animal_prefab);
                 this.map.node.addChild(animal_instance);
                 animal_instance.setPosition(target_x, target_y);
-                console.log(animal_instance);
+                let animationComponent = animal_instance.getComponent(Animation);
+                const [ idleClip, runClip ] = animationComponent.clips;
+                const idleState = animationComponent.getState(idleClip.name);
+                animationComponent.play(idleClip.name);
+                idleState.wrapMode = AnimationClip.WrapMode.Loop;
+
+                animal_map.set(Number(animal_index), animal_instance);
             }
         }
     }

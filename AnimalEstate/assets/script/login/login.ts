@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Button, EditBox, find, director } from 'cc';
+import { _decorator, Component, Node, Button, EditBox, director } from 'cc';
 const { ccclass, property } = _decorator;
 
 import * as singleton from '../netDriver/netSingleton';

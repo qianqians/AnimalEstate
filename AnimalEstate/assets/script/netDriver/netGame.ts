@@ -14,6 +14,8 @@ export class netGame {
 
     private game_call_client_module : game_client_module.game_client_module;
 
+    public PlayerAnimalMap : Map<number, Map<number, any> > = new Map<number, Map<number, any> >();
+
     public constructor(_login : login.netLogin) {
         this.login_handle = _login;
 
@@ -37,8 +39,8 @@ export class netGame {
         this.game_caller.get_hub(this.game_hub_name).into_game(this.login_handle.player_info.guid);
     }
 
-    public use_skill() {
-        this.game_caller.get_hub(this.game_hub_name).use_skill();
+    public use_skill(target_guid:number, target_animal_index:number) {
+        this.game_caller.get_hub(this.game_hub_name).use_skill(target_guid, target_animal_index);
     }
 
     public throw_dice() {

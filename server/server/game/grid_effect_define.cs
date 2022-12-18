@@ -61,6 +61,7 @@ namespace game
                 else
                 {
                     _effect_info.grids.Add((short)pos);
+                    _effect_info.continued_rounds = int.MaxValue;
                 }
                 effect_list.Add(_effect_info);
 

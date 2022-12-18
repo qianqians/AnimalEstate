@@ -121,6 +121,7 @@ export class player_info
     public be_invited_list : player_friend_info[];
     public hero_list : animal[];
     public skin_list : skin[];
+    public skill_list : skill[];
     public playground_list : playground[];
 
     constructor(){
@@ -176,6 +177,12 @@ export function protcol_to_player_info(_protocol:any){
             _struct.skin_list = [];
             for(let v_ of val){
                 _struct.skin_list.push(v_);
+    }
+        }
+        else if (key === "skill_list"){
+            _struct.skill_list = [];
+            for(let v_ of val){
+                _struct.skill_list.push(v_);
     }
         }
         else if (key === "playground_list"){

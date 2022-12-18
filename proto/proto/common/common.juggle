@@ -117,6 +117,7 @@ struct player_info
     player_friend_info[] be_invited_list;
 	animal[] hero_list;
 	skin[] skin_list;
+	skill[] skill_list;
 	playground[] playground_list;
 }
 
