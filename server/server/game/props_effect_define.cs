@@ -335,9 +335,8 @@ namespace game
                         rank = _impl.DonePlayClient.Count;
                     }
                 }
-                var to = _animal.current_pos;
                 _impl.ntf_player_use_props(_game_info.guid, props.red_mushroom, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index);
-                _impl.ntf_effect_move(effect.red_mushroom, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index, from, to);
+                _impl.ntf_effect_move(effect.red_mushroom, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index, from, _animal.current_pos);
             }
         }
 

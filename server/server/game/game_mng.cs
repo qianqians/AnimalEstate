@@ -220,9 +220,15 @@ namespace game
                 uuid = _info.uuid,
                 guid = _info.guid,
                 name = _info.name,
+                skill_id = 0,
                 current_animal_index = 0,
                 animal_info = new ()
             };
+
+            if (_info.skill_list.Count > 0)
+            {
+                _game_info.skill_id = _info.skill_list[(int)hub.hub.randmon_uint((uint)_info.skill_list.Count)];
+            }
 
             var animal_list = new List<animal>(_info.hero_list);
             for (var i = 0; i < 3; i++)
@@ -309,21 +315,24 @@ namespace game
             {
                 do
                 {
-                    if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].could_move)
+                    var current_animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index];
+                    if (current_animal.could_move && current_animal.current_pos < _impl.PlayergroundLenght)
                     {
                         break;
                     }
 
                     for (PlayerGameInfo.current_animal_index = 0; PlayerGameInfo.current_animal_index < PlayerGameInfo.animal_info.Count; PlayerGameInfo.current_animal_index++)
                     {
-                        if (PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].could_move)
+                        current_animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index];
+                        if (current_animal.could_move && current_animal.current_pos < _impl.PlayergroundLenght)
                         {
                             break;
                         }
                     }
                 } while (false);
 
-                if (!PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].could_move)
+                var _current_animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index];
+                if (!_current_animal.could_move || _current_animal.current_pos >= _impl.PlayergroundLenght)
                 {
                     break;
                 }
@@ -387,7 +396,7 @@ namespace game
                     } 
                 }
 
-                if (!can_not_use_skill && check_could_use_skill())
+                if (!can_not_use_skill && check_could_use_skill() && PlayerGameInfo.skill_id != 0)
                 {
                     active_State.could_use_skill = true;
                 }
@@ -463,6 +472,7 @@ namespace game
             {
                 if (skill_list.TryGetValue(PlayerGameInfo.skill_id, out Action<long, short> skill_func))
                 {
+                    skill_is_used = true;
                     check_set_active_state_unactive();
                     skill_func.Invoke(target_client_guid, target_animal_index);
                 }
@@ -642,6 +652,21 @@ namespace game
             use_props(props_list[0], target.Item1, target.Item2);
         }
 
+        private void auto_random_animal()
+        {
+            var active_animal = new List<short>();
+            for (var _animal_index = 0; _animal_index < PlayerGameInfo.animal_info.Count; _animal_index++)
+            {
+                var _animal = PlayerGameInfo.animal_info[_animal_index];
+                if (_animal.current_pos < _impl.PlayergroundLenght && _animal.could_move)
+                {
+                    active_animal.Add((short)_animal_index);
+                }
+            }
+
+            PlayerGameInfo.current_animal_index = active_animal[(int)hub.hub.randmon_uint((uint)active_animal.Count)];
+        }
+
         public void auto_active()
         {
             var active_list = new List<int>();
@@ -675,6 +700,7 @@ namespace game
 
                 case 2:
                     {
+                        auto_random_animal();
                         throw_dice();
                     }
                     break;
@@ -888,6 +914,16 @@ namespace game
                 _player_robot.guid = -1;
                 _player_robot.hero_list = new List<animal> { animal.chicken, animal.monkey, animal.rabbit, animal.duck, animal.mouse, animal.bear, animal.tiger, animal.lion };
                 _player_robot.skin_list = new List<skin> { skin.chicken, skin.monkey, skin.rabbit, skin.duck, skin.mouse, skin.bear, skin.tiger, skin.lion };
+                _player_robot.skill_list = new List<skill> { 
+                    skill.phantom_dice,
+                    skill.soul_moving_method,
+                    skill.thief_reborn,
+                    skill.step_lotus,
+                    skill.preemptiv_strike,
+                    skill.swap_places,
+                    skill.altec_lightwave,
+                    skill.reset_position
+                };
                 _player_robot.playground_list = new List<playground> { playground.lakeside/*, playground.grassland, playground.hill, playground.snow, playground.desert*/ };
                 var _client = new client_proxy(_player_robot, this);
                 _client_proxys.Add(_client);
