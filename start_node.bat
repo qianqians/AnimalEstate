@@ -5,6 +5,7 @@ start ./bin/debug/dbproxy_svr.exe ./config/config_base.txt dbproxy
 sleep 2
 
 start ./bin/debug/gate_svr.exe ./config/config_base.txt gate
+sleep 2
 
 start ./bin/debug/login.exe ./config/config_node.txt login
 start ./bin/debug/player.exe ./config/config_node.txt player
