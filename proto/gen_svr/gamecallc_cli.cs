@@ -99,6 +99,7 @@ namespace abelkhan
             _client_handle.modulemanager.add_mothed("game_client_add_props", add_props);
             _client_handle.modulemanager.add_mothed("game_client_reverse_props", reverse_props);
             _client_handle.modulemanager.add_mothed("game_client_immunity_props", immunity_props);
+            _client_handle.modulemanager.add_mothed("game_client_can_not_active_this_round", can_not_active_this_round);
         }
 
         public event Action<Int32, playground, List<player_game_info>> on_game_wait_start_info;
@@ -282,6 +283,14 @@ namespace abelkhan
             var _target_animal_index = ((MsgPack.MessagePackObject)inArray[3]).AsInt16();
             if (on_immunity_props != null){
                 on_immunity_props(_guid, _props_id, _target_guid, _target_animal_index);
+            }
+        }
+
+        public event Action<Int64> on_can_not_active_this_round;
+        public void can_not_active_this_round(IList<MsgPack.MessagePackObject> inArray){
+            var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
+            if (on_can_not_active_this_round != null){
+                on_can_not_active_this_round(_guid);
             }
         }
 

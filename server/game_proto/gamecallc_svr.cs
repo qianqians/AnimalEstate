@@ -333,6 +333,12 @@ namespace abelkhan
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_immunity_props", _argv_2888feac_1d9b_3c9f_9a00_e626b2c72788);
         }
 
+        public void can_not_active_this_round(Int64 guid){
+            var _argv_8809815d_02f3_3d59_8267_5fa68554d68a = new ArrayList();
+            _argv_8809815d_02f3_3d59_8267_5fa68554d68a.Add(guid);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_can_not_active_this_round", _argv_8809815d_02f3_3d59_8267_5fa68554d68a);
+        }
+
     }
 
     public class game_client_broadcast {

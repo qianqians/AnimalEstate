@@ -329,6 +329,12 @@ namespace game
                             break;
                         }
                     }
+
+                    if (PlayerGameInfo.current_animal_index >= PlayerGameInfo.animal_info.Count)
+                    {
+                        PlayerGameInfo.current_animal_index = 0;
+                    }
+
                 } while (false);
 
                 active_State.move_coefficient = 1.0f;
@@ -728,7 +734,7 @@ namespace game
             {
                 active_State.round_active_num--;
 
-                if (check_could_use_skill())
+                if (check_could_use_skill() && PlayerGameInfo.skill_id != 0)
                 {
                     active_State.could_use_skill = true;
                 }
@@ -1086,7 +1092,7 @@ namespace game
 
         private void next_player()
         {
-            for(var i = 0; i < 4; i++)
+            while (true)
             {
                 _current_client_index++;
                 if (_current_client_index >= 4)
@@ -1103,6 +1109,11 @@ namespace game
                     {
                         _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_round_client.PlayerGameInfo.guid);
                         break;
+                    }
+                    else
+                    {
+                        _round_client.check_end_round();
+                        _game_client_caller.get_multicast(ClientUUIDS).can_not_active_this_round(_round_client.PlayerGameInfo.guid);
                     }
                 }
             }
@@ -1239,6 +1250,8 @@ namespace game
 
                 if (turn_next_player)
                 {
+                    log.log.trace("turn_next_player");
+
                     next_player();
                     check_randmon_effect();
 
@@ -1258,14 +1271,19 @@ namespace game
                 }
                 if (_client.IsAutoActive)
                 {
-                    _client.auto_active();
-                    if (_client.check_end_round())
+                    log.log.trace("auto_active");
+                    if (_client.CouldMove)
                     {
-                        wait_next_player();
-                    }
-                    else
-                    {
-                        _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
+                        _client.auto_active();
+                        if (_client.check_end_round())
+                        {
+                            log.log.trace("wait_next_player");
+                            wait_next_player();
+                        }
+                        else
+                        {
+                            _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
+                        }
                     }
                 }
 

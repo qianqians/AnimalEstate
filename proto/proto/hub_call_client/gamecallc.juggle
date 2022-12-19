@@ -50,4 +50,6 @@ module game_client{
 	reverse_props multicast(int64 src_guid, int64 target_guid, props props_id, int64 reverse_target_guid, int16 reverse_target_animal_index);
 	
 	immunity_props multicast(int64 guid, props props_id, int64 target_guid, int16 target_animal_index);
+	
+	can_not_active_this_round multicast(int64 guid);
 }

@@ -86,6 +86,7 @@ export class game_client_module extends client_handle.imodule {
         this._client_handle._modulemng.add_method("game_client_add_props", this.add_props.bind(this));
         this._client_handle._modulemng.add_method("game_client_reverse_props", this.reverse_props.bind(this));
         this._client_handle._modulemng.add_method("game_client_immunity_props", this.immunity_props.bind(this));
+        this._client_handle._modulemng.add_method("game_client_can_not_active_this_round", this.can_not_active_this_round.bind(this));
 
         this.cb_game_wait_start_info = null;
         this.cb_game_info = null;
@@ -105,6 +106,7 @@ export class game_client_module extends client_handle.imodule {
         this.cb_add_props = null;
         this.cb_reverse_props = null;
         this.cb_immunity_props = null;
+        this.cb_can_not_active_this_round = null;
     }
 
     public cb_game_wait_start_info : (countdown:number, _playground:common.playground, info:common.player_game_info[])=>void | null;
@@ -305,6 +307,15 @@ export class game_client_module extends client_handle.imodule {
         _argv_.push(inArray[3]);
         if (this.cb_immunity_props){
             this.cb_immunity_props.apply(null, _argv_);
+        }
+    }
+
+    public cb_can_not_active_this_round : (guid:number)=>void | null;
+    can_not_active_this_round(inArray:any[]){
+        let _argv_:any[] = [];
+        _argv_.push(inArray[0]);
+        if (this.cb_can_not_active_this_round){
+            this.cb_can_not_active_this_round.apply(null, _argv_);
         }
     }
 
