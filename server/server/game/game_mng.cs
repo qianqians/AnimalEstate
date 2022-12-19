@@ -138,7 +138,6 @@ namespace game
         
         class active_state
         {
-            public animal active_animal;
             public bool could_use_skill;
             public bool could_use_props;
             public int use_props_count;
@@ -147,6 +146,7 @@ namespace game
             public float move_coefficient;
             public bool phantom_dice;
             public bool fake_dice;
+            public animal active_animal;
             public bool is_step_lotus;
             public bool preemptive_strike;
             public int round_active_num;
@@ -336,7 +336,6 @@ namespace game
                 {
                     break;
                 }
-                active_State.active_animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index].animal_id;
 
                 active_State.move_coefficient = 1.0f;
                 bool can_not_use_skill = false;
@@ -358,6 +357,7 @@ namespace game
                     }
                     else if (skill.skill_state == enum_skill_state.em_step_lotus)
                     {
+                        active_State.active_animal = skill.active_animal;
                         active_State.is_step_lotus = true;
                     }
                     else if (skill.skill_state == enum_skill_state.em_move_halved)
