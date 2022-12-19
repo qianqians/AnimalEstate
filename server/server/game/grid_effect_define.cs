@@ -8,7 +8,7 @@ namespace game
 {
     partial class game_impl
     {
-        private List<effect> effects_define = new () { effect.muddy, effect.golden_apple, effect.rice_ear, effect.monkey_wine };
+        private List<effect> effects_define = new () { effect.muddy, effect.golden_apple, effect.rice_ear, effect.golden_apple, effect.rice_ear, effect.golden_apple, effect.rice_ear, effect.monkey_wine };
 
         private bool already_has_effect_grid(short pos)
         {
