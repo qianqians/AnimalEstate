@@ -331,16 +331,17 @@ namespace game
                     }
                 } while (false);
 
-                var _current_animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index];
-                if (!_current_animal.could_move || _current_animal.current_pos >= _impl.PlayergroundLenght)
-                {
-                    break;
-                }
-
                 active_State.move_coefficient = 1.0f;
                 bool can_not_use_skill = false;
                 bool can_not_use_props = false;
                 bool can_not_move = false;
+
+                var _current_animal = PlayerGameInfo.animal_info[PlayerGameInfo.current_animal_index];
+                if (!_current_animal.could_move || _current_animal.current_pos >= _impl.PlayergroundLenght)
+                {
+                    can_not_move = true;
+                }
+
                 foreach (var skill in skill_Effects)
                 {
                     if (skill.skill_state == enum_skill_state.em_unable_use_props)
@@ -591,6 +592,8 @@ namespace game
                             is_done_play = true;
                             _impl.DonePlayClient.Add(this);
                             rank = _impl.DonePlayClient.Count;
+
+                            _impl.check_done_play();
                         }
                     }
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).move(_game_info.guid, from, _animal_info.current_pos);
@@ -734,10 +737,23 @@ namespace game
                     active_State.could_use_props = true;
                     active_State.use_props_count = 1;
                 }
-                active_State.could_throw_dice = true;
-                active_State.throw_dice_count = ThrowDiceCount;
 
-                return false;
+                for (var _animal_index = 0; _animal_index < PlayerGameInfo.animal_info.Count; _animal_index++)
+                {
+                    var _animal = PlayerGameInfo.animal_info[_animal_index];
+                    if (_animal.current_pos < _impl.PlayergroundLenght && _animal.could_move)
+                    {
+                        PlayerGameInfo.current_animal_index = (short)_animal_index;
+                        active_State.could_throw_dice = true;
+                        active_State.throw_dice_count = ThrowDiceCount;
+                        break;
+                    }
+                }
+
+                if (CouldMove)
+                {
+                    return false;
+                }
             }
 
             rounds++;
@@ -974,6 +990,11 @@ namespace game
                     player_settle_info.award_coin = 100 / _client_Proxy.PlayRank;
                     player_settle_info.award_score = 50 / _client_Proxy.PlayRank;
                     info.settle_info.Add(player_settle_info);
+
+                    if (_client_Proxy.PlayerGameInfo.guid == -1)
+                    {
+                        continue;
+                    }
 
                     var player_svr_key = redis_help.BuildPlayerGuidCacheKey(_client_Proxy.PlayerGameInfo.guid);
                     string player_hub_name = await game._redis_handle.GetStrData(player_svr_key);

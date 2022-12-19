@@ -333,6 +333,8 @@ namespace game
                         is_done_play = true;
                         _impl.DonePlayClient.Add(this);
                         rank = _impl.DonePlayClient.Count;
+
+                        _impl.check_done_play();
                     }
                 }
                 _impl.ntf_player_use_props(_game_info.guid, props.red_mushroom, PlayerGameInfo.guid, PlayerGameInfo.current_animal_index);

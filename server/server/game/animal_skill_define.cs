@@ -64,8 +64,11 @@ namespace game
             props_list.AddRange(target_client.props_list);
             target_client.props_list.Clear();
 
-            active_State.could_use_props = true;
-            active_State.use_props_count = 3;
+            if (props_list.Count > 0)
+            {
+                active_State.could_use_props = true;
+                active_State.use_props_count = props_list.Count > 3 ? 3 : props_list.Count;
+            }
 
             _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
         }
