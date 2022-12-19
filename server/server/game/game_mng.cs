@@ -719,7 +719,7 @@ namespace game
 
         public bool check_end_round()
         {
-            if (active_State.could_use_skill || active_State.could_use_props || active_State.could_throw_dice)
+            if (CouldMove)
             {
                 return false;
             }
