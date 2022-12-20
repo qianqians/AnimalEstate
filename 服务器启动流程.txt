@@ -4,5 +4,4 @@ https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-6.0.3-signed.msi
 https://dotnet.microsoft.com/zh-cn/download/dotnet/6.0
 3. 启动redis
 双击redis目录下redis-server.exe即可
-4. 执行start_base.bat脚本
-5. 执行start_node.bat脚本
+4. 执行start_node.bat脚本
