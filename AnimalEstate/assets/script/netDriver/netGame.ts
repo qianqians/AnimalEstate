@@ -99,9 +99,9 @@ export class netGame {
         this.cb_throw_dice.call(null, guid, dice);
     }
 
-    public cb_move : (guid:number, from:number, to:number) => void;
-    private on_cb_move(guid:number, from:number, to:number) {
-        this.cb_move.call(null, guid, from, to);
+    public cb_move : (guid:number, animal_index:number, from:number, to:number) => void;
+    private on_cb_move(guid:number, animal_index:number, from:number, to:number) {
+        this.cb_move.call(null, guid, animal_index, from, to);
     }
 
     public cb_relay : (guid:number, new_animal_index:number) => void;

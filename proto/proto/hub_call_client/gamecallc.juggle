@@ -33,7 +33,7 @@ module game_client{
 	
 	rabbit_choose_dice multicast(int32 dice);
 	
-	move multicast(int64 guid, int32 from, int32 to);
+	move multicast(int64 guid, int16 animal_index, int32 from, int32 to);
 	
 	relay multicast(int64 guid, int16 new_animal_index);
 	

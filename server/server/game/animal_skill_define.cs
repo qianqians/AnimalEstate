@@ -118,6 +118,7 @@ namespace game
             var target_client = _impl.get_client_proxy(target_client_guid);
             var target_animal = target_client.PlayerGameInfo.animal_info[target_animal_index];
             target_animal.could_move = false;
+            target_animal.unmovable_rounds = 10;
 
             _impl.ntf_player_use_skill(_game_info.guid, target_client_guid, target_animal_index);
         }

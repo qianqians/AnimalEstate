@@ -170,12 +170,16 @@ namespace game
             }
         }
 
-        private int rank = 4;
-        public int PlayRank
+        public int PlayScore
         {
             get
             {
-                return rank;
+                int score = 0;
+                foreach (var _animal in PlayerGameInfo.animal_info)
+                {
+                    score += _animal.current_pos;
+                }
+                return score;
             }
         }
 
@@ -471,6 +475,19 @@ namespace game
             {
                 special_grid_effects.Remove(_grid_effect);
             }
+
+            foreach (var _animal in PlayerGameInfo.animal_info)
+            {
+                if (_animal.could_move)
+                {
+                    _animal.unmovable_rounds--;
+                    if (_animal.unmovable_rounds <= 0)
+                    {
+                        _animal.could_move = true;
+                        _animal.unmovable_rounds = 0;
+                    }
+                }
+            }
         }
 
         public void use_skill(long target_client_guid, short target_animal_index)
@@ -587,6 +604,8 @@ namespace game
 
                     var _animal_info = _game_info.animal_info[_game_info.current_animal_index];
 
+                    _animal_info.current_pos = (short)(_animal_info.current_pos < 0 ? 0 : _animal_info.current_pos);
+
                     var move = (short)(dice * active_State.move_coefficient);
                     var from = _animal_info.current_pos;
                     _animal_info.current_pos += move;
@@ -597,12 +616,11 @@ namespace game
                         {
                             is_done_play = true;
                             _impl.DonePlayClient.Add(this);
-                            rank = _impl.DonePlayClient.Count;
 
                             _impl.check_done_play();
                         }
                     }
-                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).move(_game_info.guid, from, _animal_info.current_pos);
+                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).move(_game_info.guid, _game_info.current_animal_index, from, _animal_info.current_pos);
 
                     if (active_State.is_step_lotus && active_State.active_animal == _animal_info.animal_id)
                     {
@@ -928,12 +946,13 @@ namespace game
                 _client_proxys.Add(_client);
             }
 
+            var guid = -1;
             for (var i = room_player_list.Count; i < 4; i++)
             {
                 var _player_robot = new player_inline_info();
                 _player_robot.uuid = "robot";
                 _player_robot.name = NameHelper.GetNameHelper.GetName();
-                _player_robot.guid = -1;
+                _player_robot.guid = guid--;
                 _player_robot.hero_list = new List<animal> { animal.chicken, animal.monkey, animal.rabbit, animal.duck, animal.mouse, animal.bear, animal.tiger, animal.lion };
                 _player_robot.skin_list = new List<skin> { skin.chicken, skin.monkey, skin.rabbit, skin.duck, skin.mouse, skin.bear, skin.tiger, skin.lion };
                 _player_robot.skill_list = new List<skill> { 
@@ -981,7 +1000,7 @@ namespace game
 
         public async void check_done_play()
         {
-            if (DonePlayClient.Count >= 3)
+            if (DonePlayClient.Count > 0)
             {
                 var info = new game_settle_info();
                 info.settle_info = new List<game_player_settle_info>();
@@ -992,9 +1011,16 @@ namespace game
                     var player_settle_info = new game_player_settle_info();
                     player_settle_info.guid = _client_Proxy.PlayerGameInfo.guid;
                     player_settle_info.name = _client_Proxy.PlayerGameInfo.name;
-                    player_settle_info.rank = _client_Proxy.PlayRank;
-                    player_settle_info.award_coin = 100 / _client_Proxy.PlayRank;
-                    player_settle_info.award_score = 50 / _client_Proxy.PlayRank;
+                    player_settle_info.rank = 1;
+                    foreach (var _client_rank in _client_proxys)
+                    {
+                        if (_client_Proxy.PlayScore < _client_rank.PlayScore)
+                        {
+                            player_settle_info.rank++;
+                        }
+                    }
+                    player_settle_info.award_coin = 100 / player_settle_info.rank;
+                    player_settle_info.award_score = 50 / player_settle_info.rank;
                     info.settle_info.Add(player_settle_info);
 
                     if (_client_Proxy.PlayerGameInfo.guid == -1)

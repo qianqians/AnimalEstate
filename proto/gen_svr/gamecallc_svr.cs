@@ -254,9 +254,10 @@ namespace abelkhan
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_rabbit_choose_dice", _argv_61d85040_12b5_380a_9077_58950d26e18b);
         }
 
-        public void move(Int64 guid, Int32 from, Int32 to){
+        public void move(Int64 guid, Int16 animal_index, Int32 from, Int32 to){
             var _argv_33efb72e_9227_32af_a058_169be114a277 = new ArrayList();
             _argv_33efb72e_9227_32af_a058_169be114a277.Add(guid);
+            _argv_33efb72e_9227_32af_a058_169be114a277.Add(animal_index);
             _argv_33efb72e_9227_32af_a058_169be114a277.Add(from);
             _argv_33efb72e_9227_32af_a058_169be114a277.Add(to);
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_move", _argv_33efb72e_9227_32af_a058_169be114a277);

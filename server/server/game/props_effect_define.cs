@@ -332,7 +332,6 @@ namespace game
                     {
                         is_done_play = true;
                         _impl.DonePlayClient.Add(this);
-                        rank = _impl.DonePlayClient.Count;
 
                         _impl.check_done_play();
                     }

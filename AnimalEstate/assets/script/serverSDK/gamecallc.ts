@@ -204,12 +204,13 @@ export class game_client_module extends client_handle.imodule {
         }
     }
 
-    public cb_move : (guid:number, from:number, to:number)=>void | null;
+    public cb_move : (guid:number, animal_index:number, from:number, to:number)=>void | null;
     move(inArray:any[]){
         let _argv_:any[] = [];
         _argv_.push(inArray[0]);
         _argv_.push(inArray[1]);
         _argv_.push(inArray[2]);
+        _argv_.push(inArray[3]);
         if (this.cb_move){
             this.cb_move.apply(null, _argv_);
         }

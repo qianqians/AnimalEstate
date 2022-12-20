@@ -189,13 +189,14 @@ namespace abelkhan
             }
         }
 
-        public event Action<Int64, Int32, Int32> on_move;
+        public event Action<Int64, Int16, Int32, Int32> on_move;
         public void move(IList<MsgPack.MessagePackObject> inArray){
             var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
-            var _from = ((MsgPack.MessagePackObject)inArray[1]).AsInt32();
-            var _to = ((MsgPack.MessagePackObject)inArray[2]).AsInt32();
+            var _animal_index = ((MsgPack.MessagePackObject)inArray[1]).AsInt16();
+            var _from = ((MsgPack.MessagePackObject)inArray[2]).AsInt32();
+            var _to = ((MsgPack.MessagePackObject)inArray[3]).AsInt32();
             if (on_move != null){
-                on_move(_guid, _from, _to);
+                on_move(_guid, _animal_index, _from, _to);
             }
         }
 
