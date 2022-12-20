@@ -1237,6 +1237,11 @@ namespace game
         {
             do
             {
+                if (is_done_play)
+                {
+                    break;
+                }
+
                 if (!is_all_ready)
                 {
                     if (check_all_ready())
