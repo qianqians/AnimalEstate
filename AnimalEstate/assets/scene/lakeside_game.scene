@@ -7345,7 +7345,10 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "_customMaterial": null,
+    "_customMaterial": {
+      "__uuid__": "0648e871-fe7b-48e5-b2aa-e44f8d537c63",
+      "__expectedType__": "cc.Material"
+    },
     "_srcBlendFactor": 2,
     "_dstBlendFactor": 4,
     "_color": {

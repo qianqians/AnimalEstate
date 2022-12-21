@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.Material",
+  "_name": "",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "8a216499-607a-4182-81d6-65d35be0bb17",
+    "__expectedType__": "cc.EffectAsset"
+  },
+  "_techIdx": 0,
+  "_defines": [
+    {}
+  ],
+  "_states": [
+    {
+      "rasterizerState": {},
+      "depthStencilState": {},
+      "blendState": {
+        "targets": [
+          {}
+        ]
+      }
+    }
+  ],
+  "_props": [
+    {
+      "water_texture": {
+        "__uuid__": "5753aaf6-cea1-4042-8d2b-075f7bb4543f@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      },
+      "noisetex": {
+        "__uuid__": "1395f259-8126-41c5-9fc6-884a714937f8@6c48a",
+        "__expectedType__": "cc.Texture2D"
+      }
+    }
+  ]
+}

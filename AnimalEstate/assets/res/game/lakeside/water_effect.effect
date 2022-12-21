@@ -1,0 +1,109 @@
+// Effect Syntax Guide: https://docs.cocos.com/creator/manual/zh/shader/index.html
+
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: vs:vert
+      frag: fs:frag
+      blendState:
+        targets:
+        - blend: true
+      rasterizerState:
+        cullMode: none
+      properties:
+        water_texture: { value: white }
+        alphaThreshold: { value: 0.5 }
+        noisetex: { value: white }
+        speedFactor: {
+          value: 0.1,
+          editor: {
+            tooltip: "速度",
+            range: [0.0, 1.0],
+          }
+        }
+        strengthFactor: {
+          value: 0.1,
+          editor: {
+            tooltip: "强度",
+            range: [-0.5, 0.5],
+          }
+        }
+        isHorizontal: {
+            value: 0,
+            editor: {
+              tooltip: "横向扭曲",
+              range: [0.0, 1.0],
+            }
+        }
+        isVertical: {
+            value: 0,
+            editor: {
+              tooltip: "纵向扭曲",
+              range: [0.0, 1.0],
+            }
+        }
+}%
+
+CCProgram vs %{
+  precision highp float;
+
+  #include <builtin/uniforms/cc-global>
+
+  in vec3 a_position;
+  in vec4 a_color;
+  out vec4 v_color;
+
+  in vec2 a_uv0;
+  out vec2 v_uv0;
+
+  out vec4 v_time;
+
+  vec4 vert () {
+    vec4 pos = vec4(a_position, 1);
+    pos = cc_matViewProj * pos;
+
+    v_uv0 = a_uv0;
+    v_color = a_color;
+    v_time = cc_time;
+    
+    return pos;
+  }
+}%
+
+
+CCProgram fs %{
+  precision highp float;
+  
+  #include <builtin/internal/alpha-test>
+
+  in vec4 v_color;
+
+  in vec2 v_uv0;
+  uniform sampler2D water_texture;
+  uniform sampler2D noisetex;
+
+  uniform Factor {
+      float speedFactor;
+      float strengthFactor;
+      float isHorizontal;
+      float isVertical;
+  };
+
+  in vec4 v_time;
+
+  vec4 frag () {
+    vec4 o = vec4(1);
+    vec4 noise = vec4(1);
+
+    vec2 uv_temp = v_uv0;
+    noise = texture(noisetex, v_uv0.xy + v_time.x * speedFactor);
+    float isH = step(0.1, isHorizontal);
+    float isV = step(0.1, isVertical);
+    uv_temp.x += noise.x * strengthFactor * isH;
+    uv_temp.y += noise.x * strengthFactor * isV;
+
+    o = texture(water_texture, uv_temp);
+
+    return o;
+  }
+}%
