@@ -160,6 +160,16 @@ namespace game
                 return active_State.could_use_skill || active_State.could_use_props || active_State.could_throw_dice;
             }
         }
+
+        private int wait_time = 3000;
+        public int WaitTime
+        {
+            get
+            {
+                return wait_time;
+            }
+        }
+        private float speed = (float)5 * 64 / 3000;
         
         private bool is_done_play = false;
         public bool IsDonePlay
@@ -499,6 +509,7 @@ namespace game
                     skill_is_used = true;
                     check_set_active_state_unactive();
                     skill_func.Invoke(target_client_guid, target_animal_index);
+                    wait_time = 3000;
                 }
                 else
                 {
@@ -522,6 +533,7 @@ namespace game
                     if (props_callback_list.TryGetValue(_props_id, out Action<long, short> props_func))
                     {
                         props_func.Invoke(target_client_guid, target_animal_index);
+                        wait_time = 3000;
                     }
                     else
                     {
@@ -630,7 +642,11 @@ namespace game
                         }
                     }
 
-                    _impl.check_grid_effect(this, from, _animal_info.current_pos);
+                    wait_time = (int)((float)move * 64 / speed + 500);
+                    if (_impl.check_grid_effect(this, from, _animal_info.current_pos))
+                    {
+                        wait_time += 2000;
+                    }
                 }
             }
             catch (System.Exception ex)
@@ -1147,10 +1163,15 @@ namespace game
             turn_next_player = false;
         }
 
-        private void wait_next_player()
+        private void wait_next_player(int wait_time)
         {
             turn_next_player = true;
-            idle_time = service.timerservice.Tick + 3000;
+            idle_time = service.timerservice.Tick + wait_time;
+        }
+
+        private void wait_active(int wait_time)
+        {
+            idle_time = service.timerservice.Tick + wait_time;
         }
 
         public void player_use_skill(client_proxy _client, long target_client_guid, short target_animal_index)
@@ -1161,10 +1182,11 @@ namespace game
                 _client.use_skill(target_client_guid, target_animal_index);
                 if (_client.check_end_round())
                 {
-                    wait_next_player();
+                    wait_next_player(_client.WaitTime);
                 }
                 else
                 {
+                    wait_active(_client.WaitTime);
                     _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
                 }
             }
@@ -1182,10 +1204,11 @@ namespace game
                 _client.use_props(_props_id, target_client_guid, target_animal_index);
                 if (_client.check_end_round())
                 {
-                    wait_next_player();
+                    wait_next_player(_client.WaitTime);
                 }
                 else
                 {
+                    wait_active(_client.WaitTime);
                     _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
                 }
             }
@@ -1203,10 +1226,11 @@ namespace game
                 _client.throw_dice();
                 if (_client.check_end_round())
                 {
-                    wait_next_player();
+                    wait_next_player(_client.WaitTime);
                 }
                 else
                 {
+                    wait_active(_client.WaitTime);
                     _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
                 }
             }
@@ -1309,10 +1333,11 @@ namespace game
                         if (_client.check_end_round())
                         {
                             log.log.trace("wait_next_player");
-                            wait_next_player();
+                            wait_next_player(_client.WaitTime);
                         }
                         else
                         {
+                            wait_active(_client.WaitTime);
                             _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
                         }
                     }

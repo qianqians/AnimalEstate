@@ -71,9 +71,9 @@ export class main_game extends Component {
         let _animal = animal_map.get(animal_index);
         let animationComponent = _animal.getComponent(Animation);
         const [ idleClip, runClip ] = animationComponent.clips;
-        const idleState = animationComponent.getState(runClip.name);
+        const runState = animationComponent.getState(runClip.name);
         animationComponent.play(runClip.name);
-        idleState.wrapMode = AnimationClip.WrapMode.Loop;
+        runState.wrapMode = AnimationClip.WrapMode.Loop;
 
         let _move_info = new move_info();
         _move_info.animal = _animal;
@@ -81,7 +81,7 @@ export class main_game extends Component {
         _move_info.to = to;
         let from_Pos = this.mapPlayground.get(from);
         _move_info.pos = new Vec2(from_Pos.x * 64 + 32 - 800, from_Pos.y * 64 + 32 - 800);
-        _move_info.speed = (to - from) * 64 / 3;
+        _move_info.speed = 5 * 64 / 3;
         this.moveList.push(_move_info);
 
         this.current_move_obj = _move_info;
@@ -138,6 +138,12 @@ export class main_game extends Component {
 
         for (let _remove of remove_list) {
             this.moveList.splice(this.moveList.indexOf(_remove), 1);
+
+            let animationComponent = _remove.animal.getComponent(Animation);
+            const [ idleClip, runClip ] = animationComponent.clips;
+            const idleState = animationComponent.getState(idleClip.name);
+            animationComponent.play(idleClip.name);
+            idleState.wrapMode = AnimationClip.WrapMode.Loop;
         }
 
         if (this.current_move_obj) {

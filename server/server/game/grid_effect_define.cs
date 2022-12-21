@@ -69,7 +69,7 @@ namespace game
             }
         }
 
-        public void check_grid_effect(client_proxy _client, int _from, int _to)
+        public bool check_grid_effect(client_proxy _client, int _from, int _to)
         {
             foreach (var _effect_info in effect_list)
             {
@@ -185,9 +185,11 @@ namespace game
                             break;
                     }
 
-                    break;
+                    return true;
                 }
             }
+
+            return false;
         }
     }
 }
