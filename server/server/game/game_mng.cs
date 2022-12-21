@@ -510,6 +510,7 @@ namespace game
                     check_set_active_state_unactive();
                     skill_func.Invoke(target_client_guid, target_animal_index);
                     wait_time = 3000;
+                    wait_active_time = service.timerservice.Tick;
                 }
                 else
                 {
@@ -534,6 +535,7 @@ namespace game
                     {
                         props_func.Invoke(target_client_guid, target_animal_index);
                         wait_time = 3000;
+                        wait_active_time = service.timerservice.Tick;
                     }
                     else
                     {
@@ -647,6 +649,7 @@ namespace game
                     {
                         wait_time += 2000;
                     }
+                    wait_active_time = service.timerservice.Tick;
                 }
             }
             catch (System.Exception ex)
