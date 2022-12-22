@@ -1,6 +1,9 @@
 import { _decorator, Component, Node, Button, Widget, find, director } from 'cc';
 const { ccclass, property } = _decorator;
 
+import * as singleton from '../netDriver/netSingleton';
+import { playground } from '../serverSDK/common';
+
 @ccclass('main_scene')
 export class main_scene extends Component {
     @property(Button)
@@ -18,6 +21,15 @@ export class main_scene extends Component {
     start() {
         this.match_interface.node.active = false;
         this.start_match_btn.node.on(Node.EventType.MOUSE_DOWN, this.start_match_callback, this);
+
+        
+        singleton.netSingleton.game.cb_game_info = () => {
+            console.log("start match!");
+
+            if (singleton.netSingleton.game.Playground == playground.lakeside){
+                director.loadScene("lakeside_game");
+            }
+        }
     }
 
     update(deltaTime: number) {

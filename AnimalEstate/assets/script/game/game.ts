@@ -195,8 +195,14 @@ export class main_game extends Component {
                 let layer = this.map.getLayer(layer_name);
                 console.log(layer_name);
                 console.log(layer);
+
                 let target_x = layer.rightTop.col * 64 + 32 - 800;
                 let target_y=  layer.rightTop.row * 64 + 32 - 800;
+                if (animal_info.current_pos != -1) {
+                    let pos = this.mapPlayground.get(animal_info.current_pos);
+                    target_x = pos.x * 64 + 32 - 800;
+                    target_y=  pos.y * 64 + 32 - 800;
+                }
 
                 let animal_prefab = null;
                 switch(animal_info.animal_id) {
@@ -261,5 +267,7 @@ export class main_game extends Component {
                 animal_map.set(Number(animal_index), animal_instance);
             }
         }
+        let _current_animal = singleton.netSingleton.game.CurrentPlayerInfo.animal_info[singleton.netSingleton.game.CurrentPlayerInfo.current_animal_index];
+        this.set_camera_pos_grid(_current_animal.current_pos);
     }
 }
