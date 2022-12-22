@@ -133,41 +133,55 @@ namespace abelkhan
             _protocol.Add("name", _struct.name);
             _protocol.Add("coin", _struct.coin);
             _protocol.Add("score", _struct.score);
-            var _array_friend_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.friend_list){
-                _array_friend_list.Add( new MsgPack.MessagePackObject(player_friend_info.player_friend_info_to_protcol(v_)));
+            if (_struct.friend_list != null) {
+                var _array_friend_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.friend_list){
+                    _array_friend_list.Add( new MsgPack.MessagePackObject(player_friend_info.player_friend_info_to_protcol(v_)));
+                }
+                _protocol.Add("friend_list", new MsgPack.MessagePackObject(_array_friend_list));
             }
-            _protocol.Add("friend_list", new MsgPack.MessagePackObject(_array_friend_list));
-            var _array_invite_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.invite_list){
-                _array_invite_list.Add( new MsgPack.MessagePackObject(player_friend_info.player_friend_info_to_protcol(v_)));
+            if (_struct.invite_list != null) {
+                var _array_invite_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.invite_list){
+                    _array_invite_list.Add( new MsgPack.MessagePackObject(player_friend_info.player_friend_info_to_protcol(v_)));
+                }
+                _protocol.Add("invite_list", new MsgPack.MessagePackObject(_array_invite_list));
             }
-            _protocol.Add("invite_list", new MsgPack.MessagePackObject(_array_invite_list));
-            var _array_be_invited_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.be_invited_list){
-                _array_be_invited_list.Add( new MsgPack.MessagePackObject(player_friend_info.player_friend_info_to_protcol(v_)));
+            if (_struct.be_invited_list != null) {
+                var _array_be_invited_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.be_invited_list){
+                    _array_be_invited_list.Add( new MsgPack.MessagePackObject(player_friend_info.player_friend_info_to_protcol(v_)));
+                }
+                _protocol.Add("be_invited_list", new MsgPack.MessagePackObject(_array_be_invited_list));
             }
-            _protocol.Add("be_invited_list", new MsgPack.MessagePackObject(_array_be_invited_list));
-            var _array_hero_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.hero_list){
-                _array_hero_list.Add((Int32)v_);
+            if (_struct.hero_list != null) {
+                var _array_hero_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.hero_list){
+                    _array_hero_list.Add((Int32)v_);
+                }
+                _protocol.Add("hero_list", new MsgPack.MessagePackObject(_array_hero_list));
             }
-            _protocol.Add("hero_list", new MsgPack.MessagePackObject(_array_hero_list));
-            var _array_skin_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.skin_list){
-                _array_skin_list.Add((Int32)v_);
+            if (_struct.skin_list != null) {
+                var _array_skin_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.skin_list){
+                    _array_skin_list.Add((Int32)v_);
+                }
+                _protocol.Add("skin_list", new MsgPack.MessagePackObject(_array_skin_list));
             }
-            _protocol.Add("skin_list", new MsgPack.MessagePackObject(_array_skin_list));
-            var _array_skill_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.skill_list){
-                _array_skill_list.Add((Int32)v_);
+            if (_struct.skill_list != null) {
+                var _array_skill_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.skill_list){
+                    _array_skill_list.Add((Int32)v_);
+                }
+                _protocol.Add("skill_list", new MsgPack.MessagePackObject(_array_skill_list));
             }
-            _protocol.Add("skill_list", new MsgPack.MessagePackObject(_array_skill_list));
-            var _array_playground_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.playground_list){
-                _array_playground_list.Add((Int32)v_);
+            if (_struct.playground_list != null) {
+                var _array_playground_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.playground_list){
+                    _array_playground_list.Add((Int32)v_);
+                }
+                _protocol.Add("playground_list", new MsgPack.MessagePackObject(_array_playground_list));
             }
-            _protocol.Add("playground_list", new MsgPack.MessagePackObject(_array_playground_list));
             return _protocol;
         }
         public static player_info protcol_to_player_info(MsgPack.MessagePackObjectDictionary _protocol){
@@ -260,26 +274,34 @@ namespace abelkhan
             _protocol.Add("name", _struct.name);
             _protocol.Add("coin", _struct.coin);
             _protocol.Add("score", _struct.score);
-            var _array_hero_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.hero_list){
-                _array_hero_list.Add((Int32)v_);
+            if (_struct.hero_list != null) {
+                var _array_hero_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.hero_list){
+                    _array_hero_list.Add((Int32)v_);
+                }
+                _protocol.Add("hero_list", new MsgPack.MessagePackObject(_array_hero_list));
             }
-            _protocol.Add("hero_list", new MsgPack.MessagePackObject(_array_hero_list));
-            var _array_skin_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.skin_list){
-                _array_skin_list.Add((Int32)v_);
+            if (_struct.skin_list != null) {
+                var _array_skin_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.skin_list){
+                    _array_skin_list.Add((Int32)v_);
+                }
+                _protocol.Add("skin_list", new MsgPack.MessagePackObject(_array_skin_list));
             }
-            _protocol.Add("skin_list", new MsgPack.MessagePackObject(_array_skin_list));
-            var _array_skill_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.skill_list){
-                _array_skill_list.Add((Int32)v_);
+            if (_struct.skill_list != null) {
+                var _array_skill_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.skill_list){
+                    _array_skill_list.Add((Int32)v_);
+                }
+                _protocol.Add("skill_list", new MsgPack.MessagePackObject(_array_skill_list));
             }
-            _protocol.Add("skill_list", new MsgPack.MessagePackObject(_array_skill_list));
-            var _array_playground_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.playground_list){
-                _array_playground_list.Add((Int32)v_);
+            if (_struct.playground_list != null) {
+                var _array_playground_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.playground_list){
+                    _array_playground_list.Add((Int32)v_);
+                }
+                _protocol.Add("playground_list", new MsgPack.MessagePackObject(_array_playground_list));
             }
-            _protocol.Add("playground_list", new MsgPack.MessagePackObject(_array_playground_list));
             return _protocol;
         }
         public static player_inline_info protcol_to_player_inline_info(MsgPack.MessagePackObjectDictionary _protocol){
@@ -344,11 +366,13 @@ namespace abelkhan
             _protocol.Add("room_uuid", _struct.room_uuid);
             _protocol.Add("room_owner_guid", _struct.room_owner_guid);
             _protocol.Add("_playground", (Int32)_struct._playground);
-            var _array_room_player_list = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.room_player_list){
-                _array_room_player_list.Add( new MsgPack.MessagePackObject(player_inline_info.player_inline_info_to_protcol(v_)));
+            if (_struct.room_player_list != null) {
+                var _array_room_player_list = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.room_player_list){
+                    _array_room_player_list.Add( new MsgPack.MessagePackObject(player_inline_info.player_inline_info_to_protcol(v_)));
+                }
+                _protocol.Add("room_player_list", new MsgPack.MessagePackObject(_array_room_player_list));
             }
-            _protocol.Add("room_player_list", new MsgPack.MessagePackObject(_array_room_player_list));
             return _protocol;
         }
         public static room_info protcol_to_room_info(MsgPack.MessagePackObjectDictionary _protocol){
@@ -428,11 +452,13 @@ namespace abelkhan
             _protocol.Add("guid", _struct.guid);
             _protocol.Add("name", _struct.name);
             _protocol.Add("skill_id", (Int32)_struct.skill_id);
-            var _array_animal_info = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.animal_info){
-                _array_animal_info.Add( new MsgPack.MessagePackObject(animal_game_info.animal_game_info_to_protcol(v_)));
+            if (_struct.animal_info != null) {
+                var _array_animal_info = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.animal_info){
+                    _array_animal_info.Add( new MsgPack.MessagePackObject(animal_game_info.animal_game_info_to_protcol(v_)));
+                }
+                _protocol.Add("animal_info", new MsgPack.MessagePackObject(_array_animal_info));
             }
-            _protocol.Add("animal_info", new MsgPack.MessagePackObject(_array_animal_info));
             _protocol.Add("current_animal_index", _struct.current_animal_index);
             return _protocol;
         }
@@ -510,11 +536,13 @@ namespace abelkhan
         public List<game_player_settle_info> settle_info;
         public static MsgPack.MessagePackObjectDictionary game_settle_info_to_protcol(game_settle_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
-            var _array_settle_info = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.settle_info){
-                _array_settle_info.Add( new MsgPack.MessagePackObject(game_player_settle_info.game_player_settle_info_to_protcol(v_)));
+            if (_struct.settle_info != null) {
+                var _array_settle_info = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.settle_info){
+                    _array_settle_info.Add( new MsgPack.MessagePackObject(game_player_settle_info.game_player_settle_info_to_protcol(v_)));
+                }
+                _protocol.Add("settle_info", new MsgPack.MessagePackObject(_array_settle_info));
             }
-            _protocol.Add("settle_info", new MsgPack.MessagePackObject(_array_settle_info));
             return _protocol;
         }
         public static game_settle_info protcol_to_game_settle_info(MsgPack.MessagePackObjectDictionary _protocol){

@@ -20,11 +20,13 @@ namespace abelkhan
         public Int32 continued_rounds;
         public static MsgPack.MessagePackObjectDictionary effect_info_to_protcol(effect_info _struct){
             var _protocol = new MsgPack.MessagePackObjectDictionary();
-            var _array_grids = new List<MsgPack.MessagePackObject>();
-            foreach(var v_ in _struct.grids){
-                _array_grids.Add(v_);
+            if (_struct.grids != null) {
+                var _array_grids = new List<MsgPack.MessagePackObject>();
+                foreach(var v_ in _struct.grids){
+                    _array_grids.Add(v_);
+                }
+                _protocol.Add("grids", new MsgPack.MessagePackObject(_array_grids));
             }
-            _protocol.Add("grids", new MsgPack.MessagePackObject(_array_grids));
             _protocol.Add("effect_id", (Int32)_struct.effect_id);
             _protocol.Add("continued_rounds", _struct.continued_rounds);
             return _protocol;
