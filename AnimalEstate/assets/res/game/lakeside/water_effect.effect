@@ -50,12 +50,9 @@ CCProgram vs %{
   #include <builtin/uniforms/cc-global>
 
   in vec3 a_position;
-  in vec4 a_color;
-  out vec4 v_color;
-
   in vec2 a_uv0;
-  out vec2 v_uv0;
 
+  out vec2 v_uv0;
   out vec4 v_time;
 
   vec4 vert () {
@@ -63,7 +60,6 @@ CCProgram vs %{
     pos = cc_matViewProj * pos;
 
     v_uv0 = a_uv0;
-    v_color = a_color;
     v_time = cc_time;
     
     return pos;
@@ -76,9 +72,9 @@ CCProgram fs %{
   
   #include <builtin/internal/alpha-test>
 
-  in vec4 v_color;
-
   in vec2 v_uv0;
+  in vec4 v_time;
+  
   uniform sampler2D water_texture;
   uniform sampler2D noisetex;
 
@@ -88,8 +84,6 @@ CCProgram fs %{
       float isHorizontal;
       float isVertical;
   };
-
-  in vec4 v_time;
 
   vec4 frag () {
     vec4 o = vec4(1);
