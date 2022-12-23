@@ -9,7 +9,7 @@ import * as login from "./netLogin"
 export class netGame {
     private login_handle : login.netLogin;
 
-    private game_hub_name : string;
+    public game_hub_name : string;
     private game_caller : client_game_caller.game_caller;
 
     private game_call_client_module : game_client_module.game_client_module;

@@ -21,11 +21,11 @@
     "_active": true,
     "_components": [],
     "_prefab": {
-      "__id__": 247
+      "__id__": 246
     },
     "autoReleaseAssets": false,
     "_globals": {
-      "__id__": 248
+      "__id__": 247
     },
     "_id": "81f7b71d-f69c-4841-9ecd-f59f723fca80"
   },
@@ -7271,7 +7271,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "水面",
+    "_name": "lake",
     "_objFlags": 0,
     "_parent": {
       "__id__": 2
@@ -7455,7 +7455,7 @@
       "__id__": 238
     },
     "lake": {
-      "__id__": 246
+      "__id__": 241
     },
     "bear": {
       "__uuid__": "547a45a3-c571-4205-b78f-ab982665eab9",
@@ -7492,61 +7492,25 @@
     "_id": "e14B+wdYlAbKY6/jESllQJ"
   },
   {
-    "__type__": "cc.Sprite",
-    "_name": "",
-    "_objFlags": 0,
-    "node": null,
-    "_enabled": true,
-    "__prefab": null,
-    "_customMaterial": null,
-    "_srcBlendFactor": 2,
-    "_dstBlendFactor": 4,
-    "_color": {
-      "__type__": "cc.Color",
-      "r": 115,
-      "g": 193,
-      "b": 213,
-      "a": 0
-    },
-    "_spriteFrame": {
-      "__uuid__": "5753aaf6-cea1-4042-8d2b-075f7bb4543f@f9941",
-      "__expectedType__": "cc.SpriteFrame"
-    },
-    "_type": 0,
-    "_fillType": 0,
-    "_sizeMode": 1,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
-    },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_useGrayscale": false,
-    "_atlas": null,
-    "_id": "3ebHAbZctEVpgl/gsLmY5q"
-  },
-  {
     "__type__": "cc.PrefabInfo",
     "fileId": "81f7b71d-f69c-4841-9ecd-f59f723fca80"
   },
   {
     "__type__": "cc.SceneGlobals",
     "ambient": {
-      "__id__": 249
+      "__id__": 248
     },
     "shadows": {
-      "__id__": 250
+      "__id__": 249
     },
     "_skybox": {
-      "__id__": 251
+      "__id__": 250
     },
     "fog": {
-      "__id__": 252
+      "__id__": 251
     },
     "octree": {
-      "__id__": 253
+      "__id__": 252
     }
   },
   {

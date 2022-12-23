@@ -267,7 +267,5 @@ export class main_game extends Component {
                 animal_map.set(Number(animal_index), animal_instance);
             }
         }
-        let _current_animal = singleton.netSingleton.game.CurrentPlayerInfo.animal_info[singleton.netSingleton.game.CurrentPlayerInfo.current_animal_index];
-        this.set_camera_pos_grid(_current_animal.current_pos);
     }
 }

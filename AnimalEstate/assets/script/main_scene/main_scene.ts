@@ -23,10 +23,10 @@ export class main_scene extends Component {
         this.start_match_btn.node.on(Node.EventType.MOUSE_DOWN, this.start_match_callback, this);
 
         
-        singleton.netSingleton.game.cb_game_info = () => {
-            console.log("start match!");
-
+        if (singleton.netSingleton.game.game_hub_name) {
+            console.log("start game!");
             if (singleton.netSingleton.game.Playground == playground.lakeside){
+                console.log("start game reconnect!");
                 director.loadScene("lakeside_game");
             }
         }

@@ -2,6 +2,7 @@ import { _decorator, Component, Node, Button, EditBox, director } from 'cc';
 const { ccclass, property } = _decorator;
 
 import * as singleton from '../netDriver/netSingleton';
+import { playground } from '../serverSDK/common';
 
 @ccclass('login')
 export class login extends Component {
@@ -24,6 +25,10 @@ export class login extends Component {
         singleton.netSingleton.login.cb_player_login_sucess = () => {
             console.log("login sucess!");
             director.loadScene("main");
+        }
+
+        singleton.netSingleton.game.cb_game_info = () => {
+            console.log("start match!");
         }
 
         this.netBode.on("connect",(e)=>{
