@@ -43,6 +43,8 @@ export class main_game extends Component {
     private current_move_obj:move_info = null;
 
     start() {
+        singleton.netSingleton.game.cb_move = this.on_cb_move.bind(this);
+
         let playgroundLenght = singleton.netSingleton.game.get_playground_len();
         for(let i = 0; i < playgroundLenght; i++) {
             let layer_name = "跑道" + i;
@@ -60,8 +62,6 @@ export class main_game extends Component {
             var current_animal = singleton.netSingleton.game.CurrentPlayerInfo.animal_info[singleton.netSingleton.game.CurrentPlayerInfo.current_animal_index];
             this.set_camera_pos_grid(current_animal.current_pos);
         }
-
-        singleton.netSingleton.game.cb_move = this.on_cb_move.bind(this);
     }
 
     private on_cb_move(guid:number, animal_index:number, from:number, to:number) {
@@ -91,6 +91,9 @@ export class main_game extends Component {
         let remove_list = [];
         for (let _info of this.moveList) {
             let target_grid = _info.current + 1;
+            if (target_grid >= singleton.netSingleton.game.get_playground_len()) {
+                continue;
+            }
             let target_config_pos = this.mapPlayground.get(target_grid);
             let target_pos = new Vec2(target_config_pos.x * 64 + 32 - 800, target_config_pos.y * 64 + 32 - 800);
 
@@ -160,12 +163,13 @@ export class main_game extends Component {
             target_x = 1600 - 320;
         }
         let view_center_x = 800 - target_x;
+
         let target_y = y;
         if (target_y < 320) {
             target_y = 320;
         }
-        else if ((1600 - target_y) < 320) {
-            target_y = 1600 - 320;
+        else if ((1600 - target_y) < 400) {
+            target_y = 1600 - 400;
         }
         let view_center_y = 800 + 160 - target_y;
 

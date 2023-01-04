@@ -22,17 +22,26 @@ export class main_scene extends Component {
         this.match_interface.node.active = false;
         this.start_match_btn.node.on(Node.EventType.MOUSE_DOWN, this.start_match_callback, this);
 
-        
+        this.check_reconnect();
+
+        singleton.netSingleton.game.cb_game_info = () => {
+            console.log("start match!");
+            this.check_reconnect();
+        }
+    }
+
+    update(deltaTime: number) {
+    }
+
+    check_reconnect() {
         if (singleton.netSingleton.game.game_hub_name) {
             console.log("start game!");
+            console.log("Playground:", singleton.netSingleton.game.Playground);
             if (singleton.netSingleton.game.Playground == playground.lakeside){
                 console.log("start game reconnect!");
                 director.loadScene("lakeside_game");
             }
         }
-    }
-
-    update(deltaTime: number) {
     }
 
     start_match_callback() {

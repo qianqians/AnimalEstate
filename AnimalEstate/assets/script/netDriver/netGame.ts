@@ -64,58 +64,79 @@ export class netGame {
         this.Countdown = countdown;
         this.Playground = _playground;
         this.PlayerGameInfo = info;
-        this.cb_game_wait_start_info.call(null);
+        if (this.cb_game_wait_start_info) {
+            this.cb_game_wait_start_info.call(null);
+        }
     }
 
     public cb_game_info : () => void;
     private on_cb_game_info(_playground:common.playground, info:common.player_game_info[], round_player_guid:number) {
         this.Playground = _playground;
+        console.log("this.Playground:", this.Playground);
         this.PlayerGameInfo = info;
         for(let info of this.PlayerGameInfo) {
             if (info.guid == round_player_guid) {
                 this.CurrentPlayerInfo = info;
             }
         }
-        this.cb_game_info.call(null);
+        if (this.cb_game_info) {
+            this.cb_game_info.call(null);
+        }
     }
 
     public cb_ntf_effect_info : (info:game_client_module.effect_info[]) => void;
     private on_cb_ntf_effect_info(info:game_client_module.effect_info[]) {
-        this.cb_ntf_effect_info.call(null, info);
+        if (this.cb_ntf_effect_info) {
+            this.cb_ntf_effect_info.call(null, info);
+        }
     }
 
     public cb_ntf_new_effect_info : (info:game_client_module.effect_info) => void;
     private on_cb_ntf_new_effect_info(info:game_client_module.effect_info) {
-        this.cb_ntf_new_effect_info.call(null, info);
+        if (this.cb_ntf_new_effect_info) {
+            this.cb_ntf_new_effect_info.call(null, info);
+        }
     }
 
     public cb_turn_player_round : (guid:number) => void;
     private on_cb_turn_player_round(guid:number) {
-        this.cb_turn_player_round.call(null, guid);
+        if (this.cb_turn_player_round) {
+            this.cb_turn_player_round.call(null, guid);
+        }
     }
 
     public cb_throw_dice : (guid:number, dice:number[]) => void;
     private on_cb_throw_dice(guid:number, dice:number[]) {
-        this.cb_throw_dice.call(null, guid, dice);
+        if (this.cb_throw_dice) {
+            this.cb_throw_dice.call(null, guid, dice);
+        }
     }
 
     public cb_move : (guid:number, animal_index:number, from:number, to:number) => void;
     private on_cb_move(guid:number, animal_index:number, from:number, to:number) {
-        this.cb_move.call(null, guid, animal_index, from, to);
+        if (this.cb_move) {
+            this.cb_move.call(null, guid, animal_index, from, to);
+        }
     }
 
     public cb_relay : (guid:number, new_animal_index:number) => void;
     private on_cb_relay(guid:number, new_animal_index:number) {
-        this.cb_relay.call(null, guid, new_animal_index);
+        if (this.cb_relay) {
+            this.cb_relay.call(null, guid, new_animal_index);
+        }
     }
 
     public cb_use_skill : (guid:number) => void
     private on_cb_use_skill(guid:number) {
-        this.cb_use_skill.call(null, guid);
+        if (this.cb_use_skill) {
+            this.cb_use_skill.call(null, guid);
+        }
     }
 
     public cb_effect_move : (guid:number, effect_id:common.effect, from:number, to:number) => void;
     private on_cb_effect_move(guid:number, effect_id:common.effect, from:number, to:number) {
-        this.cb_effect_move.call(null, guid, effect_id, from, to)
+        if (this.cb_effect_move) {
+            this.cb_effect_move.call(null, guid, effect_id, from, to);
+        }
     }
 }
