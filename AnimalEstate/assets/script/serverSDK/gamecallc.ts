@@ -74,6 +74,7 @@ export class game_client_module extends client_handle.imodule {
         this._client_handle._modulemng.add_method("game_client_ntf_effect_info", this.ntf_effect_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_ntf_new_effect_info", this.ntf_new_effect_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_turn_player_round", this.turn_player_round.bind(this));
+        this._client_handle._modulemng.add_method("game_client_start_throw_dice", this.start_throw_dice.bind(this));
         this._client_handle._modulemng.add_method("game_client_throw_dice", this.throw_dice.bind(this));
         this._client_handle._modulemng.add_method("game_client_choose_dice", this.choose_dice.bind(this));
         this._client_handle._modulemng.add_method("game_client_rabbit_choose_dice", this.rabbit_choose_dice.bind(this));
@@ -93,6 +94,7 @@ export class game_client_module extends client_handle.imodule {
         this.cb_ntf_effect_info = null;
         this.cb_ntf_new_effect_info = null;
         this.cb_turn_player_round = null;
+        this.cb_start_throw_dice = null;
         this.cb_throw_dice = null;
         this.cb_choose_dice = null;
 
@@ -167,6 +169,15 @@ export class game_client_module extends client_handle.imodule {
         _argv_.push(inArray[0]);
         if (this.cb_turn_player_round){
             this.cb_turn_player_round.apply(null, _argv_);
+        }
+    }
+
+    public cb_start_throw_dice : (guid:number)=>void | null;
+    start_throw_dice(inArray:any[]){
+        let _argv_:any[] = [];
+        _argv_.push(inArray[0]);
+        if (this.cb_start_throw_dice){
+            this.cb_start_throw_dice.apply(null, _argv_);
         }
     }
 

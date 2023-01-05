@@ -586,7 +586,7 @@ namespace game
             return retTask.Task;
         }
 
-        public async void throw_dice()
+        public async Task throw_dice()
         {
             try
             {
@@ -613,6 +613,11 @@ namespace game
                             dice_list.Add(n);
                         }
                     }
+                    _impl.WaitDice = true;
+                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).start_throw_dice(_game_info.guid);
+                    await Task.Delay(3000);
+                    _impl.WaitDice = false;
+
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).throw_dice(_game_info.guid, dice_list);
                     var dice = await choose_dice(dice_list);
 
@@ -713,7 +718,7 @@ namespace game
             PlayerGameInfo.current_animal_index = active_animal[(int)hub.hub.randmon_uint((uint)active_animal.Count)];
         }
 
-        public void auto_active()
+        public async Task auto_active()
         {
             var active_list = new List<int>();
             if (active_State.could_use_skill)
@@ -747,7 +752,7 @@ namespace game
                 case 2:
                     {
                         auto_random_animal();
-                        throw_dice();
+                        await throw_dice();
                     }
                     break;
             }
@@ -928,6 +933,19 @@ namespace game
         private bool turn_next_player = false;
         private int round_active_players = 0;
         private int game_rounds = 0;
+
+        private bool wait_dice = false;
+        public bool WaitDice
+        {
+            set
+            {
+                wait_dice = value;
+            }
+            get
+            {
+                return wait_dice;
+            }
+        }
 
         private readonly game_client_caller _game_client_caller;
         public game_client_caller GameClientCaller
@@ -1221,12 +1239,12 @@ namespace game
             }
         }
 
-        public void player_throw_dice(client_proxy _client)
+        public async void player_throw_dice(client_proxy _client)
         {
             var _current_client = _client_proxys[_current_client_index];
             if (_client.PlayerGameInfo.guid == _current_client.PlayerGameInfo.guid)
             {
-                _client.throw_dice();
+                await _client.throw_dice();
                 if (_client.check_end_round())
                 {
                     wait_next_player(_client.WaitTime);
@@ -1260,7 +1278,7 @@ namespace game
             }
         }
 
-        public bool tick()
+        public async Task<bool> tick()
         {
             do
             {
@@ -1306,6 +1324,11 @@ namespace game
                     break;
                 }
 
+                if (wait_dice)
+                {
+                    break;
+                }
+
                 if (turn_next_player)
                 {
                     log.log.trace("turn_next_player");
@@ -1332,7 +1355,7 @@ namespace game
                     log.log.trace("auto_active");
                     if (_client.CouldMove)
                     {
-                        _client.auto_active();
+                        await _client.auto_active();
                         if (_client.check_end_round())
                         {
                             log.log.trace("wait_next_player");
@@ -1466,14 +1489,14 @@ namespace game
             }
         }
 
-        private void tick_game(long tick)
+        private async void tick_game(long tick)
         {
             try
             {
                 var done_game_list = new List<game_impl>();
                 foreach (var _game in games)
                 {
-                    if (_game.tick())
+                    if (await _game.tick())
                     {
                         done_game_list.Add(_game);
                     }

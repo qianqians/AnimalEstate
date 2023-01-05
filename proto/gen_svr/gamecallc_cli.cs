@@ -89,6 +89,7 @@ namespace abelkhan
             _client_handle.modulemanager.add_mothed("game_client_ntf_effect_info", ntf_effect_info);
             _client_handle.modulemanager.add_mothed("game_client_ntf_new_effect_info", ntf_new_effect_info);
             _client_handle.modulemanager.add_mothed("game_client_turn_player_round", turn_player_round);
+            _client_handle.modulemanager.add_mothed("game_client_start_throw_dice", start_throw_dice);
             _client_handle.modulemanager.add_mothed("game_client_throw_dice", throw_dice);
             _client_handle.modulemanager.add_mothed("game_client_choose_dice", choose_dice);
             _client_handle.modulemanager.add_mothed("game_client_rabbit_choose_dice", rabbit_choose_dice);
@@ -157,6 +158,14 @@ namespace abelkhan
             var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
             if (on_turn_player_round != null){
                 on_turn_player_round(_guid);
+            }
+        }
+
+        public event Action<Int64> on_start_throw_dice;
+        public void start_throw_dice(IList<MsgPack.MessagePackObject> inArray){
+            var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
+            if (on_start_throw_dice != null){
+                on_start_throw_dice(_guid);
             }
         }
 

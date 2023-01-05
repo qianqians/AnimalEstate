@@ -27,6 +27,7 @@ export class netGame {
         this.game_call_client_module.cb_ntf_effect_info = this.on_cb_ntf_effect_info.bind(this);
         this.game_call_client_module.cb_ntf_new_effect_info = this.on_cb_ntf_new_effect_info.bind(this);
         this.game_call_client_module.cb_turn_player_round = this.on_cb_turn_player_round.bind(this);
+        this.game_call_client_module.cb_start_throw_dice = this.on_cb_start_dice.bind(this);
         this.game_call_client_module.cb_throw_dice = this.on_cb_throw_dice.bind(this);
         this.game_call_client_module.cb_move = this.on_cb_move.bind(this);
         this.game_call_client_module.cb_relay = this.on_cb_relay.bind(this);
@@ -109,6 +110,13 @@ export class netGame {
     private on_cb_throw_dice(guid:number, dice:number[]) {
         if (this.cb_throw_dice) {
             this.cb_throw_dice.call(null, guid, dice);
+        }
+    }
+
+    public cb_start_dice: (guid:number) => void;
+    private on_cb_start_dice(guid:number) {
+        if (this.cb_start_dice) {
+            this.cb_start_dice.call(null, guid);
         }
     }
 

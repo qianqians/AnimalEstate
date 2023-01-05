@@ -26,6 +26,8 @@ module game_client{
 	ntf_new_effect_info multicast(effect_info info);
 	
 	turn_player_round multicast(int64 guid);
+
+	start_throw_dice multicast(int64 guid);
 	
 	throw_dice multicast(int64 guid, int32[] dice);
 	

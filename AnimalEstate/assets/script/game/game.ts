@@ -38,12 +38,16 @@ export class main_game extends Component {
     @property(Prefab)
     tiger:Prefab = null;
 
+    @property(Sprite)
+    dice_instance = null;
+
     private mapPlayground:Map<number, Vec2> = new Map<number, Vec2>();
     private moveList:move_info[] = [];
     private current_move_obj:move_info = null;
 
     start() {
         singleton.netSingleton.game.cb_move = this.on_cb_move.bind(this);
+        singleton.netSingleton.game.cb_start_dice = this.on_cb_start_dice.bind(this);
 
         let playgroundLenght = singleton.netSingleton.game.get_playground_len();
         for(let i = 0; i < playgroundLenght; i++) {
@@ -54,14 +58,35 @@ export class main_game extends Component {
         }
 
         this.set_animal_born_pos();
+        this.init_dice();
         
         if (!singleton.netSingleton.game.CurrentPlayerInfo) {
             this.set_camera_pos_grid(0);
         }
         else {
             var current_animal = singleton.netSingleton.game.CurrentPlayerInfo.animal_info[singleton.netSingleton.game.CurrentPlayerInfo.current_animal_index];
-            this.set_camera_pos_grid(current_animal.current_pos);
+            if (current_animal.current_pos < 0) {
+                this.set_camera_pos_grid(0);
+            }
+            else {
+                this.set_camera_pos_grid(current_animal.current_pos);
+            }
         }
+    }
+
+    private init_dice() {
+        console.log(this.dice_instance);
+        this.dice_instance.node.setPosition(0, 0);
+        this.dice_instance.active = false;
+    }
+
+    private on_cb_start_dice(guid:number) {
+        this.dice_instance.active = true;
+        let animationComponent = this.dice_instance.getComponent(Animation);
+        const [ diceClip ] = animationComponent.clips;
+        const diceState = animationComponent.getState(diceClip.name);
+        animationComponent.play(diceState.name);
+        diceState.wrapMode = AnimationClip.WrapMode.Loop;
     }
 
     private on_cb_move(guid:number, animal_index:number, from:number, to:number) {
@@ -165,11 +190,11 @@ export class main_game extends Component {
         let view_center_x = 800 - target_x;
 
         let target_y = y;
-        if (target_y < 320) {
-            target_y = 320;
+        if (target_y < 500) {
+            target_y = 500;
         }
-        else if ((1600 - target_y) < 400) {
-            target_y = 1600 - 400;
+        else if ((1600 - target_y) < 480) {
+            target_y = 1600 - 480;
         }
         let view_center_y = 800 + 160 - target_y;
 
