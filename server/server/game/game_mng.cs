@@ -725,6 +725,7 @@ namespace game
             }
 
             PlayerGameInfo.current_animal_index = active_animal[(int)hub.hub.randmon_uint((uint)active_animal.Count)];
+            active_State.throw_dice_count = ThrowDiceCount;
         }
 
         public async Task auto_active()
