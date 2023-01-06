@@ -2,7 +2,7 @@ import { _decorator, Component, director, Sprite, Camera, Animation, AnimationCl
 const { ccclass, property } = _decorator;
 
 import * as singleton from '../netDriver/netSingleton';
-import { playground, player_game_info, animal } from '../serverSDK/common';
+import { playground, player_game_info, animal_game_info, animal } from '../serverSDK/common';
 
 class move_info {
     public animal : any;
@@ -39,7 +39,54 @@ export class main_game extends Component {
     tiger:Prefab = null;
 
     @property(Sprite)
-    dice_instance = null;
+    dice_instance:Sprite = null;
+    @property(Sprite)
+    dice2_1_instance:Sprite = null;
+    @property(Sprite)
+    dice2_2_instance:Sprite = null;
+
+    @property(Sprite)
+    dice_1:Sprite = null;
+    @property(Sprite)
+    dice_2:Sprite = null;
+    @property(Sprite)
+    dice_3:Sprite = null;
+    @property(Sprite)
+    dice_4:Sprite = null;
+    @property(Sprite)
+    dice_5:Sprite = null;
+    @property(Sprite)
+    dice_6:Sprite = null;
+
+    @property(Sprite)
+    dice_1_1:Sprite = null;
+    @property(Sprite)
+    dice_1_2:Sprite = null;
+    @property(Sprite)
+    dice_1_3:Sprite = null;
+    @property(Sprite)
+    dice_1_4:Sprite = null;
+    @property(Sprite)
+    dice_1_5:Sprite = null;
+    @property(Sprite)
+    dice_1_6:Sprite = null;
+
+    @property(Sprite)
+    dice_2_1:Sprite = null;
+    @property(Sprite)
+    dice_2_2:Sprite = null;
+    @property(Sprite)
+    dice_2_3:Sprite = null;
+    @property(Sprite)
+    dice_2_4:Sprite = null;
+    @property(Sprite)
+    dice_2_5:Sprite = null;
+    @property(Sprite)
+    dice_2_6:Sprite = null;
+    
+    dice_result_instance:Sprite = null;
+    dice_1_result_instance:Sprite = null;
+    dice_2_result_instance:Sprite = null;
 
     private mapPlayground:Map<number, Vec2> = new Map<number, Vec2>();
     private moveList:move_info[] = [];
@@ -48,6 +95,8 @@ export class main_game extends Component {
     start() {
         singleton.netSingleton.game.cb_move = this.on_cb_move.bind(this);
         singleton.netSingleton.game.cb_start_dice = this.on_cb_start_dice.bind(this);
+        singleton.netSingleton.game.cb_throw_dice = this.on_cb_throw_dice.bind(this);
+        singleton.netSingleton.game.cb_rabbit_choose_dice = this.on_cb_rabbit_choose_dice.bind(this);
 
         let playgroundLenght = singleton.netSingleton.game.get_playground_len();
         for(let i = 0; i < playgroundLenght; i++) {
@@ -75,22 +124,199 @@ export class main_game extends Component {
     }
 
     private init_dice() {
-        console.log(this.dice_instance);
         this.dice_instance.node.setPosition(0, 0);
-        this.dice_instance.active = false;
+        this.dice_instance.node.active = false;
+        
+        this.dice2_1_instance.node.setPosition(-64, 0);
+        this.dice2_1_instance.node.active = false;
+        this.dice2_2_instance.node.setPosition(64, 0);
+        this.dice2_2_instance.node.active = false;
+
+        this.dice_1.node.setPosition(0, 0);
+        this.dice_1.node.active = false;
+        this.dice_2.node.setPosition(0, 0);
+        this.dice_2.node.active = false;
+        this.dice_3.node.setPosition(0, 0);
+        this.dice_3.node.active = false;
+        this.dice_4.node.setPosition(0, 0);
+        this.dice_4.node.active = false;
+        this.dice_5.node.setPosition(0, 0);
+        this.dice_5.node.active = false;
+        this.dice_6.node.setPosition(0, 0);
+        this.dice_6.node.active = false;
+        
+        this.dice_1_1.node.setPosition(-64, 0);
+        this.dice_1_1.node.active = false;
+        this.dice_1_2.node.setPosition(-64, 0);
+        this.dice_1_2.node.active = false;
+        this.dice_1_3.node.setPosition(-64, 0);
+        this.dice_1_3.node.active = false;
+        this.dice_1_4.node.setPosition(-64, 0);
+        this.dice_1_4.node.active = false;
+        this.dice_1_5.node.setPosition(-64, 0);
+        this.dice_1_5.node.active = false;
+        this.dice_1_6.node.setPosition(-64, 0);
+        this.dice_1_6.node.active = false;
+
+        this.dice_2_1.node.setPosition(64, 0);
+        this.dice_2_1.node.active = false;
+        this.dice_2_2.node.setPosition(64, 0);
+        this.dice_2_2.node.active = false;
+        this.dice_2_3.node.setPosition(64, 0);
+        this.dice_2_3.node.active = false;
+        this.dice_2_4.node.setPosition(64, 0);
+        this.dice_2_4.node.active = false;
+        this.dice_2_5.node.setPosition(64, 0);
+        this.dice_2_5.node.active = false;
+        this.dice_2_6.node.setPosition(64, 0);
+        this.dice_2_6.node.active = false;
     }
 
-    private on_cb_start_dice(guid:number) {
-        this.dice_instance.active = true;
-        let animationComponent = this.dice_instance.getComponent(Animation);
-        const [ diceClip ] = animationComponent.clips;
-        const diceState = animationComponent.getState(diceClip.name);
-        animationComponent.play(diceState.name);
-        diceState.wrapMode = AnimationClip.WrapMode.Loop;
+    private on_cb_start_dice(guid:number, animal_index:number) {
+        let _current_animal:animal_game_info = null;
+        for(let info of singleton.netSingleton.game.PlayerGameInfo) {
+            if (info.guid == guid) {
+                _current_animal = info.animal_info[animal_index];
+            }
+        }
+
+        if (_current_animal.animal_id != animal.rabbit) {
+            this.dice_instance.node.active = true;
+            let animationComponent = this.dice_instance.getComponent(Animation);
+            const [ diceClip ] = animationComponent.clips;
+            const diceState = animationComponent.getState(diceClip.name);
+            animationComponent.play(diceState.name);
+            diceState.wrapMode = AnimationClip.WrapMode.Loop;
+        }
+        else {
+            {
+                this.dice2_1_instance.node.active = true;
+                let animationComponent = this.dice2_1_instance.getComponent(Animation);
+                const [ diceClip ] = animationComponent.clips;
+                const diceState = animationComponent.getState(diceClip.name);
+                animationComponent.play(diceState.name);
+                diceState.wrapMode = AnimationClip.WrapMode.Loop;
+            }
+
+            {
+                this.dice2_2_instance.node.active = true;
+                let animationComponent = this.dice2_2_instance.getComponent(Animation);
+                const [ diceClip ] = animationComponent.clips;
+                const diceState = animationComponent.getState(diceClip.name);
+                animationComponent.play(diceState.name);
+                diceState.wrapMode = AnimationClip.WrapMode.Loop;
+            }
+        }
+    }
+
+    private on_cb_throw_dice(guid:number, dice:number[]) {
+        this.dice_instance.node.active = false;
+        this.dice2_1_instance.node.active = false;
+        this.dice2_2_instance.node.active = false;
+
+        if (dice.length == 1) {
+            let dice_num = dice[0];
+            switch(dice_num){
+                case 1:
+                    this.dice_result_instance = this.dice_1;
+                    break;
+                case 2:
+                    this.dice_result_instance = this.dice_2;
+                    break;
+                case 3:
+                    this.dice_result_instance = this.dice_3;
+                    break;
+                case 4:
+                    this.dice_result_instance = this.dice_4;
+                    break;
+                case 5:
+                    this.dice_result_instance = this.dice_5;
+                    break;
+                case 6:
+                    this.dice_result_instance = this.dice_6;
+                    break;
+            }
+            this.dice_result_instance.node.active = true;
+        }
+        else {
+            let dice_1_num = dice[0];
+            let dice_2_num = dice[1];
+            switch(dice_1_num){
+                case 1:
+                    this.dice_1_result_instance = this.dice_1_1;
+                    break;
+                case 2:
+                    this.dice_1_result_instance = this.dice_1_2;
+                    break;
+                case 3:
+                    this.dice_1_result_instance = this.dice_1_3;
+                    break;
+                case 4:
+                    this.dice_1_result_instance = this.dice_1_4;
+                    break;
+                case 5:
+                    this.dice_1_result_instance = this.dice_1_5;
+                    break;
+                case 6:
+                    this.dice_1_result_instance = this.dice_1_6;
+                    break;
+            } 
+            switch(dice_2_num){
+                case 1:
+                    this.dice_2_result_instance = this.dice_2_1;
+                    break;
+                case 2:
+                    this.dice_2_result_instance = this.dice_2_2;
+                    break;
+                case 3:
+                    this.dice_2_result_instance = this.dice_2_3;
+                    break;
+                case 4:
+                    this.dice_2_result_instance = this.dice_2_4;
+                    break;
+                case 5:
+                    this.dice_2_result_instance = this.dice_2_5;
+                    break;
+                case 6:
+                    this.dice_2_result_instance = this.dice_2_6;
+                    break;
+            }
+            this.dice_1_result_instance.node.active = true;
+            this.dice_2_result_instance.node.active = true;
+        }
+    }
+
+    private on_cb_rabbit_choose_dice(dice:number) {
+        this.dice_1_result_instance.node.active = false;
+        this.dice_2_result_instance.node.active = false;
+
+        switch(dice){
+            case 1:
+                this.dice_result_instance = this.dice_1;
+                break;
+            case 2:
+                this.dice_result_instance = this.dice_2;
+                break;
+            case 3:
+                this.dice_result_instance = this.dice_3;
+                break;
+            case 4:
+                this.dice_result_instance = this.dice_4;
+                break;
+            case 5:
+                this.dice_result_instance = this.dice_5;
+                break;
+            case 6:
+                this.dice_result_instance = this.dice_6;
+                break;
+        }
+        this.dice_result_instance.node.active = true;
     }
 
     private on_cb_move(guid:number, animal_index:number, from:number, to:number) {
         console.log("guid:" + guid + " animal_index:" + animal_index);
+
+        this.dice_result_instance.node.active = false;
 
         let animal_map = singleton.netSingleton.game.PlayerAnimalMap.get(guid);
         let _animal = animal_map.get(animal_index);

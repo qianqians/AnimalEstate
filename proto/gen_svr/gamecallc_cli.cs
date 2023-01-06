@@ -161,11 +161,12 @@ namespace abelkhan
             }
         }
 
-        public event Action<Int64> on_start_throw_dice;
+        public event Action<Int64, Int16> on_start_throw_dice;
         public void start_throw_dice(IList<MsgPack.MessagePackObject> inArray){
             var _guid = ((MsgPack.MessagePackObject)inArray[0]).AsInt64();
+            var _animal_index = ((MsgPack.MessagePackObject)inArray[1]).AsInt16();
             if (on_start_throw_dice != null){
-                on_start_throw_dice(_guid);
+                on_start_throw_dice(_guid, _animal_index);
             }
         }
 

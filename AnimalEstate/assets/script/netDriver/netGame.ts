@@ -29,6 +29,7 @@ export class netGame {
         this.game_call_client_module.cb_turn_player_round = this.on_cb_turn_player_round.bind(this);
         this.game_call_client_module.cb_start_throw_dice = this.on_cb_start_dice.bind(this);
         this.game_call_client_module.cb_throw_dice = this.on_cb_throw_dice.bind(this);
+        this.game_call_client_module.cb_rabbit_choose_dice = this.on_cb_rabbit_choose_dice.bind(this);
         this.game_call_client_module.cb_move = this.on_cb_move.bind(this);
         this.game_call_client_module.cb_relay = this.on_cb_relay.bind(this);
         this.game_call_client_module.cb_use_skill = this.on_cb_use_skill.bind(this);
@@ -113,10 +114,17 @@ export class netGame {
         }
     }
 
-    public cb_start_dice: (guid:number) => void;
-    private on_cb_start_dice(guid:number) {
+    public cb_rabbit_choose_dice : (dice:number) => void;
+    private on_cb_rabbit_choose_dice(dice:number) {
+        if (this.cb_rabbit_choose_dice) {
+            this.cb_rabbit_choose_dice.call(null, dice);
+        }
+    }
+
+    public cb_start_dice: (guid:number, animal_index:number) => void;
+    private on_cb_start_dice(guid:number, animal_index:number) {
         if (this.cb_start_dice) {
-            this.cb_start_dice.call(null, guid);
+            this.cb_start_dice.call(null, guid, animal_index);
         }
     }
 

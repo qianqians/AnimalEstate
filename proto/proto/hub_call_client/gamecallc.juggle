@@ -27,7 +27,7 @@ module game_client{
 	
 	turn_player_round multicast(int64 guid);
 
-	start_throw_dice multicast(int64 guid);
+	start_throw_dice multicast(int64 guid, int16 animal_index);
 	
 	throw_dice multicast(int64 guid, int32[] dice);
 	

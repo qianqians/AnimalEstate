@@ -614,7 +614,7 @@ namespace game
                         }
                     }
                     _impl.WaitDice = true;
-                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).start_throw_dice(_game_info.guid);
+                    _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).start_throw_dice(_game_info.guid, _game_info.current_animal_index);
                     await Task.Delay(3000);
                     _impl.WaitDice = false;
 

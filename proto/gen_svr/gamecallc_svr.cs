@@ -239,9 +239,10 @@ namespace abelkhan
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_turn_player_round", _argv_ecab320c_0c7a_39d6_86e9_96ecfccda4c1);
         }
 
-        public void start_throw_dice(Int64 guid){
+        public void start_throw_dice(Int64 guid, Int16 animal_index){
             var _argv_180c21b7_1e1e_3e0e_a79b_c785f9eac089 = new ArrayList();
             _argv_180c21b7_1e1e_3e0e_a79b_c785f9eac089.Add(guid);
+            _argv_180c21b7_1e1e_3e0e_a79b_c785f9eac089.Add(animal_index);
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_start_throw_dice", _argv_180c21b7_1e1e_3e0e_a79b_c785f9eac089);
         }
 

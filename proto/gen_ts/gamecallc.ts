@@ -172,10 +172,11 @@ export class game_client_module extends client_handle.imodule {
         }
     }
 
-    public cb_start_throw_dice : (guid:number)=>void | null;
+    public cb_start_throw_dice : (guid:number, animal_index:number)=>void | null;
     start_throw_dice(inArray:any[]){
         let _argv_:any[] = [];
         _argv_.push(inArray[0]);
+        _argv_.push(inArray[1]);
         if (this.cb_start_throw_dice){
             this.cb_start_throw_dice.apply(null, _argv_);
         }
