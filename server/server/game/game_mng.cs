@@ -615,11 +615,16 @@ namespace game
                     }
                     _impl.WaitDice = true;
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).start_throw_dice(_game_info.guid, _game_info.current_animal_index);
-                    await Task.Delay(3000);
-                    _impl.WaitDice = false;
+                    await Task.Delay(1500);
 
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).throw_dice(_game_info.guid, dice_list);
-                    var dice = await choose_dice(dice_list);
+                    await Task.Delay(1500);
+                    var dice = dice_list[0];
+                    if (dice_list.Count >= 2)
+                    {
+                        dice = await choose_dice(dice_list);
+                        await Task.Delay(1500);
+                    }
 
                     var _animal_info = _game_info.animal_info[_game_info.current_animal_index];
 
@@ -660,6 +665,10 @@ namespace game
             catch (System.Exception ex)
             {
                 log.log.err($"{ex}");
+            }
+            finally
+            {
+                _impl.WaitDice = false;
             }
         }
 
@@ -1315,7 +1324,7 @@ namespace game
                         var _round_client = _client_proxys[_current_client_index];
                         _round_client.summary_skill_effect();
                         _round_client.iterater_skill_effect();
-                        ntf_game_info();
+                        //ntf_game_info();
                     }
                 }
 

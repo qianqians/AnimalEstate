@@ -127,9 +127,9 @@ export class main_game extends Component {
         this.dice_instance.node.setPosition(0, 0);
         this.dice_instance.node.active = false;
         
-        this.dice2_1_instance.node.setPosition(-64, 0);
+        this.dice2_1_instance.node.setPosition(-96, 0);
         this.dice2_1_instance.node.active = false;
-        this.dice2_2_instance.node.setPosition(64, 0);
+        this.dice2_2_instance.node.setPosition(96, 0);
         this.dice2_2_instance.node.active = false;
 
         this.dice_1.node.setPosition(0, 0);
@@ -145,30 +145,30 @@ export class main_game extends Component {
         this.dice_6.node.setPosition(0, 0);
         this.dice_6.node.active = false;
         
-        this.dice_1_1.node.setPosition(-64, 0);
+        this.dice_1_1.node.setPosition(-96, 0);
         this.dice_1_1.node.active = false;
-        this.dice_1_2.node.setPosition(-64, 0);
+        this.dice_1_2.node.setPosition(-96, 0);
         this.dice_1_2.node.active = false;
-        this.dice_1_3.node.setPosition(-64, 0);
+        this.dice_1_3.node.setPosition(-96, 0);
         this.dice_1_3.node.active = false;
-        this.dice_1_4.node.setPosition(-64, 0);
+        this.dice_1_4.node.setPosition(-96, 0);
         this.dice_1_4.node.active = false;
-        this.dice_1_5.node.setPosition(-64, 0);
+        this.dice_1_5.node.setPosition(-96, 0);
         this.dice_1_5.node.active = false;
-        this.dice_1_6.node.setPosition(-64, 0);
+        this.dice_1_6.node.setPosition(-96, 0);
         this.dice_1_6.node.active = false;
 
-        this.dice_2_1.node.setPosition(64, 0);
+        this.dice_2_1.node.setPosition(96, 0);
         this.dice_2_1.node.active = false;
-        this.dice_2_2.node.setPosition(64, 0);
+        this.dice_2_2.node.setPosition(96, 0);
         this.dice_2_2.node.active = false;
-        this.dice_2_3.node.setPosition(64, 0);
+        this.dice_2_3.node.setPosition(96, 0);
         this.dice_2_3.node.active = false;
-        this.dice_2_4.node.setPosition(64, 0);
+        this.dice_2_4.node.setPosition(96, 0);
         this.dice_2_4.node.active = false;
-        this.dice_2_5.node.setPosition(64, 0);
+        this.dice_2_5.node.setPosition(96, 0);
         this.dice_2_5.node.active = false;
-        this.dice_2_6.node.setPosition(64, 0);
+        this.dice_2_6.node.setPosition(96, 0);
         this.dice_2_6.node.active = false;
     }
 
@@ -179,6 +179,8 @@ export class main_game extends Component {
                 _current_animal = info.animal_info[animal_index];
             }
         }
+
+        console.log("on_cb_start_dice _current_animal.animal_id:", _current_animal.animal_id);
 
         if (_current_animal.animal_id != animal.rabbit) {
             this.dice_instance.node.active = true;
@@ -213,6 +215,8 @@ export class main_game extends Component {
         this.dice_instance.node.active = false;
         this.dice2_1_instance.node.active = false;
         this.dice2_2_instance.node.active = false;
+
+        console.log("on_cb_throw_dice dice:", dice);
 
         if (dice.length == 1) {
             let dice_num = dice[0];
