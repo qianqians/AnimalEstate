@@ -4,7 +4,9 @@ module game{
 	
 	into_game ntf(int64 guid);
 	
-	play_order ntf(animal_game_info[] animal_info); 
+	play_order ntf(animal_game_info[] animal_info);
+
+	ready ntf();
 	
 	use_skill ntf(int64 target_guid, int16 target_animal_index);
 	

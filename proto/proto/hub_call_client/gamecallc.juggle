@@ -20,6 +20,8 @@ module game_client{
 	game_wait_start_info multicast(int32 countdown, playground _playground, player_game_info[] info);
 	
 	game_info multicast(playground _playground, player_game_info[] info, int64 round_player_guid);
+
+	animal_order multicast(int64 guid, animal_game_info[] animal_info);
 	
 	ntf_effect_info multicast(effect_info[] info);
 	

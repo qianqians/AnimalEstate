@@ -1,4 +1,4 @@
-import { _decorator, Component, director, Sprite, Camera, Animation, AnimationClip, TiledMap, Vec2, Prefab, instantiate } from 'cc';
+import { _decorator, Component, director, Button, Node, Sprite, Camera, Animation, AnimationClip, TiledMap, Vec2, Prefab, instantiate } from 'cc';
 const { ccclass, property } = _decorator;
 
 import * as singleton from '../netDriver/netSingleton';
@@ -83,6 +83,11 @@ export class main_game extends Component {
     dice_2_5:Sprite = null;
     @property(Sprite)
     dice_2_6:Sprite = null;
+
+    @property(Button)
+    readyBtn:Button = null;
+    @property(Button)
+    diceBtn:Button = null;
     
     dice_result_instance:Sprite = null;
     dice_1_result_instance:Sprite = null;
@@ -93,6 +98,10 @@ export class main_game extends Component {
     private current_move_obj:move_info = null;
 
     start() {
+        this.readyBtn.node.on(Node.EventType.MOUSE_DOWN, this.ready_callback, this);
+        this.diceBtn.node.on(Node.EventType.MOUSE_DOWN, this.dice_callback, this);
+
+        singleton.netSingleton.game.cb_turn_player_round = this.on_cb_turn_player_round.bind(this);
         singleton.netSingleton.game.cb_move = this.on_cb_move.bind(this);
         singleton.netSingleton.game.cb_start_dice = this.on_cb_start_dice.bind(this);
         singleton.netSingleton.game.cb_throw_dice = this.on_cb_throw_dice.bind(this);
@@ -113,6 +122,8 @@ export class main_game extends Component {
             this.set_camera_pos_grid(0);
         }
         else {
+            this.readyBtn.node.active = false;
+
             var current_animal = singleton.netSingleton.game.CurrentPlayerInfo.animal_info[singleton.netSingleton.game.CurrentPlayerInfo.current_animal_index];
             if (current_animal.current_pos < 0) {
                 this.set_camera_pos_grid(0);
@@ -170,6 +181,29 @@ export class main_game extends Component {
         this.dice_2_5.node.active = false;
         this.dice_2_6.node.setPosition(96, 0);
         this.dice_2_6.node.active = false;
+    }
+
+    private ready_callback() {
+        console.log("ready!");
+
+        singleton.netSingleton.game.ready();
+        this.readyBtn.node.active = false;
+    }
+
+    private dice_callback() {
+        singleton.netSingleton.game.throw_dice();
+    }
+
+    private on_cb_turn_player_round(guid:number) {
+        this.readyBtn.node.active = false;
+        if (guid == singleton.netSingleton.login.player_info.guid) {
+            let player_game_info = singleton.netSingleton.game.get_player_game_info(guid);
+            let pos = player_game_info.animal_info[player_game_info.current_animal_index].current_pos;
+            pos = pos >= 0 ? pos : 0;
+            this.set_camera_pos_grid(pos);
+
+            console.log("on_cb_turn_player_round guid:", guid);
+        }
     }
 
     private on_cb_start_dice(guid:number, animal_index:number) {
