@@ -41,7 +41,7 @@ namespace abelkhan
 
     public class game_hubproxy {
         public string hub_name_b8b9723b_52d5_3bc2_8583_8bf5fd51de47;
-        private Int64 uuid_b8b9723b_52d5_3bc2_8583_8bf5fd51de47 = (Int64)RandomUUID.random();
+        private Int32 uuid_b8b9723b_52d5_3bc2_8583_8bf5fd51de47 = (Int32)RandomUUID.random();
 
         public client.client _client_handle;
         public game_rsp_cb rsp_cb_game_handle;

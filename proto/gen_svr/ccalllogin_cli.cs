@@ -140,7 +140,7 @@ namespace abelkhan
 
     public class login_hubproxy {
         public string hub_name_d3bb20a7_d0fc_3440_bb9e_b3cc0630e2d1;
-        private Int64 uuid_d3bb20a7_d0fc_3440_bb9e_b3cc0630e2d1 = (Int64)RandomUUID.random();
+        private Int32 uuid_d3bb20a7_d0fc_3440_bb9e_b3cc0630e2d1 = (Int32)RandomUUID.random();
 
         public client.client _client_handle;
         public login_rsp_cb rsp_cb_login_handle;

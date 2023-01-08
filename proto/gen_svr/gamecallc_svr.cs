@@ -160,7 +160,7 @@ namespace abelkhan
 
     public class game_client_clientproxy {
         public string client_uuid_b99eae25_99b5_3006_b19c_ccf531aff983;
-        private Int64 uuid_b99eae25_99b5_3006_b19c_ccf531aff983 = (Int64)RandomUUID.random();
+        private Int32 uuid_b99eae25_99b5_3006_b19c_ccf531aff983 = (Int32)RandomUUID.random();
 
         public game_client_rsp_cb rsp_cb_game_client_handle;
 

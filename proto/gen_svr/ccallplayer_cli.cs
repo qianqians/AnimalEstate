@@ -237,7 +237,7 @@ namespace abelkhan
 
     public class player_login_hubproxy {
         public string hub_name_803b03c3_eef6_3b5c_a790_4cd13c6c4e4b;
-        private Int64 uuid_803b03c3_eef6_3b5c_a790_4cd13c6c4e4b = (Int64)RandomUUID.random();
+        private Int32 uuid_803b03c3_eef6_3b5c_a790_4cd13c6c4e4b = (Int32)RandomUUID.random();
 
         public client.client _client_handle;
         public player_login_rsp_cb rsp_cb_player_login_handle;
@@ -308,7 +308,7 @@ namespace abelkhan
 
     public class client_match_hubproxy {
         public string hub_name_a67a32be_6a98_3d05_88d9_696d83c9d775;
-        private Int64 uuid_a67a32be_6a98_3d05_88d9_696d83c9d775 = (Int64)RandomUUID.random();
+        private Int32 uuid_a67a32be_6a98_3d05_88d9_696d83c9d775 = (Int32)RandomUUID.random();
 
         public client.client _client_handle;
         public client_match_rsp_cb rsp_cb_client_match_handle;
@@ -555,7 +555,7 @@ namespace abelkhan
 
     public class client_room_player_hubproxy {
         public string hub_name_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2;
-        private Int64 uuid_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2 = (Int64)RandomUUID.random();
+        private Int32 uuid_8bda7395_33b3_34a3_bd3e_b6d6b2ba9cb2 = (Int32)RandomUUID.random();
 
         public client.client _client_handle;
         public client_room_player_rsp_cb rsp_cb_client_room_player_handle;
@@ -730,7 +730,7 @@ namespace abelkhan
 
     public class client_friend_lobby_hubproxy {
         public string hub_name_f2e2d46a_373f_3b99_b818_f5e5b675f4da;
-        private Int64 uuid_f2e2d46a_373f_3b99_b818_f5e5b675f4da = (Int64)RandomUUID.random();
+        private Int32 uuid_f2e2d46a_373f_3b99_b818_f5e5b675f4da = (Int32)RandomUUID.random();
 
         public client.client _client_handle;
         public client_friend_lobby_rsp_cb rsp_cb_client_friend_lobby_handle;
