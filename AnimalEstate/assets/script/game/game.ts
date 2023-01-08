@@ -214,7 +214,7 @@ export class main_game extends Component {
             }
         }
 
-        console.log("on_cb_start_dice _current_animal.animal_id:", _current_animal.animal_id);
+        console.log("on_cb_start_dice guid:" + guid + " _current_animal.animal_id:", _current_animal.animal_id);
 
         if (_current_animal.animal_id != animal.rabbit) {
             this.dice_instance.node.active = true;
@@ -250,7 +250,7 @@ export class main_game extends Component {
         this.dice2_1_instance.node.active = false;
         this.dice2_2_instance.node.active = false;
 
-        console.log("on_cb_throw_dice dice:", dice);
+        console.log("guid: " + guid + " on_cb_throw_dice dice:", dice);
 
         if (dice.length == 1) {
             let dice_num = dice[0];
@@ -321,6 +321,31 @@ export class main_game extends Component {
             }
             this.dice_1_result_instance.node.active = true;
             this.dice_2_result_instance.node.active = true;
+
+            if (guid == singleton.netSingleton.login.player_info.guid) {
+                this.dice_1_result_instance.node.on(Node.EventType.MOUSE_DOWN, this.dice_1_callback, this);
+                this.dice_2_result_instance.node.on(Node.EventType.MOUSE_DOWN, this.dice_2_callback, this);
+            }
+        }
+    }
+
+    private dice_1_callback() {
+        if (singleton.netSingleton.game.choose_dice_rsp) {
+            this.dice_1_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_1_callback, this);
+            this.dice_2_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_2_callback, this);
+
+            singleton.netSingleton.game.choose_dice_rsp.rsp(0);
+            singleton.netSingleton.game.choose_dice_rsp = null;
+        }
+    }
+
+    private dice_2_callback() {
+        if (singleton.netSingleton.game.choose_dice_rsp) {
+            this.dice_1_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_1_callback, this);
+            this.dice_2_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_2_callback, this);
+
+            singleton.netSingleton.game.choose_dice_rsp.rsp(1);
+            singleton.netSingleton.game.choose_dice_rsp = null;
         }
     }
 
@@ -354,7 +379,9 @@ export class main_game extends Component {
     private on_cb_move(guid:number, animal_index:number, from:number, to:number) {
         console.log("guid:" + guid + " animal_index:" + animal_index);
 
-        this.dice_result_instance.node.active = false;
+        if (this.dice_result_instance) {
+            this.dice_result_instance.node.active = false;
+        }
 
         let animal_map = singleton.netSingleton.game.PlayerAnimalMap.get(guid);
         let _animal = animal_map.get(animal_index);

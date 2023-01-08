@@ -559,7 +559,7 @@ namespace game
 
             if (IsAutoActive)
             {
-                var dice = dice_list[0];
+                var dice = dice_list[0] > dice_list[1] ? dice_list[0] : dice_list[1];
                 _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).rabbit_choose_dice(dice);
                 retTask.SetResult(dice);
             }
@@ -572,12 +572,12 @@ namespace game
                     retTask.SetResult(dice);
                 }, () =>
                 {
-                    var dice = dice_list[0];
+                    var dice = dice_list[0] > dice_list[1] ? dice_list[0] : dice_list[1];
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).rabbit_choose_dice(dice);
                     retTask.SetResult(dice);
                 }).timeout(8000, () =>
                 {
-                    var dice = dice_list[0];
+                    var dice = dice_list[0] > dice_list[1] ? dice_list[0] : dice_list[1];
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).rabbit_choose_dice(dice);
                     retTask.SetResult(dice);
                 });
@@ -618,15 +618,15 @@ namespace game
                     }
                     _impl.WaitDice = true;
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).start_throw_dice(_game_info.guid, _game_info.current_animal_index);
-                    await Task.Delay(1500);
+                    await Task.Delay(1200);
 
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).throw_dice(_game_info.guid, dice_list);
-                    await Task.Delay(1500);
+                    await Task.Delay(1200);
                     var dice = dice_list[0];
                     if (dice_list.Count >= 2)
                     {
                         dice = await choose_dice(dice_list);
-                        await Task.Delay(1500);
+                        await Task.Delay(1000);
                     }
 
                     var _animal_info = _game_info.animal_info[_game_info.current_animal_index];
@@ -1085,10 +1085,10 @@ namespace game
                     player_settle_info.award_score = 50 / player_settle_info.rank;
                     info.settle_info.Add(player_settle_info);
 
-                    if (_client_Proxy.PlayerGameInfo.guid < 0)
-                    {
-                        continue;
-                    }
+                    //if (_client_Proxy.PlayerGameInfo.guid < 0)
+                    //{
+                    //    continue;
+                    //}
 
                     var player_svr_key = redis_help.BuildPlayerGuidCacheKey(_client_Proxy.PlayerGameInfo.guid);
                     string player_hub_name = await game._redis_handle.GetStrData(player_svr_key);
