@@ -250,7 +250,7 @@ export class main_game extends Component {
         this.dice2_1_instance.node.active = false;
         this.dice2_2_instance.node.active = false;
 
-        console.log("guid: " + guid + " on_cb_throw_dice dice:", dice);
+        console.log("guid:" + guid + " on_cb_throw_dice dice:", dice);
 
         if (dice.length == 1) {
             let dice_num = dice[0];
@@ -323,6 +323,8 @@ export class main_game extends Component {
             this.dice_2_result_instance.node.active = true;
 
             if (guid == singleton.netSingleton.login.player_info.guid) {
+                console.log("dice_1_2_result_instance");
+
                 this.dice_1_result_instance.node.on(Node.EventType.MOUSE_DOWN, this.dice_1_callback, this);
                 this.dice_2_result_instance.node.on(Node.EventType.MOUSE_DOWN, this.dice_2_callback, this);
             }
@@ -330,20 +332,24 @@ export class main_game extends Component {
     }
 
     private dice_1_callback() {
+        console.log("dice_1_callback");
         if (singleton.netSingleton.game.choose_dice_rsp) {
             this.dice_1_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_1_callback, this);
             this.dice_2_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_2_callback, this);
 
+            console.log("dice_1_callback rsp");
             singleton.netSingleton.game.choose_dice_rsp.rsp(0);
             singleton.netSingleton.game.choose_dice_rsp = null;
         }
     }
 
     private dice_2_callback() {
+        console.log("dice_2_callback");
         if (singleton.netSingleton.game.choose_dice_rsp) {
             this.dice_1_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_1_callback, this);
             this.dice_2_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_2_callback, this);
 
+            console.log("dice_2_callback rsp");
             singleton.netSingleton.game.choose_dice_rsp.rsp(1);
             singleton.netSingleton.game.choose_dice_rsp = null;
         }

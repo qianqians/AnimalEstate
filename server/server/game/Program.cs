@@ -41,7 +41,10 @@ namespace game
         private static void _hub_on_client_disconnect(string uuid)
         {
             var _client = _game_mng.get_client_uuid(uuid);
-            _client.IsOffline = true;
+            if (_client != null)
+            {
+                _client.IsOffline = true;
+            }
         }
 
         private static void tick_set_game_svr_info(long tick_time)

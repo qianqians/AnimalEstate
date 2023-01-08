@@ -1087,10 +1087,10 @@ namespace game
                     player_settle_info.award_score = 50 / player_settle_info.rank;
                     info.settle_info.Add(player_settle_info);
 
-                    //if (_client_Proxy.PlayerGameInfo.guid < 0)
-                    //{
-                    //    continue;
-                    //}
+                    if (_client_Proxy.PlayerGameInfo.guid < 0)
+                    {
+                        continue;
+                    }
 
                     var player_svr_key = redis_help.BuildPlayerGuidCacheKey(_client_Proxy.PlayerGameInfo.guid);
                     string player_hub_name = await game._redis_handle.GetStrData(player_svr_key);
@@ -1421,7 +1421,7 @@ namespace game
 
         public game_mng()
         {
-            hub.hub._timer.addticktime(3000, tick_game);
+            hub.hub._timer.addticktime(1500, tick_game);
         }
 
         public client_proxy get_player(string uuid)
@@ -1549,7 +1549,7 @@ namespace game
             }
             finally
             {
-                hub.hub._timer.addticktime(3000, tick_game);
+                hub.hub._timer.addticktime(1500, tick_game);
             }
         }
     }
