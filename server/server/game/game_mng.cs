@@ -1064,6 +1064,8 @@ namespace game
         {
             if (DonePlayClient.Count > 0)
             {
+                is_done_play = true;
+
                 var info = new game_settle_info();
                 info.settle_info = new List<game_player_settle_info>();
 
@@ -1120,8 +1122,6 @@ namespace game
                 {
                     game._player_proxy_mng.get_player(palyer_hub_name).settle(info);
                 }
-
-                is_done_play = true;
             }
         }
 
