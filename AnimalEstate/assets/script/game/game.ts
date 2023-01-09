@@ -424,6 +424,7 @@ export class main_game extends Component {
         for (let _info of this.moveList) {
             let target_grid = _info.current + 1;
             if (target_grid >= singleton.netSingleton.game.get_playground_len()) {
+                remove_list.push(_info);
                 continue;
             }
             let target_config_pos = this.mapPlayground.get(target_grid);
