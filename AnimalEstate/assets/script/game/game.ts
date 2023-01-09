@@ -92,6 +92,7 @@ export class main_game extends Component {
     dice_result_instance:Sprite = null;
     dice_1_result_instance:Sprite = null;
     dice_2_result_instance:Sprite = null;
+    dice_choose_index:number = -1;
 
     private mapPlayground:Map<number, Vec2> = new Map<number, Vec2>();
     private moveList:move_info[] = [];
@@ -105,6 +106,7 @@ export class main_game extends Component {
         singleton.netSingleton.game.cb_move = this.on_cb_move.bind(this);
         singleton.netSingleton.game.cb_start_dice = this.on_cb_start_dice.bind(this);
         singleton.netSingleton.game.cb_throw_dice = this.on_cb_throw_dice.bind(this);
+        singleton.netSingleton.game.cb_choose_dice = this.on_cb_choose_dice.bind(this);
         singleton.netSingleton.game.cb_rabbit_choose_dice = this.on_cb_rabbit_choose_dice.bind(this);
 
         let playgroundLenght = singleton.netSingleton.game.get_playground_len();
@@ -201,6 +203,7 @@ export class main_game extends Component {
             let pos = player_game_info.animal_info[player_game_info.current_animal_index].current_pos;
             pos = pos >= 0 ? pos : 0;
             this.set_camera_pos_grid(pos);
+            this.current_move_obj = null;
 
             console.log("on_cb_turn_player_round guid:", guid);
         }
@@ -338,25 +341,38 @@ export class main_game extends Component {
     }
 
     private dice_1_callback() {
+        this.dice_1_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_1_callback, this);
+        this.dice_2_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_2_callback, this);
+
         console.log("dice_1_callback");
         if (singleton.netSingleton.game.choose_dice_rsp) {
-            this.dice_1_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_1_callback, this);
-            this.dice_2_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_2_callback, this);
-
             console.log("dice_1_callback rsp");
             singleton.netSingleton.game.choose_dice_rsp.rsp(0);
             singleton.netSingleton.game.choose_dice_rsp = null;
         }
+        else {
+            this.dice_choose_index = 0;
+        }
     }
 
     private dice_2_callback() {
+        this.dice_1_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_1_callback, this);
+        this.dice_2_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_2_callback, this);
+
         console.log("dice_2_callback");
         if (singleton.netSingleton.game.choose_dice_rsp) {
-            this.dice_1_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_1_callback, this);
-            this.dice_2_result_instance.node.off(Node.EventType.MOUSE_DOWN, this.dice_2_callback, this);
-
             console.log("dice_2_callback rsp");
             singleton.netSingleton.game.choose_dice_rsp.rsp(1);
+            singleton.netSingleton.game.choose_dice_rsp = null;
+        }
+        else {
+            this.dice_choose_index = 1;
+        }
+    }
+
+    private on_cb_choose_dice() {
+        if (this.dice_choose_index >= 0) {
+            singleton.netSingleton.game.choose_dice_rsp.rsp(this.dice_choose_index);
             singleton.netSingleton.game.choose_dice_rsp = null;
         }
     }
@@ -535,7 +551,7 @@ export class main_game extends Component {
 
                 let target_x = layer.rightTop.col * 64 + 32 - 800;
                 let target_y=  layer.rightTop.row * 64 + 32 - 800;
-                if (animal_info.current_pos != -1) {
+                if (animal_info.current_pos > -1 && animal_info.current_pos < 64) {
                     let pos = this.mapPlayground.get(animal_info.current_pos);
                     target_x = pos.x * 64 + 32 - 800;
                     target_y=  pos.y * 64 + 32 - 800;

@@ -135,8 +135,12 @@ export class netGame {
     }
 
     public choose_dice_rsp : game_client_module.game_client_choose_dice_rsp = null;
+    public cb_choose_dice : () => void;
     private on_cb_choose_dice() {
         this.choose_dice_rsp = this.game_call_client_module.rsp;
+        if (this.cb_choose_dice) {
+            this.cb_choose_dice.call(null);
+        }
     }
 
     public cb_rabbit_choose_dice : (dice:number) => void;

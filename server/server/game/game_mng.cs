@@ -714,7 +714,7 @@ namespace game
             use_props(props_list[0], target.Item1, target.Item2);
         }
 
-        private void auto_random_animal()
+        public void auto_random_animal()
         {
             var active_animal = new List<short>();
             for (var _animal_index = 0; _animal_index < PlayerGameInfo.animal_info.Count; _animal_index++)
@@ -1178,6 +1178,16 @@ namespace game
             return null;
         }
 
+        private void turn_player_round(long guid)
+        {
+            var client_proxy = get_client_proxy(guid);
+            if (client_proxy.PlayerGameInfo.animal_info[client_proxy.PlayerGameInfo.current_animal_index].current_pos >= PlayergroundLenght)
+            {
+                client_proxy.auto_random_animal();
+            }
+            _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(guid);
+        }
+
         private void next_player()
         {
             while (true)
@@ -1196,7 +1206,7 @@ namespace game
                     _round_client.iterater_skill_effect();
                     if (_round_client.CouldMove)
                     {
-                        _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_round_client.PlayerGameInfo.guid);
+                        turn_player_round(_round_client.PlayerGameInfo.guid);
                         break;
                     }
                     else
@@ -1234,7 +1244,7 @@ namespace game
                 else
                 {
                     wait_active(_client.WaitTime);
-                    _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
+                    turn_player_round(_client.PlayerGameInfo.guid);
                 }
             }
             else
@@ -1256,7 +1266,7 @@ namespace game
                 else
                 {
                     wait_active(_client.WaitTime);
-                    _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
+                    turn_player_round(_client.PlayerGameInfo.guid);
                 }
             }
             else
@@ -1278,7 +1288,7 @@ namespace game
                 else
                 {
                     wait_active(_client.WaitTime);
-                    _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
+                    turn_player_round(_client.PlayerGameInfo.guid);
                 }
             }
             else
@@ -1345,7 +1355,7 @@ namespace game
                         _round_client.summary_skill_effect();
                         _round_client.iterater_skill_effect();
                         //ntf_game_info();
-                        _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_round_client.PlayerGameInfo.guid);
+                        turn_player_round(_round_client.PlayerGameInfo.guid);
                     }
                 }
 
@@ -1395,7 +1405,7 @@ namespace game
                         else
                         {
                             wait_active(_client.WaitTime);
-                            _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_client.PlayerGameInfo.guid);
+                            turn_player_round(_client.PlayerGameInfo.guid);
                         }
                     }
                 }
