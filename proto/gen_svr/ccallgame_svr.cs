@@ -15,6 +15,7 @@ namespace abelkhan
         {
             hub.hub._modules.add_mothed("game_into_game", into_game);
             hub.hub._modules.add_mothed("game_play_order", play_order);
+            hub.hub._modules.add_mothed("game_ready", ready);
             hub.hub._modules.add_mothed("game_use_skill", use_skill);
             hub.hub._modules.add_mothed("game_use_props", use_props);
             hub.hub._modules.add_mothed("game_throw_dice", throw_dice);
@@ -37,6 +38,13 @@ namespace abelkhan
             }
             if (on_play_order != null){
                 on_play_order(_animal_info);
+            }
+        }
+
+        public event Action on_ready;
+        public void ready(IList<MsgPack.MessagePackObject> inArray){
+            if (on_ready != null){
+                on_ready();
             }
         }
 

@@ -5,6 +5,7 @@ import * as client_game_caller from "../serverSDK/ccallgame"
 import * as game_client_module from "../serverSDK/gamecallc"
 
 import * as login from "./netLogin"
+import { netSingleton } from "./netSingleton"
 
 export class netGame {
     private login_handle : login.netLogin;
@@ -29,6 +30,7 @@ export class netGame {
         this.game_call_client_module.cb_turn_player_round = this.on_cb_turn_player_round.bind(this);
         this.game_call_client_module.cb_start_throw_dice = this.on_cb_start_dice.bind(this);
         this.game_call_client_module.cb_throw_dice = this.on_cb_throw_dice.bind(this);
+        this.game_call_client_module.cb_choose_dice = this.on_cb_choose_dice.bind(this);
         this.game_call_client_module.cb_rabbit_choose_dice = this.on_cb_rabbit_choose_dice.bind(this);
         this.game_call_client_module.cb_move = this.on_cb_move.bind(this);
         this.game_call_client_module.cb_relay = this.on_cb_relay.bind(this);
@@ -41,12 +43,19 @@ export class netGame {
         this.game_caller.get_hub(this.game_hub_name).into_game(this.login_handle.player_info.guid);
     }
 
+    public ready() {
+        this.game_caller.get_hub(this.game_hub_name).ready();
+    }
+
     public use_skill(target_guid:number, target_animal_index:number) {
         this.game_caller.get_hub(this.game_hub_name).use_skill(target_guid, target_animal_index);
     }
 
     public throw_dice() {
-        this.game_caller.get_hub(this.game_hub_name).throw_dice();
+        if (this.CurrentPlayerInfo && netSingleton.login.player_info.guid == this.CurrentPlayerInfo.guid) {
+            console.log("dice!");
+            this.game_caller.get_hub(this.game_hub_name).throw_dice();
+        }
     }
 
     public get_playground_len(){
@@ -86,6 +95,16 @@ export class netGame {
         }
     }
 
+    public get_player_game_info(guid:number) {
+        for(let info of this.PlayerGameInfo) {
+            if (info.guid == guid) {
+                this.CurrentPlayerInfo = info;
+                return info;
+            }
+        }
+        return null;
+    }
+
     public cb_ntf_effect_info : (info:game_client_module.effect_info[]) => void;
     private on_cb_ntf_effect_info(info:game_client_module.effect_info[]) {
         if (this.cb_ntf_effect_info) {
@@ -102,6 +121,7 @@ export class netGame {
 
     public cb_turn_player_round : (guid:number) => void;
     private on_cb_turn_player_round(guid:number) {
+        this.get_player_game_info(guid);
         if (this.cb_turn_player_round) {
             this.cb_turn_player_round.call(null, guid);
         }
@@ -112,6 +132,11 @@ export class netGame {
         if (this.cb_throw_dice) {
             this.cb_throw_dice.call(null, guid, dice);
         }
+    }
+
+    public choose_dice_rsp : game_client_module.game_client_choose_dice_rsp = null;
+    private on_cb_choose_dice() {
+        this.choose_dice_rsp = this.game_call_client_module.rsp;
     }
 
     public cb_rabbit_choose_dice : (dice:number) => void;

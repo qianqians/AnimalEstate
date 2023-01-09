@@ -39,7 +39,7 @@ namespace abelkhan
 
     public class room_match_hubproxy {
         public string hub_name_b422163b_ba16_33dc_9805_fb7de83348f5;
-        private Int64 uuid_b422163b_ba16_33dc_9805_fb7de83348f5 = (Int64)RandomUUID.random();
+        private Int32 uuid_b422163b_ba16_33dc_9805_fb7de83348f5 = (Int32)RandomUUID.random();
 
         private room_match_rsp_cb rsp_cb_room_match_handle;
 

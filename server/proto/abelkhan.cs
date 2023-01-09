@@ -19,7 +19,7 @@ namespace abelkhan
         private static Random ran = new Random();
         public static UInt64 random()
         {
-            return (UInt64)(ran.NextDouble() * UInt64.MaxValue);
+            return (UInt64)(ran.NextDouble() * Int32.MaxValue);
         }
     }
 

@@ -39,7 +39,7 @@ namespace abelkhan
 
     public class match_room_hubproxy {
         public string hub_name_7be997e8_0e81_3728_9f6b_2f2429d08950;
-        private Int64 uuid_7be997e8_0e81_3728_9f6b_2f2429d08950 = (Int64)RandomUUID.random();
+        private Int32 uuid_7be997e8_0e81_3728_9f6b_2f2429d08950 = (Int32)RandomUUID.random();
 
         private match_room_rsp_cb rsp_cb_match_room_handle;
 
@@ -85,7 +85,7 @@ namespace abelkhan
 
     public class match_player_hubproxy {
         public string hub_name_da7b2c07_3c4d_366b_8def_7fa976df7502;
-        private Int64 uuid_da7b2c07_3c4d_366b_8def_7fa976df7502 = (Int64)RandomUUID.random();
+        private Int32 uuid_da7b2c07_3c4d_366b_8def_7fa976df7502 = (Int32)RandomUUID.random();
 
         private match_player_rsp_cb rsp_cb_match_player_handle;
 

@@ -160,7 +160,7 @@ namespace abelkhan
 
     public class game_client_clientproxy {
         public string client_uuid_b99eae25_99b5_3006_b19c_ccf531aff983;
-        private Int64 uuid_b99eae25_99b5_3006_b19c_ccf531aff983 = (Int64)RandomUUID.random();
+        private Int32 uuid_b99eae25_99b5_3006_b19c_ccf531aff983 = (Int32)RandomUUID.random();
 
         public game_client_rsp_cb rsp_cb_game_client_handle;
 
@@ -215,6 +215,17 @@ namespace abelkhan
             _argv_a8150bab_ab88_3ac0_b633_425c25e81223.Add(_array_391fd3d4_2d55_3f5e_9223_7f450a814a15);
             _argv_a8150bab_ab88_3ac0_b633_425c25e81223.Add(round_player_guid);
             hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_game_info", _argv_a8150bab_ab88_3ac0_b633_425c25e81223);
+        }
+
+        public void animal_order(Int64 guid, List<animal_game_info> animal_info){
+            var _argv_98825186_48db_317f_b007_6c88f60e4f97 = new ArrayList();
+            _argv_98825186_48db_317f_b007_6c88f60e4f97.Add(guid);
+            var _array_7044f738_3b40_35d1_a737_b6b236adbdd2 = new ArrayList();
+            foreach(var v_6dc408dd_fea4_5767_a896_5cfbe6a4974f in animal_info){
+                _array_7044f738_3b40_35d1_a737_b6b236adbdd2.Add(animal_game_info.animal_game_info_to_protcol(v_6dc408dd_fea4_5767_a896_5cfbe6a4974f));
+            }
+            _argv_98825186_48db_317f_b007_6c88f60e4f97.Add(_array_7044f738_3b40_35d1_a737_b6b236adbdd2);
+            hub.hub._gates.call_group_client(client_uuids_b99eae25_99b5_3006_b19c_ccf531aff983, "game_client_animal_order", _argv_98825186_48db_317f_b007_6c88f60e4f97);
         }
 
         public void ntf_effect_info(List<effect_info> info){

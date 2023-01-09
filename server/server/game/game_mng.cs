@@ -506,11 +506,11 @@ namespace game
             {
                 if (skill_list.TryGetValue(PlayerGameInfo.skill_id, out Action<long, short> skill_func))
                 {
+                    wait_active_time = service.timerservice.Tick;
                     skill_is_used = true;
                     check_set_active_state_unactive();
                     skill_func.Invoke(target_client_guid, target_animal_index);
                     wait_time = 3000;
-                    wait_active_time = service.timerservice.Tick;
                 }
                 else
                 {
@@ -533,9 +533,9 @@ namespace game
 
                     if (props_callback_list.TryGetValue(_props_id, out Action<long, short> props_func))
                     {
+                        wait_active_time = service.timerservice.Tick;
                         props_func.Invoke(target_client_guid, target_animal_index);
                         wait_time = 3000;
-                        wait_active_time = service.timerservice.Tick;
                     }
                     else
                     {
@@ -559,7 +559,7 @@ namespace game
 
             if (IsAutoActive)
             {
-                var dice = dice_list[0];
+                var dice = dice_list[0] > dice_list[1] ? dice_list[0] : dice_list[1];
                 _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).rabbit_choose_dice(dice);
                 retTask.SetResult(dice);
             }
@@ -572,12 +572,12 @@ namespace game
                     retTask.SetResult(dice);
                 }, () =>
                 {
-                    var dice = dice_list[0];
+                    var dice = dice_list[0] > dice_list[1] ? dice_list[0] : dice_list[1];
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).rabbit_choose_dice(dice);
                     retTask.SetResult(dice);
                 }).timeout(8000, () =>
                 {
-                    var dice = dice_list[0];
+                    var dice = dice_list[0] > dice_list[1] ? dice_list[0] : dice_list[1];
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).rabbit_choose_dice(dice);
                     retTask.SetResult(dice);
                 });
@@ -592,6 +592,9 @@ namespace game
             {
                 if (active_State.could_throw_dice)
                 {
+                    wait_active_time = service.timerservice.Tick;
+                    log.log.trace($"guid:{PlayerGameInfo.guid}, wait_active_time:{wait_active_time}");
+
                     check_set_active_state_unactive();
 
                     var dice_list = new List<int>();
@@ -615,15 +618,15 @@ namespace game
                     }
                     _impl.WaitDice = true;
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).start_throw_dice(_game_info.guid, _game_info.current_animal_index);
-                    await Task.Delay(1500);
+                    await Task.Delay(1200);
 
                     _impl.GameClientCaller.get_multicast(_impl.ClientUUIDS).throw_dice(_game_info.guid, dice_list);
-                    await Task.Delay(1500);
+                    await Task.Delay(1200);
                     var dice = dice_list[0];
                     if (dice_list.Count >= 2)
                     {
                         dice = await choose_dice(dice_list);
-                        await Task.Delay(1500);
+                        await Task.Delay(1000);
                     }
 
                     var _animal_info = _game_info.animal_info[_game_info.current_animal_index];
@@ -659,7 +662,6 @@ namespace game
                     {
                         wait_time += 2000;
                     }
-                    wait_active_time = service.timerservice.Tick;
                 }
             }
             catch (System.Exception ex)
@@ -935,6 +937,13 @@ namespace game
         }
 
         private bool is_done_play = false;
+        public bool IsDonePlay
+        {
+            get
+            {
+                return is_done_play;
+            }
+        }
         public List<client_proxy> DonePlayClient = new ();
 
         public List<effect_info> effect_list = new ();
@@ -1033,6 +1042,12 @@ namespace game
             _game_client_caller.get_multicast(ClientUUIDS).game_wait_start_info((int)Countdown, Playground, PlayerGameInfo);
         }
 
+        public void ntf_animal_order(long guid)
+        {
+            var _player = get_client_proxy(guid);
+            _game_client_caller.get_multicast(ClientUUIDS).animal_order(guid, _player.PlayerGameInfo.animal_info);
+        }
+
         private bool check_all_ready()
         {
             foreach (var _client_Proxy in _client_proxys)
@@ -1049,6 +1064,8 @@ namespace game
         {
             if (DonePlayClient.Count > 0)
             {
+                is_done_play = true;
+
                 var info = new game_settle_info();
                 info.settle_info = new List<game_player_settle_info>();
 
@@ -1105,8 +1122,6 @@ namespace game
                 {
                     game._player_proxy_mng.get_player(palyer_hub_name).settle(info);
                 }
-
-                is_done_play = true;
             }
         }
 
@@ -1176,6 +1191,7 @@ namespace game
                 var _round_client = _client_proxys[_current_client_index];
                 if (!_round_client.IsDonePlay)
                 {
+                    _round_client.WaitActiveTime = service.timerservice.Tick;
                     _round_client.summary_skill_effect();
                     _round_client.iterater_skill_effect();
                     if (_round_client.CouldMove)
@@ -1288,7 +1304,7 @@ namespace game
             }
         }
 
-        public async Task<bool> tick()
+        public async void tick()
         {
             do
             {
@@ -1303,21 +1319,24 @@ namespace game
                     {
                         is_all_ready = true;
                     }
-                    if (wait_ready_time < service.timerservice.Tick)
-                    {
-                        foreach (var _client_Proxy in _client_proxys)
-                        {
-                            if (!_client_Proxy.IsReady)
-                            {
-                                _client_Proxy.set_ready();
-                                _client_Proxy.set_auto_active(true);
-                            }
-                        }
-                        is_all_ready = true;
-                    }
                     else
                     {
-                        break;
+                        if (wait_ready_time < service.timerservice.Tick)
+                        {
+                            foreach (var _client_Proxy in _client_proxys)
+                            {
+                                if (!_client_Proxy.IsReady)
+                                {
+                                    _client_Proxy.set_ready();
+                                    _client_Proxy.set_auto_active(true);
+                                }
+                            }
+                            is_all_ready = true;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
 
                     if (is_all_ready)
@@ -1326,6 +1345,7 @@ namespace game
                         _round_client.summary_skill_effect();
                         _round_client.iterater_skill_effect();
                         //ntf_game_info();
+                        _game_client_caller.get_multicast(ClientUUIDS).turn_player_round(_round_client.PlayerGameInfo.guid);
                     }
                 }
 
@@ -1356,8 +1376,9 @@ namespace game
                 }
 
                 var _client = _client_proxys[_current_client_index];
-                if ((_client.WaitActiveTime + 15000) < service.timerservice.Tick)
+                if (!_client.IsAutoActive && (_client.WaitActiveTime + 30000) < service.timerservice.Tick)
                 {
+                    log.log.trace($"guid:{_client.PlayerGameInfo.guid}, WaitActiveTime:{_client.WaitActiveTime}, tick:{service.timerservice.Tick}");
                     _client.set_auto_active(true);
                 }
                 if (_client.IsAutoActive)
@@ -1380,8 +1401,6 @@ namespace game
                 }
 
             } while (false);
-
-            return is_done_play;
         }
     }
 
@@ -1402,7 +1421,7 @@ namespace game
 
         public game_mng()
         {
-            hub.hub._timer.addticktime(3000, tick_game);
+            hub.hub._timer.addticktime(1500, tick_game);
         }
 
         public client_proxy get_player(string uuid)
@@ -1499,14 +1518,15 @@ namespace game
             }
         }
 
-        private async void tick_game(long tick)
+        private void tick_game(long tick)
         {
             try
             {
                 var done_game_list = new List<game_impl>();
                 foreach (var _game in games)
                 {
-                    if (await _game.tick())
+                    _game.tick();
+                    if (_game.IsDonePlay)
                     {
                         done_game_list.Add(_game);
                     }
@@ -1529,7 +1549,7 @@ namespace game
             }
             finally
             {
-                hub.hub._timer.addticktime(3000, tick_game);
+                hub.hub._timer.addticktime(1500, tick_game);
             }
         }
     }

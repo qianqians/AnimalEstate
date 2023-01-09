@@ -71,6 +71,7 @@ export class game_client_module extends client_handle.imodule {
         this._client_handle = _client_handle_;
         this._client_handle._modulemng.add_method("game_client_game_wait_start_info", this.game_wait_start_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_game_info", this.game_info.bind(this));
+        this._client_handle._modulemng.add_method("game_client_animal_order", this.animal_order.bind(this));
         this._client_handle._modulemng.add_method("game_client_ntf_effect_info", this.ntf_effect_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_ntf_new_effect_info", this.ntf_new_effect_info.bind(this));
         this._client_handle._modulemng.add_method("game_client_turn_player_round", this.turn_player_round.bind(this));
@@ -91,6 +92,7 @@ export class game_client_module extends client_handle.imodule {
 
         this.cb_game_wait_start_info = null;
         this.cb_game_info = null;
+        this.cb_animal_order = null;
         this.cb_ntf_effect_info = null;
         this.cb_ntf_new_effect_info = null;
         this.cb_turn_player_round = null;
@@ -138,6 +140,20 @@ export class game_client_module extends client_handle.imodule {
         _argv_.push(inArray[2]);
         if (this.cb_game_info){
             this.cb_game_info.apply(null, _argv_);
+        }
+    }
+
+    public cb_animal_order : (guid:number, animal_info:common.animal_game_info[])=>void | null;
+    animal_order(inArray:any[]){
+        let _argv_:any[] = [];
+        _argv_.push(inArray[0]);
+        let _array_:any[] = [];
+        for(let v_ of inArray[1]){
+            _array_.push(common.protcol_to_animal_game_info(v_));
+        }
+        _argv_.push(_array_);
+        if (this.cb_animal_order){
+            this.cb_animal_order.apply(null, _argv_);
         }
     }
 

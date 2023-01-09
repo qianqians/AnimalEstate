@@ -136,7 +136,7 @@ namespace abelkhan
 
     public class match_game_hubproxy {
         public string hub_name_c4041984_8d90_3417_8e13_9d51947982cb;
-        private Int64 uuid_c4041984_8d90_3417_8e13_9d51947982cb = (Int64)RandomUUID.random();
+        private Int32 uuid_c4041984_8d90_3417_8e13_9d51947982cb = (Int32)RandomUUID.random();
 
         private match_game_rsp_cb rsp_cb_match_game_handle;
 

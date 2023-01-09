@@ -29,7 +29,7 @@ namespace abelkhan
 
     public class error_code_ntf_clientproxy {
         public string client_uuid_f657c200_2a33_308f_b478_82cef68fbca2;
-        private Int64 uuid_f657c200_2a33_308f_b478_82cef68fbca2 = (Int64)RandomUUID.random();
+        private Int32 uuid_f657c200_2a33_308f_b478_82cef68fbca2 = (Int32)RandomUUID.random();
 
         public error_code_ntf_rsp_cb rsp_cb_error_code_ntf_handle;
 
