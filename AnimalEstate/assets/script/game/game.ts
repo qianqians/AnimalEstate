@@ -212,9 +212,15 @@ export class main_game extends Component {
     }
 
     private on_cb_throw_dice(guid:number, dice:number[]) {
-        this.dice_instance.node.active = false;
-        this.dice2_1_instance.node.active = false;
-        this.dice2_2_instance.node.active = false;
+        if (this.dice_instance) {
+            this.dice_instance.node.active = false;
+        }
+        if (this.dice2_1_instance) {
+            this.dice2_1_instance.node.active = false;
+        }
+        if (this.dice2_2_instance) {
+            this.dice2_2_instance.node.active = false;
+        }
 
         console.log("on_cb_throw_dice dice:", dice);
 
@@ -291,8 +297,12 @@ export class main_game extends Component {
     }
 
     private on_cb_rabbit_choose_dice(dice:number) {
-        this.dice_1_result_instance.node.active = false;
-        this.dice_2_result_instance.node.active = false;
+        if (this.dice_1_result_instance) {
+            this.dice_1_result_instance.node.active = false;
+        }
+        if (this.dice_2_result_instance) {
+            this.dice_2_result_instance.node.active = false;
+        }
 
         switch(dice){
             case 1:
@@ -320,7 +330,9 @@ export class main_game extends Component {
     private on_cb_move(guid:number, animal_index:number, from:number, to:number) {
         console.log("guid:" + guid + " animal_index:" + animal_index);
 
-        this.dice_result_instance.node.active = false;
+        if (this.dice_result_instance) {
+            this.dice_result_instance.node.active = false;
+        }
 
         let animal_map = singleton.netSingleton.game.PlayerAnimalMap.get(guid);
         let _animal = animal_map.get(animal_index);
