@@ -39,6 +39,11 @@ export class main_game extends Component {
     tiger:Prefab = null;
 
     @property(Sprite)
+    diceBG:Sprite = null;
+    @property(Sprite)
+    diceTriggerBG:Sprite = null;
+
+    @property(Sprite)
     dice_instance:Sprite = null;
     @property(Sprite)
     dice2_1_instance:Sprite = null;
@@ -88,6 +93,7 @@ export class main_game extends Component {
     readyBtn:Button = null;
     @property(Button)
     diceBtn:Button = null;
+    waitDice:boolean = false;
     
     dice_result_instance:Sprite = null;
     dice_1_result_instance:Sprite = null;
@@ -183,6 +189,9 @@ export class main_game extends Component {
         this.dice_2_5.node.active = false;
         this.dice_2_6.node.setPosition(96, 0);
         this.dice_2_6.node.active = false;
+
+        this.diceBG.node.active = true;
+        this.diceTriggerBG.node.active = false;
     }
 
     private ready_callback() {
@@ -194,6 +203,35 @@ export class main_game extends Component {
 
     private dice_callback() {
         singleton.netSingleton.game.throw_dice();
+
+        this.waitDice = false;
+        this.diceBG.node.active = true;
+        this.diceTriggerBG.node.active = false;
+    }
+
+    private update_dice_bg() {
+        if (this.waitDice) {
+            setTimeout(this.update_dice_bg.bind(this), 300);
+        }
+        else {
+            return;
+        }
+
+        if (this.diceBG.node.active){
+            this.diceBG.node.active = false;
+        }
+        else {
+            this.diceBG.node.active = true;
+        }
+
+        if (this.diceTriggerBG.node.active) {
+            this.diceTriggerBG.node.active = false;
+        }
+        else {
+            this.diceTriggerBG.node.active = true;
+        }
+
+        
     }
 
     private on_cb_turn_player_round(guid:number) {
@@ -204,6 +242,9 @@ export class main_game extends Component {
             pos = pos >= 0 ? pos : 0;
             this.set_camera_pos_grid(pos);
             this.current_move_obj = null;
+
+            this.waitDice = true;
+            setTimeout(this.update_dice_bg.bind(this), 300);
 
             console.log("on_cb_turn_player_round guid:", guid);
         }
